@@ -1,0 +1,89 @@
+1. 
+
+File#path is an instance method and is called on a particular instance of File.
+Returns the pathname as a string. It raises an Exception when pathname does not
+exists.
+
+File.new("testfile").path               #=> "testfile"
+File.new("/tmp/../tmp/xxx", "w").path   #=> "/tmp/../tmp/xxx"
+File.new("Does not exist").path         #=> Error
+
+
+File::path is a class method, it is defined in the class and is called directly
+from the class. It returns the pathname as a string.
+
+File.path("/dev/null")          #=> "/dev/null"
+
+2.
+
+require 'date'
+
+puts Date.new                    #=> -4712-01-01  everything defaults
+puts Date.new(2016)              #=> 2016-01-01   month, mday, start use defaults
+puts Date.new(2016, 5)           #=> 2016-05-01   mday, start use defaults
+puts Date.new(2016, 5, 13)       #=> 2016-05-13   start uses default
+puts Date.new(2016, 5, 13, Date::ITALTY)  #=> 2016-05-13 nothing defaults
+
+Documentation
+Date::new 
+new([year=-4712[, month=1[, mday=1[, start=Date::ITALY]]]]) → date 
+
+[]          means that the argument is optional
+,           means that there needs to be a comma
+year=-4712  default arguments
+→ date      means that this method returns a date object 
+
+3.
+
+def my_method(a, b = 2, c = 3, d)
+  p [a, b, c, d]
+end
+
+my_method(4, 5, 6) 
+#=> [4, 5, 3, 6] 
+
+Default Positional arguments
+when method defines default arguments, you don't have to supply all the arguments.
+Ruby will fill in missing arguments in order.
+
+4 is assigned to a. 6 is assigned to d. Since b and c have default values, 5 
+will be assigned to b. This is becaus of the left to right order. 
+
+
+def my_method(a, b = 2, c = 3, d)
+  p [a, b, c, d]
+end
+
+my_method(4, 5) 
+#=> [4,2,3,5]
+
+4. 
+
+Array#bsearch
+a = [1, 4, 8, 11, 15, 19]
+
+value = a.bsearch {|x| x > 8}
+
+5. 
+
+a = %w(a b c d e)
+
+puts a.fetch(7) 
+#=> Error
+
+puts a.fetch(7, 'beats me')
+#=> 'beats me'
+
+puts a.fetch(7) { |index| index**2 }
+#=> 49
+
+6. 
+
+5.step(to: 10, by: 3) { |value| puts value }
+#=> 5
+#=> 8
+
+7. 
+
+s = 'abc'
+puts s.public_methods(false).inspect
