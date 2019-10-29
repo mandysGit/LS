@@ -2,7 +2,7 @@ require 'yaml'
 MESSAGES = YAML.load_file('calculator_messages.yml')
 LANGUAGE = 'en'
 
-def messages(message, variable, lang='en')
+def messages(message, lang='en')
   MESSAGES[lang][message]
 end
 
@@ -37,16 +37,16 @@ def float?(input)
   input.match?(/^\d*\.?\d*$/)
 end
 
-def operation_to_message(op)
+def operation_to_message(op, lang=en)
   word = case op
   when '1'
-    'Adding'
+    MESSAGES[lang]['adding']
   when '2'
-    'Subtracting'
+    MESSAGES[lang]['subtracting']
   when '3'
-    'Multipying'
+    MESSAGES[lang]['multiplying']
   when '4'
-    'Dividing'
+    MESSAGES[lang]['dividing']
   end
 
   word
@@ -93,15 +93,7 @@ loop do # main loop
     end
   end
 
-  operator_prompt = <<-MSG
-  What operation would you like to perform?
-    1) add
-    2) subtract
-    3) multiply
-    4) divide
-  MSG
-
-  prompt('operation_question', operator_prompt)
+  prompt('operation_question')
 
   operator = ''
   loop do
@@ -114,7 +106,7 @@ loop do # main loop
     end
   end
 
-  prompt('operation_statement', operation_to_message(operator))
+  prompt('operation_statement', operation_to_message(operator, LANGUAGE))
 
   result =
     case operator

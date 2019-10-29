@@ -5,9 +5,38 @@ en:
   number_1: "What's the first number?"
   valid_number: "Hmm... that doesn't look like a valid number"
   number_2: "What's the second number?"
-  operation_question: "%{variable}"
+  operation_question: "What operation would you like to perform? \n
+    1) add \n
+    2) subtract \n
+    3) multiply \n
+    4) divide \n"
   valid_operator: "Must choose 1, 2, 3, or 4"
   operation_statement: "%{variable} the two numbers..."
   result: "The result is %{variable}"
   restart: "Do you want to perform another calculation? (Y to calculate again)"
   thank_you: "Thank you for using the calculator. Good bye."
+  adding: adding
+  subtracting: subtracting
+  multiplying: multiplying
+  dividing: dividing
+es:
+  welcome: "Bienvenido a la calculadora! Entre su nombre:"
+  welcome_name: "Hola %{variable}"
+  valid_name: "Asegúrese de entrar un nombre válido."
+  number_1: "¿Cuál es el primer número?"
+  valid_number: "Hmm ... ese no es un número válido"
+  number_2: "¿Cuál es el segundo número?"
+  operation_question: "¿Qué operación te gustaría realizar? \n
+    1) agregar \n
+    2) restar \n
+    3) multiplicar \n
+    4) dividir \n"
+  valid_operator: "debe elegir 1, 2, 3, or 4"
+  operation_statement: "%{variable} los dos números..."
+  result: "El resultado es %{variable}"
+  restart: "¿Quieres realizar otro cálculo? (Y para calcular de nuevo)"
+  thank_you: "Gracias por usar la calculadora. Adiós."
+  adding: agregando
+  subtracting: restando
+  multiplying: multiplicando
+  dividing: dividiendo
