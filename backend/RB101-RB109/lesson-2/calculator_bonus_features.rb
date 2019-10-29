@@ -1,8 +1,19 @@
 require 'yaml'
 MESSAGES = YAML.load_file('calculator_messages.yml')
+LANGUAGE = 'en'
 
-def prompt(message)
-  Kernel.puts("=> #{message}")
+def messages(message, variable, lang='en')
+  MESSAGES[lang][message]
+end
+
+def prompt(key, variable=nil)
+  message = messages(key, LANGUAGE)
+  if variable
+    message_with_variable = message % { :variable => variable }
+    Kernel.puts("=> #{message_with_variable}")
+  else
+    Kernel.puts("=> #{message}")
+  end
 end
 
 def valid_number?(num)
@@ -41,44 +52,44 @@ def operation_to_message(op)
   word
 end
 
-prompt(MESSAGES['welcome'])
+prompt('welcome')
 
 name = ''
 loop do
   name = Kernel.gets().chomp()
 
   if name.empty?()
-    prompt(MESSAGES['valid_name'])
+    prompt('valid_name')
   else
     break
   end
 end
 
-prompt("Hi #{name}!")
+prompt('welcome_name', name)
 
 loop do # main loop
   # loop do creates a new block
   number1 = ''
   loop do
-    prompt(MESSAGES['number_1'])
+    prompt('number_1')
     number1 = Kernel.gets().chomp()
 
     if valid_number?(number1)
       break
     else
-      prompt(MESSAGES['valid_number'])
+      prompt('valid_number')
     end
   end
 
   number2 = ''
   loop do
-    prompt(MESSAGES['number_2'])
+    prompt('number_2')
     number2 = Kernel.gets().chomp()
 
     if valid_number?(number2)
       break
     else
-      prompt(MESSAGES['valid_number'])
+      prompt('valid_number')
     end
   end
 
@@ -90,7 +101,7 @@ loop do # main loop
     4) divide
   MSG
 
-  prompt(operator_prompt)
+  prompt('operation_question', operator_prompt)
 
   operator = ''
   loop do
@@ -99,11 +110,11 @@ loop do # main loop
     if %w(1 2 3 4).include?(operator)
       break
     else
-      prompt(MESSAGES['valid_operator'])
+      prompt('valid_operator')
     end
   end
 
-  prompt("#{operation_to_message(operator)} the two numbers...")
+  prompt('operation_statement', operation_to_message(operator))
 
   result =
     case operator
@@ -117,11 +128,11 @@ loop do # main loop
       number1.to_f() / number2.to_f()
     end
 
-  prompt("The result is #{result}")
+  prompt('result', result)
 
-  prompt(MESSAGES['restart'])
+  prompt('restart')
   answer = Kernel.gets().chomp()
   break unless answer.downcase.start_with?('y')
 end
 
-prompt(MESSAGES['thank_you'])
+prompt('thank_you')
