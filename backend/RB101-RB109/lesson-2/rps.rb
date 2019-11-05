@@ -7,17 +7,17 @@ def prompt(message)
   Kernel.puts("=> #{message}")
 end
 
-# refactor the conditions to smaller helper methods
-# one method for the if and another for the elsif
+def win?(first, second)
+  (first == 'rock' && second == 'scissors') ||
+    (first == 'paper' && second == 'rock') ||
+    (first == 'scissors' && second == 'paper')
+end
+
 def display_results(player, computer)
-  if  (player == 'rock' && computer == 'scissors') ||
-      (player == 'paper' && computer == 'rock') ||
-      (player == 'scissors' && computer == 'paper')
-    "You won!"
-  elsif (player == 'rock' && computer == 'paper')     ||
-        (player == 'paper' && computer == 'scissors') ||
-        (player == 'scissors' && computer == 'rock')
-    "Computer won!"
+  if win?(player, computer)
+    prompt("You won!")
+  elsif win?(computer, player)
+    prompt("Computer won!")
   else
     "It's a tie!"
   end
