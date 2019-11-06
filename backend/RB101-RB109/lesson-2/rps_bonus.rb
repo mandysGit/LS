@@ -76,11 +76,17 @@ loop do
     update_score_board(choice, computer_choice, score_board)
 
     if score_board[:player] == WIN_SCORE
-      prompt("Congratulations! You are the grand winner of #{WIN_SCORE} rounds!")
+      prompt(
+        "Congratulations!
+        You are the grand winner of #{WIN_SCORE} rounds!"
+      )
       reset_score_board(score_board)
       break
     elsif score_board[:computer] == WIN_SCORE
-      prompt("Congrautlations! Computer is the grand winner of #{WIN_SCORE} rounds!")
+      prompt(
+        "Congrautlations!
+        Computer is the grand winner of #{WIN_SCORE} rounds!"
+      )
       reset_score_board(score_board)
       break
     end
