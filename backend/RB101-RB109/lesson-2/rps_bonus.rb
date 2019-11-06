@@ -1,5 +1,7 @@
 VALID_CHOICES = ['r', 'p', 'sc', 'sp', 'l']
 
+WIN_SCORE = 5
+
 WIN_COMBINATIONS = {
   'r' => ['l', 'sc'],
   'l' => ['p', 'sp'],
@@ -14,7 +16,7 @@ score_board = {
 }
 
 def prompt(message)
-  Kernel.puts("=> #{message}")
+  puts("=> #{message}")
 end
 
 def win?(first, second)
@@ -36,9 +38,9 @@ end
 
 def display_results(player, computer)
   if win?(player, computer)
-    prompt("You won!")
+    "You won!"
   elsif win?(computer, player)
-    prompt("Computer won!")
+    "Computer won!"
   else
     "It's a tie!"
   end
@@ -48,8 +50,15 @@ loop do
   loop do
     choice = ''
     loop do
-      prompt("Choose one: #{VALID_CHOICES.join(', ')}")
-      choice = Kernel.gets().chomp()
+      prompt(
+        "Choose one:
+        'r'  for rock,
+        'p'  for paper,
+        'sc' for scissors,
+        'sp' for spock,
+        'l'  for lizard"
+      )
+      choice = gets.chomp
 
       if VALID_CHOICES.include?(choice)
         break
@@ -60,25 +69,25 @@ loop do
 
     computer_choice = VALID_CHOICES.sample
 
-    Kernel.puts("You chose: #{choice}; Computer chose: #{computer_choice}")
+    puts "You chose: #{choice}; Computer chose: #{computer_choice}"
 
     prompt(display_results(choice, computer_choice))
 
     update_score_board(choice, computer_choice, score_board)
 
-    if score_board[:player] == 5
-      prompt("Congratulations! You are the grand winner of 5 rounds!")
+    if score_board[:player] == WIN_SCORE
+      prompt("Congratulations! You are the grand winner of #{WIN_SCORE} rounds!")
       reset_score_board(score_board)
       break
-    elsif score_board[:computer] == 5
-      prompt("Congrautlations! Computer is the grand winner of 5 rounds!")
+    elsif score_board[:computer] == WIN_SCORE
+      prompt("Congrautlations! Computer is the grand winner of #{WIN_SCORE} rounds!")
       reset_score_board(score_board)
       break
     end
   end
 
   prompt("Do you want to play again?")
-  answer = Kernel.gets().chomp()
+  answer = gets.chomp
   break unless answer.downcase().start_with?('y')
 end
 
