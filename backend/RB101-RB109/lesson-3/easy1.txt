@@ -11,7 +11,6 @@ It will print out
 
 because Array#uniq does not mutate the caller, Array#uniqu did not modify the numbers Object, the object that numbers variable points to. Instead it returned a new Array with unqiue elements.
 
-
 The puts method
 --------------
 If called with an array argument, it writes each element on a new line. If the given object is not a string or array, it will be converted by calling it's to_s method
@@ -24,6 +23,7 @@ The inspect method
 ------------------
 Ex. Array#inspect, Integer#inspect, Object#inspect...
 Returns a string containing a human-readable representation of obj.
+
 
 2.
 ! appended at the end of method name usually means that this method mutates the caller
@@ -43,8 +43,10 @@ If the truthy value is true, then prepending it with a single ! will convert it 
 
 !! before something, like !!user_name means if user_name was truthy, convert it to false, then convert false to true. !! turns any object into their boolean equivalent.
 
+
 3.
 advice.gsub!(/important/, 'urgent')
+
 
 4.
 numbers = [1, 2, 3, 4, 5]
@@ -58,8 +60,53 @@ numbers will be [2,3,4,5]
 
 Both methods are mutating.
 
+
 5.
 (10..100).cover?(42)
 Returns true if obj is between the begin and end of the range.
 
+
 6.
+famous_words = "seven years ago..."
+famous_words = "Four score and" + famous_words
+famous_words = "Four score and" << famous_words
+
+famous_words.prepend("Four score and ")
+
+
+7.
+def add_eight(number)
+  number + 8
+end
+
+number = 2
+
+how_deep = "number"
+5.times { how_deep.gsub!("number", "add_eight(number)") }
+
+p how_deep
+
+"add_eight(add_eight(add_eight(add_eight(add_eight(number)))))"
+
+10
+18
+26
+34
+42
+
+
+8.
+flintstones = ["Fred", "Wilma", ["Barney", "Betty"], ["BamBam", "Pebbles"]]
+flintstones.flatten!
+#=> ["Fred", "Wilma", "Barney", "Betty", "BamBam", "Pebbles"]
+
+
+9.
+flintstones = { "Fred" => 0, "Wilma" => 1, "Barney" => 2, "Betty" => 3, "BamBam" => 4, "Pebbles" => 5 }
+
+flintstones.assoc("Barney")
+array = ["Barney", flintstones["Barney"]]
+ => ["Barney", 2]
+
+Hash#assoc
+Searches through the hash comparing obj with the key using ==. Returns the key-value pair (two elements array) or nil if no match is found.
