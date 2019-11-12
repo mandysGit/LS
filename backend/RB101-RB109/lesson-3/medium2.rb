@@ -217,3 +217,8 @@ my_string = new_string(my_string)
 
 puts "My string looks like this now: #{my_string}"
 puts "My array looks like this now: #{my_array}"
+
+#6.
+def color_valid(color)
+  color == "blue" || color == "green"
+end
