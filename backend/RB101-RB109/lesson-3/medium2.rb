@@ -158,3 +158,26 @@ def an_illustrative_method(a_outer, b_outer, c_outer, d_outer, a_outer_id, b_out
 end
 
 # fun_with_ids
+
+# 3.
+
+def tricky_method(a_string_param, an_array_param)
+  a_string_param += "rutabaga"
+  an_array_param << "rutabaga"
+end
+
+my_string = "pumpkins"
+my_array = ["pumpkins"]
+tricky_method(my_string, my_array)
+
+puts "My string looks like this now: #{my_string}" #=> "pumpkins"
+puts "My array looks like this now: #{my_array}" #=> ["pumpkins", "rutabaga"]
+
+=begin
+my_string is passed to the tricky_method as an arugment. Inside the tricky method, a_string_param paramater variable references the same String Object as my_string variable, and that String Object has the value "pumpkins". Inside the tricky method, a_string_param gets reassigned to a new String Object `a_string_param = a_string_param + "rutaga"`. a_string_param now references "pumpkinsrutabaga". This reassignment does not modify the my_string vairable and what it points it. It only modifies the method's local variable a_string_param and makes it reference a new String Object. Thus, the print statement outputs "pumpkins" for my_string, because the method did not mutate my_string.
+
+my_array is passed to the tricky_method as an argument. Inside the tricky method, an_array_param parameter references the same String Object as my_array variable, and that Array Object has the value ["pumpkins"].
+an_array_param calls Array#<< method to append "rutabaga" to the last position of the array. This mutates/modifies the Array object that both an_array_param and my_array references to. Thus, the print statement outputs ["pumpkins", "rutabaga"] for my_array.
+=end
+
+# 4.
