@@ -2,6 +2,24 @@
 
 ----------------------------------------
 
+
+
+1.
+
+```ruby
+10.times {|n| puts "Flintstones Rock!".prepend(" " *n)}
+```
+
+2.
+
+Cannot concatenate an Integer with a String. It will result in TypeError (no implicit conversion of Integer into String)
+
+```ruby
+result = 40 + 2
+puts "the value of 40 + 2 is #{result}"
+puts "the value of 40 + 2 is " + result.to_s
+```
+
 3.
 
 **Notes:**
