@@ -170,8 +170,8 @@ my_string = "pumpkins"
 my_array = ["pumpkins"]
 tricky_method(my_string, my_array)
 
-puts "My string looks like this now: #{my_string}" #=> "pumpkins"
-puts "My array looks like this now: #{my_array}" #=> ["pumpkins", "rutabaga"]
+# puts "My string looks like this now: #{my_string}" #=> "pumpkins"
+# puts "My array looks like this now: #{my_array}" #=> ["pumpkins", "rutabaga"]
 
 =begin
 my_string is passed to the tricky_method as an arugment. Inside the tricky method, a_string_param paramater variable references the same String Object as my_string variable, and that String Object has the value "pumpkins". Inside the tricky method, a_string_param gets reassigned to a new String Object `a_string_param = a_string_param + "rutaga"`. a_string_param now references "pumpkinsrutabaga". This reassignment does not modify the my_string vairable and what it points it. It only modifies the method's local variable a_string_param and makes it reference a new String Object. Thus, the print statement outputs "pumpkins" for my_string, because the method did not mutate my_string.
@@ -181,3 +181,39 @@ an_array_param calls Array#<< method to append "rutabaga" to the last position o
 =end
 
 # 4.
+
+def tricky_method_two(a_string_param, an_array_param)
+  a_string_param << 'rutabaga'
+  an_array_param = ['pumpkins', 'rutabaga']
+end
+
+my_string = "pumpkins"
+my_array = ["pumpkins"]
+tricky_method_two(my_string, my_array)
+
+# puts "My string looks like this now: #{my_string}" #=> 'pumpkinsrutabaga'
+# puts "My array looks like this now: #{my_array}" #=> ['pumpkins']
+
+=begin
+In this scenario, a_string_param modifies the String Object that my_string and a_string_param points to. It becomes "pumpkinsrutabaga". Both these variables point to the same String Object.
+
+an_array_param points to a new Array Object because of the reassignment. Therefore, it does not modify my_array.
+=end
+
+# 5.
+
+def new_string(a_string_param)
+  a_string_param += "rutabaga"
+end
+
+def update_array(an_array_param)
+  an_array_param << "rutabaga"
+end
+my_string = "pumpkins"
+my_array = ["pumpkins"]
+
+update_array(my_array)
+my_string = new_string(my_string)
+
+puts "My string looks like this now: #{my_string}"
+puts "My array looks like this now: #{my_array}"
