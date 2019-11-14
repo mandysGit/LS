@@ -72,7 +72,7 @@ loop do
     years = gets.chomp
 
     break if valid_years?(years)
-    prompt("Make sure you enter a valid amount of years")
+    prompt("Make sure you enter a valid amount of years. (Example: 1, 2, 3)")
   end
 
   months = years.to_i * 12
@@ -84,7 +84,7 @@ loop do
   )
 
   prompt("Your monthly payment is $ #{monthly_payment}")
-  prompt("Do you want to to do another calculation?
+  prompt("Do you want to do another calculation?
   Enter Y/y for another calculation. Enter anything else to exit.")
   answer = gets.chomp
 
