@@ -45,3 +45,114 @@ The `reject` method considers the "truthy" or "falsey" return value of the block
 end
 ```
 
+return: 
+
+```ruby
+{'a' => 'ant', 'b' => 'bear', 'c' => 'cat'}
+```
+
+`each_with_object` takes in an object as an argument. In this case `{}` was passed in as an argument. 
+
+`each_with_object` iterates each element of the calling collection, and in the first iteration, `value[0]` is `a` and value is `'ant'` , we assign `a` as the key and `ant` as the value to the hash object. 
+
+After iterating the calling collection, the hash object is now populated like this: `{'a' => 'ant', 'b' => 'bear', 'c' => 'cat'}` and is the return value of `each_with_object` . The `each_with_object` method returns the initial obj argument that was passed it, whether it was mutated or not. 
+
+5.
+
+```ruby
+hash = { a: 'ant', b: 'bear' }
+hash.shift
+```
+
+output: 
+
+```ruby
+['a', 'ant']
+```
+
+Hash#shift removes a the first key-value pair and returns the key value in a two-item array [key, value]. This method mutates the caller. `hash` is modified, `{ b: 'bear' }`
+
+6.
+
+```ruby
+['ant', 'bear', 'caterpillar'].pop.size
+```
+
+output: 
+
+```ruby
+11
+```
+
+First the Array#pop method destructively removes and returns the last element of the calling array. Due to method chaining, `caterpillar` is the String object that gets returned, and `caterpilar` string calls String#size method. It will return 11 because that is how many letters there are in `caterpillar`. 
+
+7.
+
+```ruby
+[1, 2, 3].any? do |num|
+  puts num
+  num.odd?
+end
+```
+
+output
+
+```ruby
+1
+=> true
+```
+
+The block's return value is the last line of the block. The last line is `num.odd?` , which returns a boolean. The return value will become evaluated as "truthy" or "falsey". It is determined by the "truthiness", anything that is returned and is not `nil` or `false` is "truthy". 
+
+Thus if the block returns a single "truthy" value, then `any?` method will return true. Otherwise, if the block only returns "falsey" values, the `any?` method will return false. 
+
+`any?` stops iterating once it reaches an iteration that returns a "truthy" value. That's why `puts num` only invokved once and prints out 1. The first element is odd, so `any?` stops iterating after that point. 
+
+8.
+
+```ruby
+arr = [1, 2, 3, 4, 5]
+arr.take(2)
+```
+
+Returns the first _n_ elements from the array as a new array. This method is not destructive and does not mutate the caller Array. 
+
+9.
+
+```ruby
+{ a: 'ant', b: 'bear' }.map do |key, value|
+  if value.size > 3
+    value
+  end
+end
+```
+
+output
+
+```ruby
+=> [nil, "bear"]
+```
+
+Enumerable#map returns a new array with the results of running block once for every element in the collection. This method does transformation. In the first iteration of the block, `"ant".size` is not greater than 3, so it returns `nil`. In the second iteration, `"bear".size` is greater than 3, so it returns `"bear"`.
+
+When none of the conditions in an `if` statement evaluates as `true`, the `if` statement itself returns `nil`. 
+
+10.
+
+```ruby
+[1, 2, 3].map do |num|
+  if num > 1
+    puts num
+  else
+    num
+  end
+end
+```
+
+output:
+
+```ruby
+[1, nil, nil]
+```
+
+Enumberable#map returns a new array with the results of running the block once for every element in the collection. The first iteration, 1 is not greater than 1, so it returns 1. In the second and third iteration, 2 and 3 are greater than 1, so it invokes `puts num`, and `puts` method returns nil. Therefore, the new array that `map` returns is `[1, nil, nil]` 
