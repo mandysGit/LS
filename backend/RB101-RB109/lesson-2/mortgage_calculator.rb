@@ -3,17 +3,15 @@ def prompt(message)
 end
 
 def valid_loan_amount?(loan_amount)
-  !loan_amount.empty? &&
-    float?(loan_amount) || integer?(loan_amount) &&
-      loan_amount.to_f > 0
+  integer?(loan_amount) && loan_amount.to_i > 0
 end
 
 def valid_apr?(apr)
-  !apr.empty? && (float?(apr) || integer?(apr)) && apr.to_f > 0
+  (float?(apr) || integer?(apr)) && apr.to_f > 0
 end
 
 def valid_years?(years)
-  !years.empty? && integer?(years) && years.to_i > 0
+  integer?(years) && years.to_i > 0
 end
 
 def integer?(num)
@@ -62,12 +60,12 @@ def display_thank_you
 end
 
 def display_loan_amount
-  "What is your loan amount (Example: 10000, 10000.25)?"
+  "What is your loan amount (Example: 10000)?"
 end
 
 def display_invalid_loan(loan_amount)
   "#{loan_amount} is invalid.
-   Only positive whole numbers or positive decimal numbers are accepted."
+   Only positive whole numbers are accepted."
 end
 
 def display_apr
