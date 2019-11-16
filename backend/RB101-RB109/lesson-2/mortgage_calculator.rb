@@ -42,37 +42,81 @@ def calculate_monthly_payment(
   monthly_payment.round(2)
 end
 
-prompt("Welcome to the Mortgage Calculator!
-To calculate your monthly mortgage payment,
-we will need your loan amount, annual percentage rate and loan duration.")
+def display_welcome
+  "Welcome to the Mortgage Calculator!
+    To calculate your monthly mortgage payment,
+    we will need your loan amount, annual percentage rate and loan duration."
+end
+
+def display_monthly_payment(monthly_payment)
+  "Your monthly payment is $ #{monthly_payment}"
+end
+
+def display_new_calculation
+  "Do you want to do another calculation?
+    Enter Y/y for another calculation. Enter anything else to exit."
+end
+
+def display_thank_you
+  "Thank you for using the Mortgage Calculator! Goodbye!"
+end
+
+def display_loan_amount
+  "What is your loan amount (Example: 10000, 10000.25)?"
+end
+
+def display_invalid_loan(loan_amount)
+  "#{loan_amount} is invalid.
+    Only positive whole numbers or positive decimal numbers are accepted."
+end
+
+def display_apr
+  "What is your Annual Percent Rate (APR)
+    (Example: enter 1 for 1%, enter 2.5 for 2.5%)?"
+end
+
+def display_invalid_apr(apr)
+  "#{apr} is invalid.
+    Only positive whole numbers or positive decimal numbers are accepted."
+end
+
+def display_year
+  "What is your loan duration in years? (Example: 1, 2, 3)"
+end
+
+def display_invalid_year(years)
+  "#{years} is invalid.
+    Only positive whole numbers are accepted."
+end
+
+prompt(display_welcome)
 
 loop do
   loan_amount = ''
   loop do
-    prompt("What is your loan amount (Example: 10000, 10000.25)?")
+    prompt(display_loan_amount)
     loan_amount = gets.chomp
 
     break if valid_loan_amount?(loan_amount)
-    prompt("Make sure you use a valid number. (Example: 10000, 10000.25)")
+    prompt(display_invalid_loan(loan_amount))
   end
 
   apr = ''
   loop do
-    prompt("What is your Annual Percent Rate (APR)
-    (Example: enter 1 for 1%, enter 2.5 for 2.5%)?")
+    prompt(display_apr)
     apr = gets.chomp
 
     break if valid_apr?(apr)
-    prompt("Make sure you use a valid number. (Example: 1, 2.5, 3.0)")
+    prompt(display_invalid_apr(apr))
   end
 
   years = ''
   loop do
-    prompt("What is your loan duration in years? (Example: 1, 2, 3)")
+    prompt(display_year)
     years = gets.chomp
 
     break if valid_years?(years)
-    prompt("Make sure you enter a valid amount of years. (Example: 1, 2, 3)")
+    prompt(display_invalid_year(years))
   end
 
   months = years.to_i * 12
@@ -83,12 +127,11 @@ loop do
     months
   )
 
-  prompt("Your monthly payment is $ #{monthly_payment}")
-  prompt("Do you want to do another calculation?
-  Enter Y/y for another calculation. Enter anything else to exit.")
+  prompt(display_monthly_payment(monthly_payment))
+  prompt(display_new_calculation)
   answer = gets.chomp
 
   break unless answer.downcase() == ('y')
 end
 
-prompt("Thank you for using the Mortgage Calculator! Goodbye!")
+prompt(display_thank_you)
