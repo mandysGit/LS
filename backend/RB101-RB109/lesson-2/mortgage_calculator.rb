@@ -26,7 +26,7 @@ end
 
 def calculate_monthly_interest_rate(apr)
   apr_percentage = apr.to_f / 100
-  monthly_interest_rate = (apr_percentage / 12).round(4)
+  monthly_interest_rate = (apr_percentage / 12)
   monthly_interest_rate
 end
 
@@ -36,7 +36,7 @@ def calculate_monthly_payment(
   months
 )
   monthly_payment =
-    loan_amount.to_f.round(2) *
+    loan_amount.to_f *
     (monthly_interest_rate / (1 - (1 + monthly_interest_rate)**-months))
 
   monthly_payment.round(2)
