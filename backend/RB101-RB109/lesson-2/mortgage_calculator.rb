@@ -44,8 +44,8 @@ end
 
 def display_welcome
   "Welcome to the Mortgage Calculator!
-    To calculate your monthly mortgage payment,
-    we will need your loan amount, annual percentage rate and loan duration."
+   To calculate your monthly mortgage payment,
+   we will need your loan amount, annual percentage rate and loan duration."
 end
 
 def display_monthly_payment(monthly_payment)
@@ -54,7 +54,7 @@ end
 
 def display_new_calculation
   "Do you want to do another calculation?
-    Enter Y/y for another calculation. Enter anything else to exit."
+   Enter Y/y for another calculation. Enter anything else to exit."
 end
 
 def display_thank_you
@@ -67,17 +67,17 @@ end
 
 def display_invalid_loan(loan_amount)
   "#{loan_amount} is invalid.
-    Only positive whole numbers or positive decimal numbers are accepted."
+   Only positive whole numbers or positive decimal numbers are accepted."
 end
 
 def display_apr
   "What is your Annual Percent Rate (APR)
-    (Example: enter 1 for 1%, enter 2.5 for 2.5%)?"
+   (Example: enter 1 for 1%, enter 2.5 for 2.5%)?"
 end
 
 def display_invalid_apr(apr)
   "#{apr} is invalid.
-    Only positive whole numbers or positive decimal numbers are accepted."
+   Only positive whole numbers or positive decimal numbers are accepted."
 end
 
 def display_year
@@ -86,12 +86,10 @@ end
 
 def display_invalid_year(years)
   "#{years} is invalid.
-    Only positive whole numbers are accepted."
+   Only positive whole numbers are accepted."
 end
 
-prompt(display_welcome)
-
-loop do
+def retrieve_loan_amount
   loan_amount = ''
   loop do
     prompt(display_loan_amount)
@@ -101,6 +99,10 @@ loop do
     prompt(display_invalid_loan(loan_amount))
   end
 
+  loan_amount
+end
+
+def retrieve_apr
   apr = ''
   loop do
     prompt(display_apr)
@@ -110,6 +112,10 @@ loop do
     prompt(display_invalid_apr(apr))
   end
 
+  apr
+end
+
+def retrieve_duration
   years = ''
   loop do
     prompt(display_year)
@@ -118,6 +124,16 @@ loop do
     break if valid_years?(years)
     prompt(display_invalid_year(years))
   end
+
+  years
+end
+
+prompt(display_welcome)
+
+loop do
+  loan_amount = retrieve_loan_amount
+  apr = retrieve_apr
+  years = retrieve_duration
 
   months = years.to_i * 12
   monthly_interest_rate = calculate_monthly_interest_rate(apr)
