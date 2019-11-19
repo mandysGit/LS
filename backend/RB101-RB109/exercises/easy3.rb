@@ -1,91 +1,72 @@
 # 1. Searching 101
 #======================
-# def prompt_message(num)
-#   if num == 1
-#     puts "==> Enter the #{num}st number:"
-#   elsif num == 2
-#     puts "==> Enter the #{num}nd number: "
-#   elsif num == 3
-#     puts "==> Enter the #{num}rd number: "
-#   elsif num == 4 || num == 5
-#     puts "==> Enter the #{num}th number: "
-#   else
-#     puts "==> Enter the last number: "
-#   ends
-# end
+def searching_101
+  array = []
 
-# def valid_number?(num)
-#   num.match?(/^\d+$/)
-# end
+  puts "==> Enter the 1st number:"
+  num1 = gets.chomp.to_i
+  array << num1
 
-# array = []
-# count = 1
-# last_number = 0
+  puts "==> Enter the 2nd number:"
+  num2 = gets.chomp.to_i
+  array << num2
 
-# while count < 7
-#   loop do
-#     prompt_message(count)
-#     input_number = gets.chomp
+  puts "==> Enter the 3rd number:"
+  num3 = gets.chomp.to_i
+  array << num3
 
-#     if valid_number?(input_number)
-#       if count == 6
-#         last_number = input_number.to_i
-#       else
-#         array << input_number.to_i
-#       end
+  puts "==> Enter the 4th number:"
+  num4 = gets.chomp.to_i
+  array << num4
 
-#       break
-#     else
-#       puts "Invalid number. Enter a number greater than 0 without decimals"
-#     end
-#   end
+  puts "==> Enter the 5th number:"
+  num5 = gets.chomp.to_i
+  array << num5
 
-#   count += 1
-# end
+  puts "==> Enter the last number:"
+  num6 = gets.chomp.to_i
 
-# if array.include?(last_number)
-#   puts "The number #{last_number} appears in #{array}."
-# else
-#   puts "The number #{last_number} does not appear in #{array}."
-# end
+  puts "The number #{num6} appears in #{array}." if array.include?(num6)
+  puts "The number #{num6} appears in #{array}." if !array.include?(num6)
+end
 
 # 2. Arithmetic Integer
 #======================
-# def prompt(msg)
-#   puts "==> #{msg}"
-# end
-# prompt("Enter the first number:")
-# num1 = gets.chomp.to_i
+OPERATIONS = [:+, :-, :*, :/, :%, :**]
 
-# prompt("Enter the second number:")
-# num2 = gets.chomp.to_i
+def prompt(msg)
+  puts "==> #{msg}"
+end
 
-# OPERATIONS = [:+, :-, :*, :/, :%, :**]
+def arithmetic_integer
+  prompt("Enter the first number:")
+  num1 = gets.chomp.to_i
 
-# OPERATIONS.each do |operation|
-#   prompt("#{num1} #{operation} #{num2} = #{[num1, num2].inject(operation)}")
-# end
+  prompt("Enter the second number:")
+  num2 = gets.chomp.to_i
+
+  OPERATIONS.each do |operation|
+    prompt("#{num1} #{operation} #{num2} = #{[num1, num2].inject(operation)}")
+  end
+end
 
 # Further Exploration
-# OPERATIONS = [:+, :-, :*, :/, :%, :**]
+def arithmetic_integer2
+  prompt("Enter the first number:")
+  num1 = gets.chomp
 
-# def prompt(msg)
-#   puts "==> #{msg}"
-# end
-# prompt("Enter the first number:")
-# num1 = gets.chomp
+  num2 = ''
+  loop do
+    prompt("Enter the second number:")
+    num2 = gets.chomp
+    break if num2.to_f != 0
+    prompt("Only non-zero numbers are accepted.")
+  end
 
-# num2 = ''
-# loop do
-#   prompt("Enter the second number:")
-#   num2 = gets.chomp
-#   break if num2.to_f != 0
-#   prompt("Only non-zero numbers are accepted.")
-# end
-
-# OPERATIONS.each do |operation|
-#   prompt("#{num1} #{operation} #{num2} = #{[num1.to_f, num2.to_f].inject(operation)}")
-# end
+  OPERATIONS.each do |operation|
+    prompt("#{num1} #{operation} #{num2} = #{[num1.to_f, num2.to_f].inject(operation)}")
+  end
+end
 
 =begin
 3. Counting the Number of Characters
@@ -112,7 +93,6 @@ def count_num_chars
 end
 
 # count_num_chars
-
 
 # 4. Multipling Two Numbers
 # =========================
@@ -218,7 +198,6 @@ end
 # p evens3([]) == []
 
 =begin
-
 8. Palindromic Strings
 ======================
 input: string
@@ -275,7 +254,6 @@ def real_palindrome?(str)
   arr = str.downcase.chars.select do |char|
     "0987654321abcdefghijklmnopqrstuvwxyz".include?(char)
   end
-
   palindrome?(arr.join)
 end
 
@@ -287,7 +265,12 @@ end
 # p real_palindrome?('123ab321') == false
 
 # 10. Palindromic Numbers
-# p palindrome?(34543) == true
-# p palindrome?(123210) == false
-# p palindrome?(22) == true
-# p palindrome?(5) == true
+# =======================
+def palindromic_number?(num)
+  palindrome?(num.to_s)
+end
+
+p palindromic_number?(4543) == true
+p palindromic_number?(123210) == false
+p palindromic_number?(22) == true
+p palindromic_number?(5) == true
