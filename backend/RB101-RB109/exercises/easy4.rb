@@ -284,7 +284,163 @@ def running_total4(arr)
   
 end
 
-p running_total4([2, 5, 13]) == [2, 7, 20]
-p running_total4([14, 11, 7, 15, 20]) == [14, 25, 32, 47, 67]
-p running_total4([3]) == [3]
-p running_total4([]) == []
+# p running_total4([2, 5, 13]) == [2, 7, 20]
+# p running_total4([14, 11, 7, 15, 20]) == [14, 25, 32, 47, 67]
+# p running_total4([3]) == [3]
+# p running_total4([]) == []
+
+=begin
+7. Convert a String to a Number!
+================================
+input: String of digits
+output: Integer, String digits coverted to Integer
+
+Algorithm: 
+1. Create a Hash mapping all String digits to their Integer equivalent
+2. Set total = 0
+3. Set multiple = 1
+4. Set Counter = 0
+
+3. Loop through Input String using negative indexes, starting from the last digit
+    - integer = Retrieve the integer that matches the string digit in the Hash
+    - Total += value*multiple
+    - multiple*= 10
+
+4. return Total
+
+'4  3  2 1'
+-4 -3 -2 -1
+size = 4
+=end
+
+DECIMAL_LOOKUP = {
+  '1' => 1,
+  '2' => 2,
+  '3' => 3,
+  '4' => 4,
+  '5' => 5,
+  '6' => 6,
+  '7' => 7,
+  '8' => 8,
+  '9' => 9,
+  '0' => 0,
+  'A' => 10,
+  'B' => 11,
+  'C' => 12,
+  'D' => 13,
+  'E' => 14,
+  'F' => 15
+}
+
+def string_to_integer(str)
+  total = 0
+  multiple = 1
+  counter = 1
+
+  loop do
+    break if counter > str.size
+    integer = DECIMAL_LOOKUP[str[-counter]]
+    total = total + (integer*multiple)
+
+    multiple *= 10
+    counter += 1
+  end
+
+  total
+end
+
+# Further Exploration
+BASE_SIXTEEN = 16
+
+def hexadecimal_to_integer(str)
+  decimal = 0
+  counter = 1
+  power = 0
+  str.upcase! 
+
+  loop do
+    break if counter > str.size
+    integer = DECIMAL_LOOKUP[str[-counter]]
+    decimal = decimal + (integer * (BASE_SIXTEEN**power))
+
+    power += 1
+    counter += 1
+  end
+
+  decimal
+end
+
+# p string_to_integer('4321') == 4321
+# p string_to_integer('570') == 570
+
+# p hexadecimal_to_integer('4D9f') == 19871
+# p hexadecimal_to_integer('7DE') == 2014
+# p hexadecimal_to_integer('7FFFFFFFFDA') == 8796093022170
+# p hexadecimal_to_integer('0') == 0
+
+# 8. Convert a String to
+# ======================
+def string_to_signed_integer(str)
+  case str[0]
+  when '-'
+    str.delete!('-')
+    string_to_integer(str) * (-1)
+  else
+    str.delete!('+')
+    string_to_integer(str)
+  end
+end
+
+# Further Exploration
+def string_to_signed_integer3(str)
+  new_string = string_to_integer(str.delete('-+'))
+  str[0] == '-' ? -new_string : new_string
+end
+
+def string_to_signed_integer2(string)
+  case string[0]
+  when '-' then -string_to_integer(string[1..-1])
+  when '+' then string_to_integer(string[1..-1])
+  else          string_to_integer(string)
+  end
+end
+
+# p string_to_signed_integer3('4321') == 4321
+# p string_to_signed_integer3('-570') == -570
+# p string_to_signed_integer3('+100') == 100
+
+# 9. Convert a String to
+# ======================
+def integer_to_string(int)
+  string = ''
+  number = int
+
+  loop do
+    remainder = number % 10
+    string.prepend("#{remainder}")
+    number /= 10
+    break if number == 0
+  end 
+
+  string
+end
+
+# p integer_to_string(4321) == '4321'
+# p integer_to_string(0) == '0'
+# p integer_to_string(5000) == '5000'
+
+# 10. Convert a Signed Number to a String
+# ========================================
+def signed_integer_to_string(int)
+  if int == 0
+    integer_to_string(int)
+  elsif int > 0
+    "+" + integer_to_string(int)
+  else
+    "-" + integer_to_string(int*-1)
+  end
+end
+
+# p signed_integer_to_string(4321) == '+4321'
+# p signed_integer_to_string(-123) == '-123'
+# p signed_integer_to_string(0) == '0'
