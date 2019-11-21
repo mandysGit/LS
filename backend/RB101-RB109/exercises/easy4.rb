@@ -441,6 +441,18 @@ def signed_integer_to_string(int)
   end
 end
 
+# Further Exploration
+def signed_integer_to_string(number)
+  pos_number = number < 0 ? number*-1 : number
+  str_number = integer_to_string(pos_number)
+
+  case number <=> 0
+  when -1 then "-" + str_number
+  when +1 then "+" + str_number
+  else         str_number
+  end
+end
+
 # p signed_integer_to_string(4321) == '+4321'
 # p signed_integer_to_string(-123) == '-123'
 # p signed_integer_to_string(0) == '0'
