@@ -166,3 +166,48 @@ end
 # p before_midnight('12:34') == 686
 # p before_midnight('24:00') == 0
 # p before_midnight('00:59') == 1381
+
+=begin
+4. Letter Swap
+--------------
+Input: String, words separated by spaces
+Output: String, words separted by spaces, with first and last chars swapped
+
+Rules: 
+- every word contains at least one letter
+- Input String will be at least one word
+- Input String contains only words and spaces
+
+Algorithm
+---------
+1. SET array to hold each word of Input String. Use String#split
+2. ITERATE through the array
+3. Use Array#map! to transform the array
+    - For each word in the array: 
+    - SET last_letter = word[-1]
+    - SET first_letter = word[0]
+    - word[0] = last_letter
+    - word[-1] = first_letter
+    - return new_word to array
+4. SET swapped String = convert array to string, each element separted by a space. Array#join(' ')
+5. return swapped String
+=end
+
+def swap(str)
+  array = str.split
+
+  array.map! do |word|
+    first_letter = word[0]
+    last_letter = word[-1]
+    word[0] = last_letter
+    word[-1] = first_letter
+    
+    word
+  end
+
+  array.join(' ')
+end
+
+# p swap('Oh what a wonderful day it is') == 'hO thaw a londerfuw yad ti si'
+# p swap('Abcde') == 'ebcdA'
+# p swap('a') == 'a'
