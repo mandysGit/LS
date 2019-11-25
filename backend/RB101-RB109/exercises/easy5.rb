@@ -209,3 +209,55 @@ end
 # p swap('Oh what a wonderful day it is') == 'hO thaw a londerfuw yad ti si'
 # p swap('Abcde') == 'ebcdA'
 # p swap('a') == 'a'
+
+=begin
+5. Clean up the words
+---------------------
+input: String, words and non alpha characters
+output: String, with non-alpha characters replaced by single space
+
+Rules: 
+- One or more non-alpha characteres occur, only replace it with one space
+- result should not have consecutive spaces
+
+Algorithm: 
+1. SET alpha_characters = all lower and upper case alphabet characters
+2. SET previous_char = alpha
+3. loop through string, on each iteration
+      1. Check if character is alpha by using String#include? on alpha_string
+        - If character is alpha 
+          - Leave char in the string
+          - previous_char = alpha
+
+        - If character is NON-alpha && previous_char = alpha
+          - replace with a space
+          - previous_char = non-alpha
+
+        - If character is NON-alpha && previous_char = nonalpha
+          - remove char from string
+          - previous_char = non-alpha
+4. return string
+=end
+
+def cleanup(str)
+  alpha_characters = "abcdefghijklmnopqrstuvwxyz"
+  previous_char = 'alpha'
+  input_array = str.chars
+  new_array = []
+
+  input_array.each do |current_char|
+    if alpha_characters.downcase.include?(current_char)
+      new_array << current_char
+      previous_char = 'alpha'
+    elsif !alpha_characters.downcase.include?(current_char) && previous_char == 'alpha'
+      new_array << ' '
+      previous_char = 'non-alpha'
+    elsif !alpha_characters.downcase.include?(current_char) && previous_char == 'non-alpha'
+      previous_char = 'non-alpha'
+    end
+  end
+
+  new_array.join
+end
+
+p cleanup("---what's my +*& line?") == ' what s my line '
