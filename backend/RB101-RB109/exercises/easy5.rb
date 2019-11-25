@@ -260,4 +260,108 @@ def cleanup(str)
   new_array.join
 end
 
+# refactored
+def cleanup2(str)
+  alpha_characters = "abcdefghijklmnopqrstuvwxyz"
+  new_array = []
+
+  str.chars.each do |current_char|
+    if alpha_characters.downcase.include?(current_char)
+      new_array << current_char
+    else 
+      new_array << ' ' if new_array.last != ' '
+    end
+  end
+
+  new_array.join
+end
+
 p cleanup("---what's my +*& line?") == ' what s my line '
+
+=begin
+6. Letter Counter (Part 1)
+--------------------------
+input: String, one word, or multiple words separated by spaces 
+output: Hash, key: length of word, value: number of words with that length
+
+Rules: 
+- word is string of characters that do not include a space
+
+Algorithm: 
+1. Use String#split to create an array with each word as an element
+2. Iterate through the array using Array#map. SET transformed array as word_lengths
+    - return length of word
+
+3. SET keys = word_lengths.uniq
+4. SET hash = empty hash
+5. ITERATE over keys
+    - Array#count to count the key in word_lengths
+    - insert count value into Hash as {key => word_length.count(key)}
+6. return hash
+=end
+
+def word_sizes(str)
+  word_lengths = str.split.map {|word| word.length }
+  keys = word_lengths.uniq
+  hash = {}
+
+  keys.each { |key| hash[key] = word_lengths.count(key) }
+  
+  hash
+end
+
+# p word_sizes('Four score and seven.') == { 3 => 1, 4 => 1, 5 => 1, 6 => 1 }
+# p word_sizes('Hey diddle diddle, the cat and the fiddle!') == { 3 => 5, 6 => 1, 7 => 2 }
+# p word_sizes("What's up doc?") == { 6 => 1, 2 => 1, 4 => 1 }
+# p word_sizes('') == {}
+
+# 7. Letter Counter (Part 2)
+# --------------------------
+def word_sizes(str)
+  word_lengths = str.split.map {|word| word.count('aA-zZ') }
+  keys = word_lengths.uniq
+  hash = {}
+
+  keys.each { |key| hash[key] = word_lengths.count(key) }
+  
+  hash
+end
+
+# p word_sizes('Four score and seven.') == { 3 => 1, 4 => 1, 5 => 2 }
+# p word_sizes('Hey diddle diddle, the cat and the fiddle!') == { 3 => 5, 6 => 3 }
+# p word_sizes("What's up doc?") == { 5 => 1, 2 => 1, 3 => 1 }
+# p word_sizes('') == {}
+
+# 8. Alphabetical Numbers
+# --------------------------
+ENGLISH_NUMBER = {
+  0 => 'zero' ,
+  1 => 'one' ,
+  2 => 'two' ,
+  3 => 'three',
+  4 => 'four' ,
+   5 => 'five' ,
+   6 => 'six' ,
+   7 => 'seven' ,
+   8 => 'eight' ,
+   9 => 'nine' ,
+   10 => 'ten',
+   11 => 'eleven',
+   12 => 'twelve',
+   13 => 'thirteen',
+   14 => 'fourteen',
+   15 => 'fifteen',
+   16 => 'sixteen',
+   17 => 'seventeen',
+   18 => 'eighteen',
+   19 => 'nineteen'
+}
+def alphabetic_number_sort(array)
+  alpha_array = array.map {|num| ENGLISH_NUMBER[num]}
+  alpha_array.sort.map {|english_num| ENGLISH_NUMBER.key(english_num)}
+end
+
+alphabetic_number_sort((0..19).to_a) == [
+  8, 18, 11, 15, 5, 4, 14, 9, 19, 1, 7, 17,
+  6, 16, 10, 13, 3, 12, 2, 0
+]
