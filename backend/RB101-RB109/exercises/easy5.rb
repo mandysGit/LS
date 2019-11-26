@@ -276,7 +276,7 @@ def cleanup2(str)
   new_array.join
 end
 
-p cleanup("---what's my +*& line?") == ' what s my line '
+# p cleanup("---what's my +*& line?") == ' what s my line '
 
 =begin
 6. Letter Counter (Part 1)
@@ -361,7 +361,159 @@ def alphabetic_number_sort(array)
   alpha_array.sort.map {|english_num| ENGLISH_NUMBER.key(english_num)}
 end
 
-alphabetic_number_sort((0..19).to_a) == [
-  8, 18, 11, 15, 5, 4, 14, 9, 19, 1, 7, 17,
-  6, 16, 10, 13, 3, 12, 2, 0
-]
+# p alphabetic_number_sort((0..19).to_a) == [
+#   8, 18, 11, 15, 5, 4, 14, 9, 19, 1, 7, 17,
+#   6, 16, 10, 13, 3, 12, 2, 0
+# ]
+
+=begin
+9. ddaaiillyy ddoouubbllee
+--------------------------
+input: String
+output: New string, consecutive duplicate characters collapsed into single char
+
+Algorithm
+1. SET new_string = ''
+2. ITERATE through input string
+3. append char to new_string unless char is equal to new_string[-]
+4. return new_string
+=end
+
+def crunch(str)
+  new_string = ''
+  counter = 0
+
+  loop do 
+    break if counter >= str.size 
+    new_string << str[counter] unless new_string[-1] == str[counter]
+    counter += 1
+  end
+
+  new_string
+end
+
+# Further Exploration
+def crunch2(str)
+  new_string = ''
+
+  str.each_char do |char|
+    new_string << char unless new_string[-1] == char
+  end
+
+  new_string
+end
+
+def crunch3(str)
+  new_string = ''
+
+  str.chars.each do |char|
+    new_string << char unless new_string[-1] == char
+  end
+
+  new_string
+end
+
+def crunch4(str)
+  str.gsub(/(.)\1+/, '\1')
+end
+
+# p crunch('ddaaiillyy ddoouubbllee') == 'daily double'
+# p crunch('4444abcabccba') == '4abcabcba'
+# p crunch('ggggggggggggggg') == 'g'
+# p crunch('a') == 'a'
+# p crunch('') == ''
+
+# p crunch2('ddaaiillyy ddoouubbllee') == 'daily double'
+# p crunch2('4444abcabccba') == '4abcabcba'
+# p crunch2('ggggggggggggggg') == 'g'
+# p crunch2('a') == 'a'
+# p crunch2('') == ''
+
+# p crunch3('ddaaiillyy ddoouubbllee') == 'daily double'
+# p crunch3('4444abcabccba') == '4abcabcba'
+# p crunch3('ggggggggggggggg') == 'g'
+# p crunch3('a') == 'a'
+# p crunch3('') == ''
+
+# p crunch4('ddaaiillyy ddoouubbllee') == 'daily double'
+# p crunch4('4444abcabccba') == '4abcabcba'
+# p crunch4('ggggggggggggggg') == 'g'
+# p crunch4('a') == 'a'
+# p crunch4('') == ''
+
+# 10 Bannerizer
+# ============
+def horizontal(length)
+  puts '+ ' + "- "*length + '+'
+end 
+
+def vertical(length)
+  puts '| ' + "  "*length + '|'
+end
+
+def print_in_box(str)
+  horizontal(str.size/2)
+  vertical(str.size/2)
+  puts '| ' + str + '|'    
+  vertical(str.size/2)
+  horizontal(str.size/2)
+end
+
+# Further Exploration
+=begin
+Algorithm:
+1. ITERATE through string
+2. Use String#slice to print strings index 0, with length 60
+3. String#delete! to delete strings that we just printed out
+4. print strings index 0, with length 60
+5. STOP iterating when str.size is 0
+=end 
+
+TERMINAL_LENGTH = 80
+
+def print_in_box2(str)
+  if str.size < TERMINAL_LENGTH
+    print_in_box(str)
+  else
+    length = TERMINAL_LENGTH/2
+    horizontal(length)
+    vertical(length)
+
+    while str.size != 0
+      if str.size < TERMINAL_LENGTH
+        puts "| #{str[0, TERMINAL_LENGTH]}#{" "*(TERMINAL_LENGTH-str.size)}|"
+        break
+      end
+      puts "| #{str[0, TERMINAL_LENGTH]}|"
+      str.delete_prefix!(str[0, TERMINAL_LENGTH])
+      
+    end
+    vertical(length)
+    horizontal(length)
+  end
+end
+
+# print_in_box2('To boldly go where no one has gone before.')
+# print_in_box2('Welcome!!!')
+# print_in_box2('')
+# print_in_box2('Modify this method so it will truncate the message if it will be too wide to fit inside a standard terminal window (80 columns, including the sides of the box). For a real challenge, try word wrapping very long messages so they appear on multiple lines, but still within a box.')
+
+# 9 Spin Me Around In Circles
+# ============================
+
+def spin_me(str)
+  str.split.each do |word|
+    word.reverse!
+  end.join(" ")
+end
+
+spin_me("hello world") # "olleh dlrow"
+
+=begin
+str.split returns an array
+Array#join(' ') returns a string
+
+The string returned is a new string, it is not the original.
+It returns a different object.
+=end
+
