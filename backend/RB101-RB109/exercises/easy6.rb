@@ -46,9 +46,26 @@ def dms(input)
 
   format_minutes = format("%02d", minutes.truncate)
   format_seconds = format("%02d", seconds.truncate)
-
+  
   %(#{degrees}°#{format_minutes}'#{format_seconds}")
 end
+
+# Further Exploration
+MINUTES_PER_DEGREE = 60
+SECONDS_PER_MINUTE = 60
+SECONDS_PER_DEGREE = MINUTES_PER_DEGREE * SECONDS_PER_MINUTE
+
+def dms2(degrees_float)
+  total_seconds = (degrees_float * SECONDS_PER_DEGREE).round
+  degrees, remaining_seconds = total_seconds.divmod(SECONDS_PER_DEGREE)
+  degrees = degrees % 360
+  minutes, seconds = remaining_seconds.divmod(SECONDS_PER_MINUTE)
+  format(%(#{degrees}°%02d'%02d"), minutes, seconds)
+end
+
+p dms2(400) == %(40°00'00")
+p dms2(-40) == %(320°00'00")
+p dms2(-420) == %(300°00'00")
 
 # p dms(30) == %(30°00'00")
 # p dms(76.73) == %(76°43'48")
@@ -58,7 +75,7 @@ end
 # p dms(360) == %(360°00'00") || dms(360) == %(0°00'00")
 
 
-# 9 Delete vowels
+# 2 Delete vowels
 # ===============
 
 def remove_vowels(arr)
