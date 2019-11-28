@@ -58,3 +58,17 @@ end
 # p dms(360) == %(360°00'00") || dms(360) == %(0°00'00")
 
 
+# 9 Delete vowels
+# ===============
+
+def remove_vowels(arr)
+  arr.each do |str|
+    str.delete!('aeiouAEIOU')
+  end
+
+  arr
+end
+
+# remove_vowels(%w(abcdefghijklmnopqrstuvwxyz)) == %w(bcdfghjklmnpqrstvwxyz)
+# remove_vowels(%w(green YELLOW black white)) == %w(grn YLLW blck wht)
+# remove_vowels(%w(ABC AEIOU XYZ)) == ['BC', '', 'XYZ']
