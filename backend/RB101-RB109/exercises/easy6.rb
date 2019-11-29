@@ -63,9 +63,9 @@ def dms2(degrees_float)
   format(%(#{degrees}°%02d'%02d"), minutes, seconds)
 end
 
-p dms2(400) == %(40°00'00")
-p dms2(-40) == %(320°00'00")
-p dms2(-420) == %(300°00'00")
+# p dms2(400) == %(40°00'00")
+# p dms2(-40) == %(320°00'00")
+# p dms2(-420) == %(300°00'00")
 
 # p dms(30) == %(30°00'00")
 # p dms(76.73) == %(76°43'48")
@@ -89,3 +89,55 @@ end
 # remove_vowels(%w(abcdefghijklmnopqrstuvwxyz)) == %w(bcdfghjklmnpqrstvwxyz)
 # remove_vowels(%w(green YELLOW black white)) == %w(grn YLLW blck wht)
 # remove_vowels(%w(ABC AEIOU XYZ)) == ['BC', '', 'XYZ']
+
+# 3 Fibonacci Number Location by Length
+# =====================================
+def fib(num)
+  return num if num <= 1 
+
+  fib(num-1) + fib(num-2)
+end
+
+def find_fibonacci_index_by_length(number_of_digits)
+  count_digits = 1
+  fib_input = 1
+
+  loop do 
+    count_digits = fib(fib_input).digits.length
+    break if count_digits == number_of_digits
+    fib_input += 1
+  end
+
+  fib_input
+end
+
+# p find_fibonacci_index_by_length(2) == 7          
+# p find_fibonacci_index_by_length(3) == 12        
+# p find_fibonacci_index_by_length(10) == 45
+# p find_fibonacci_index_by_length(100) == 476
+# p find_fibonacci_index_by_length(1000) == 4782
+# p find_fibonacci_index_by_length(10000) == 47847
+
+def find_fibonacci_index_by_length2(number_digits)
+  first = 1
+  second = 1
+  index = 2
+
+  loop do
+    fib = first + second
+    second = first
+    first = fib
+    index += 1
+    
+    break if fib.to_s.size == number_digits
+  end
+
+  index
+end
+
+# p find_fibonacci_index_by_length2(2) == 7          
+# p find_fibonacci_index_by_length2(3) == 12        
+# p find_fibonacci_index_by_length2(10) == 45
+# p find_fibonacci_index_by_length(100) == 476
+# p find_fibonacci_index_by_length(1000) == 4782
+# p find_fibonacci_index_by_length(10000) == 47847
