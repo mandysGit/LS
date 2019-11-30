@@ -141,3 +141,51 @@ end
 # p find_fibonacci_index_by_length(100) == 476
 # p find_fibonacci_index_by_length(1000) == 4782
 # p find_fibonacci_index_by_length(10000) == 47847
+
+# 4 Reversed Arrays (Part 1)
+# ==========================
+def reverse!(list)
+  list.sort! do |a, b|
+    list.index(b) <=> list.index(a)
+  end
+
+  list
+end
+
+def reverse2!(list)
+  counter = 0
+  reverse_index = -1
+
+  loop do
+    break if counter >= list.size / 2
+
+    list[counter], list[reverse_index] = list[reverse_index], list[counter]
+
+    counter += 1
+    reverse_index -= 1
+  end
+
+  list
+end
+
+# list = [1,2,3,4]
+# result = reverse!(list)
+
+# p result == [4, 3, 2, 1]
+# p list == [4, 3, 2, 1]
+# p list.object_id == result.object_id
+
+# list = %w(a b e d c)
+
+# p reverse!(list) == ["c", "d", "e", "b", "a"]
+# p list == ["c", "d", "e", "b", "a"]
+
+# list = ['abc']
+
+# p reverse!(list) == ["abc"]
+# p list == ["abc"]
+
+# list = []
+
+# p reverse!(list) == []
+# p list == []
