@@ -189,3 +189,39 @@ end
 
 # p reverse!(list) == []
 # p list == []
+
+# 5 Reversed Arrays (Part 2)
+# ==========================
+def reverse(list)
+  result = list.sort do |a, b|
+    list.index(b) <=> list.index(a)
+  end
+
+  result
+end
+
+def reverse2(list)
+  counter = 1
+  new_array = []
+
+  loop do
+    break if counter > list.size
+
+    new_array << list[-counter]
+
+    counter += 1
+  end
+
+  new_array
+end
+
+# p reverse2([1,2,3,4]) == [4,3,2,1]          # => true
+# p reverse2(%w(a b e d c)) == %w(c d e b a)  # => true
+# p reverse2(['abc']) == ['abc']              # => true
+# p reverse2([]) == []                        # => true
+
+# list = [1, 3, 2]                      # => [1, 3, 2]
+# new_list = reverse2(list)              # => [2, 3, 1]
+# p list.object_id != new_list.object_id  # => true
+# p list == [1, 3, 2]                     # => true
+# p new_list == [2, 3, 1]    
