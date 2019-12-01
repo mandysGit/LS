@@ -214,14 +214,23 @@ def reverse2(list)
 
   new_array
 end
+ 
+# Further Exploration
+def reverse3(list)
+  list.inject([]) { |array, item| array.unshift(item) }
+end
 
-# p reverse2([1,2,3,4]) == [4,3,2,1]          # => true
-# p reverse2(%w(a b e d c)) == %w(c d e b a)  # => true
-# p reverse2(['abc']) == ['abc']              # => true
-# p reverse2([]) == []                        # => true
+def reverse4(list)
+  list.each_with_object([]) {|item, array| array.unshift(item) }
+end
 
-# list = [1, 3, 2]                      # => [1, 3, 2]
-# new_list = reverse2(list)              # => [2, 3, 1]
-# p list.object_id != new_list.object_id  # => true
-# p list == [1, 3, 2]                     # => true
-# p new_list == [2, 3, 1]    
+p reverse4([1,2,3,4]) == [4,3,2,1]          # => true
+p reverse4(%w(a b e d c)) == %w(c d e b a)  # => true
+p reverse4(['abc']) == ['abc']              # => true
+p reverse4([]) == []                        # => true
+
+list = [1, 3, 2]                      # => [1, 3, 2]
+new_list = reverse4(list)              # => [2, 3, 1]
+p list.object_id != new_list.object_id  # => true
+p list == [1, 3, 2]                     # => true
+p new_list == [2, 3, 1]    
