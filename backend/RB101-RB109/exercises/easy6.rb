@@ -224,13 +224,36 @@ def reverse4(list)
   list.each_with_object([]) {|item, array| array.unshift(item) }
 end
 
-p reverse4([1,2,3,4]) == [4,3,2,1]          # => true
-p reverse4(%w(a b e d c)) == %w(c d e b a)  # => true
-p reverse4(['abc']) == ['abc']              # => true
-p reverse4([]) == []                        # => true
+# p reverse4([1,2,3,4]) == [4,3,2,1]          # => true
+# p reverse4(%w(a b e d c)) == %w(c d e b a)  # => true
+# p reverse4(['abc']) == ['abc']              # => true
+# p reverse4([]) == []                        # => true
 
-list = [1, 3, 2]                      # => [1, 3, 2]
-new_list = reverse4(list)              # => [2, 3, 1]
-p list.object_id != new_list.object_id  # => true
-p list == [1, 3, 2]                     # => true
-p new_list == [2, 3, 1]    
+# list = [1, 3, 2]                      # => [1, 3, 2]
+# new_list = reverse4(list)              # => [2, 3, 1]
+# p list.object_id != new_list.object_id  # => true
+# p list == [1, 3, 2]                     # => true
+# p new_list == [2, 3, 1]    
+
+# 6 Combing Arrays
+# ================
+def merge(arr1, arr2)
+  result = []
+  counter = 0
+
+  until counter >= arr1.size || counter >= arr2.size
+    result << arr1[counter] << arr2[counter]
+
+    if arr1[counter] == arr1[-1]
+      result << arr1[counter] << arr2[counter..arr2.size]
+    else
+      result << arr2[counter] << arr1[counter..arr1.size]
+    end
+
+    counter += 1
+  end
+
+  result.flatten.uniq
+end
+
+merge([1, 3, 5], [3, 6, 9]) == [1, 3, 5, 6, 9]
