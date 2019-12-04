@@ -394,3 +394,75 @@ end
 # p include3?([], 3) == false
 # p include3?([nil], nil) == true
 # p include3?([], nil) == false
+
+=begin
+10. Right Triangles
+=====================
+Input: Postive Integer
+Output: A right side triangle whose sides have n (Postiive Integer) stars
+
+Rules: the diagonal side should have one end at the lower-left of the triangle, and the other end at the upper-right
+
+Algorithm:
+1. SET counter = Input Integer
+1. SET stars_counter = 1
+2. Loop until counter is zero
+    - print spaces * (counter - 1) 
+    - print stars * (stars_counter)
+    - decrement counter
+    - increment stars_counter
+=end
+
+def triangle_bottom_right(n)
+  space_counter = n
+  stars_counter = 1
+  until space_counter <= 0 
+    print ' '*(space_counter - 1)
+    puts '*'*(stars_counter)
+
+    space_counter -= 1
+    stars_counter += 1
+  end
+end
+
+def triangle_top_left(n)
+  stars = n
+  spaces = 1
+  until stars <= 0 
+    print '*'*(stars - 1)
+    puts ' '*(spaces)
+
+    stars -= 1
+    spaces += 1
+  end
+end
+
+def triangle_top_right(n)
+  stars = n
+  spaces = 1
+  until stars <= 0 
+    puts ' '*(spaces) + '*'*(stars - 1)
+
+    stars -= 1
+    spaces += 1
+  end
+end
+
+def triangle_bottom_left(n)
+  spaces = n
+  stars = 1
+  until spaces <= 0 
+    puts '*'*(stars) + ' '*(spaces - 1)
+
+    spaces -= 1
+    stars += 1
+  end
+end
+
+# triangle_bottom_right(9)
+# puts "------"
+# triangle_top_right(9)
+# puts "------"
+# triangle_bottom_left(9)
+# puts "------"
+# triangle_top_left(9)
