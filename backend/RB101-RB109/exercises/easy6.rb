@@ -257,3 +257,57 @@ def merge(arr1, arr2)
 end
 
 merge([1, 3, 5], [3, 6, 9]) == [1, 3, 5, 6, 9]
+
+=begin
+7. Halvsies
+===========
+Input: Array
+Output: 2D Array that contains first half and second half of original Array
+
+Rules: 
+- If Input Array length is odd, middle element should be placed in first half
+
+Algorithm:
+- SET half = Input Array's length divide by 2
+    - When half is a decimal, round up, this will place the middle number in the first half for odd length Arrays
+- SET first_half = empty array
+- SET second_half = empty array
+- set result = empty array
+
+- ITERATE the Input Array, 0 until the half number
+- append each element to first_half
+ 
+- ITERATE the Input Array, half until the last number of Array
+- append each element to second_half
+
+- Append first_half and second_half to result
+- Return result
+=end
+
+def halvsies(arr)
+  half = (arr.size/2.0).ceil
+  first_half = []
+  second_half = []
+  result = []
+  counter = 0
+
+
+  while counter < half
+    first_half.push(arr[counter])
+    counter += 1
+  end
+
+  counter = half
+
+  while counter < arr.size
+    second_half.push(arr[counter])
+    counter += 1
+  end
+
+  result.push(first_half,second_half)
+end
+
+# p halvsies([1, 2, 3, 4]) == [[1, 2], [3, 4]]
+# p halvsies([1, 5, 2, 4, 3]) == [[1, 5, 2], [4, 3]]
+# p halvsies([5]) == [[5], []]
+# p halvsies([]) == [[], []]
