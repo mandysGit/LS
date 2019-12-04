@@ -353,3 +353,44 @@ end
 #           85, 87, 51, 17, 66, 20, 28, 26,  2, 22,
 #           40, 23, 71, 62, 73, 32, 43, 24,  4, 56,
 #           7,  34, 57, 74, 45, 11, 88, 67,  5, 58]) == 73
+
+=begin
+9. Does My List Include This?
+=====================
+Input: Array, and Search Value
+Output: Boolean, true or false, whether the search value is in the array or not
+
+Algorithm:
+1. Iterate through the Input Array
+2. Compare each item of the array to the search value
+3. If the item and search value matches, return true
+4. after iterating over the array, and there's no matches, return false
+=end
+
+def include?(array, search_value)
+  array.each do |item|
+    if item == search_value
+      return true
+    end
+  end
+
+  false
+end
+
+def include2?(array, search_value)
+  array.each { |item| return true if item == search_value }
+  false
+end
+
+def include3?(array, search_value)
+  for item in array
+    return true if item == search_value
+  end
+  false
+end
+
+# p include3?([1,2,3,4,5], 3) == true
+# p include3?([1,2,3,4,5], 6) == false
+# p include3?([], 3) == false
+# p include3?([nil], nil) == true
+# p include3?([], nil) == false
