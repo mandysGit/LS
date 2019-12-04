@@ -311,3 +311,45 @@ end
 # p halvsies([1, 5, 2, 4, 3]) == [[1, 5, 2], [4, 3]]
 # p halvsies([5]) == [[5], []]
 # p halvsies([]) == [[], []]
+
+=begin
+8. Find the Duplicate
+=====================
+Input: Unordered Array
+Output: Integer, The value that occurs twice
+
+Rules: 
+- One value in the array occurs twice, all other values occur once
+
+Algorithm:
+- ITERATE through the Input Array
+- Invoke Array#count on each element of the Array
+- If Array#count returns 2, break out of the loop and return the element
+=end
+
+def find_dup(arr)
+  counter = 0
+
+  until counter >= arr.size
+    if arr.count(arr[counter]) == 2
+      return arr[counter]
+    end
+    counter += 1
+  end
+end
+
+def find_dup2(arr)
+  p arr.select { |item| arr.count(item) == 2 }.first
+end
+
+# p find_dup2([1, 5, 3, 1]) == 1
+# p find_dup2([18,  9, 36, 96, 31, 19, 54, 75, 42, 15,
+#           38, 25, 97, 92, 46, 69, 91, 59, 53, 27,
+#           14, 61, 90, 81,  8, 63, 95, 99, 30, 65,
+#           78, 76, 48, 16, 93, 77, 52, 49, 37, 29,
+#           89, 10, 84,  1, 47, 68, 12, 33, 86, 60,
+#           41, 44, 83, 35, 94, 73, 98,  3, 64, 82,
+#           55, 79, 80, 21, 39, 72, 13, 50,  6, 70,
+#           85, 87, 51, 17, 66, 20, 28, 26,  2, 22,
+#           40, 23, 71, 62, 73, 32, 43, 24,  4, 56,
+#           7,  34, 57, 74, 45, 11, 88, 67,  5, 58]) == 73
