@@ -165,13 +165,43 @@ end
 =begin
 5. Staggered Caps(Part 1)
 =====================
-Input: 
-Output:
+Input:  String
+Output: New String, every other character is capitalized
 
-Rules:
+Rules: Characters that are not letters should not be changed, but count as characters when switching between upper and lowercase.
 
-Algorithm:
+Algorithm 
+1. Convert Input String to Array of characters, String#chars
+2. Iterate through each char in the Array, Array#map.with_index
+3. If index is even, capitalize character
+4. If index is odd, lowercase character
+4. Convert Array back to String, Array#join
+5. Return String
 =end
+def staggered_case(str)
+  str.chars.map.with_index { |char, index| index.even? ? char.upcase : char.downcase }.join 
+end
+
+# Further Exploration
+def staggered_case2(str, style='upcase')
+  array = str.chars.map.with_index do |char, index|
+    if style == 'upcase'
+     index.even? ? char.upcase : char.downcase
+    elsif style == 'downcase'
+      index.odd? ? char.upcase : char.downcase
+    end
+  end
+
+  array.join
+end
+
+# p staggered_case('I Love Launch School!') == 'I LoVe lAuNcH ScHoOl!'
+# p staggered_case('ALL_CAPS') == 'AlL_CaPs'
+# p staggered_case('ignore 77 the 444 numbers') == 'IgNoRe 77 ThE 444 NuMbErS'
+
+# p staggered_case2('I Love Launch School!', 'upcase') == 'I LoVe lAuNcH ScHoOl!'
+# p staggered_case2('ALL_CAPS','downcase') == 'aLl_cApS'
+# p staggered_case2('ignore 77 the 444 numbers', 'upcase') == 'IgNoRe 77 ThE 444 NuMbErS'
 
 =begin
 6. Staggered Caps(Part 2)
