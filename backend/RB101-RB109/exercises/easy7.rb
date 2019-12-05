@@ -48,8 +48,8 @@ Algorithm:
 4. Update appropriate Hash key value pair depending on what range the character lies in
 5. return hash
 =end
-UPPERCASE = 'A'.ord..'Z'.ord
-LOWERCASE = 'a'.ord..'z'.ord
+# UPPERCASE = 'A'.ord..'Z'.ord
+# LOWERCASE = 'a'.ord..'z'.ord
 
 def letter_case_count(str)
   hash = { lowercase: 0, uppercase: 0, neither: 0 }
@@ -122,13 +122,45 @@ end
 =begin
 4. Swap Case
 =====================
-Input: 
-Output:
-
-Rules:
+Input: String
+Output: New String, all uppercase converted to lowercase and vice versa
 
 Algorithm:
+1. SET constants for uppercase and lowercase
+2. Iterate through the String by using simple Loop, break out of the looper when counter is >= string.size
+3. If char is lowercase, append uppercase version to new string
+4. If char is uppercase, append lowercase version to new string
+5. If it's neither, append char to new string
+6. return new string
 =end
+UPPERCASE = 'A'.ord..'Z'.ord
+LOWERCASE = 'a'.ord..'z'.ord
+
+def swapcase(str)
+  counter = 0
+  result = ''
+
+  loop do
+    break if counter >= str.size
+    if UPPERCASE.include?(str[counter].ord)
+      result << str[counter].downcase
+    elsif LOWERCASE.include?(str[counter].ord)
+      result << str[counter].upcase
+    else
+      result << str[counter]
+    end
+    counter += 1
+  end
+
+  result
+end
+
+def swapcase2(str)
+  str.chars.map {|char| UPPERCASE.include?(char.ord) ? char.downcase : char.upcase}.join
+end
+
+# p swapcase2('CamelCase') == 'cAMELcASE'
+# p swapcase2('Tonight on XYZ-TV') == 'tONIGHT ON xyz-tv'
 
 =begin
 5. Staggered Caps(Part 1)
