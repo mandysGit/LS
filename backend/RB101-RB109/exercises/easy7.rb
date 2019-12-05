@@ -89,13 +89,35 @@ end
 =begin
 3. Caitalize Words
 =====================
-Input: 
-Output:
-
-Rules:
+Input: String
+Output: New String, with every word capitalized and all other lowercase.
 
 Algorithm:
+1. Use String#downcase on input String
+2. Convert Input String to Array, String#split
+3. Iterate through each word of the Array, Array#map
+3. Invoke String#capitalize
+4. Convert Array back to String, Array#Join(' ')
+5. Return new String
 =end
+def word_cap(str)
+  str.downcase.split.map { |word| word.capitalize }.join(' ')
+end
+
+# Further Exploration
+def word_cap2(str)
+  p str.downcase.split.map { |word| word[0].upcase + word[1..word.size-1] }.join(' ')
+end
+
+def word_cap3(str)
+  array = str.downcase.split
+  array.each { |word| word[0] = word[0].upcase }
+  array.join(' ')
+end
+
+# p word_cap3('four score and seven') == 'Four Score And Seven'
+# p word_cap3('the javaScript language') == 'The Javascript Language'
+# p word_cap3('this is a "quoted" word') == 'This Is A "quoted" Word'
 
 =begin
 4. Swap Case
