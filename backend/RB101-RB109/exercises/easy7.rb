@@ -206,13 +206,44 @@ end
 =begin
 6. Staggered Caps(Part 2)
 =====================
-Input: 
-Output:
-
-Rules:
-
-Algorithm:
 =end
+def staggered_case3(str)
+  need_capitalize = true
+  
+  array = str.chars.each do |char| 
+    if char.match?(/[a-z]/i)
+      need_capitalize ? char.upcase! : char.downcase!
+      need_capitalize = !need_capitalize
+    end
+  end
+
+  array.join
+end
+
+# Further Exploration
+def staggered_case4(str, count_non_alphabet = false)
+  need_capitalize = true
+  
+  array = str.chars.each do |char| 
+    if char.match?(/[a-z]/i) && !count_non_alphabet
+      need_capitalize ? char.upcase! : char.downcase!
+      need_capitalize = !need_capitalize
+    elsif count_non_alphabet
+      need_capitalize ? char.upcase! : char.downcase!
+      need_capitalize = !need_capitalize
+    end
+  end
+
+  array.join
+end
+
+# p staggered_case4('I Love Launch School!') == 'I lOvE lAuNcH sChOoL!'
+# p staggered_case4('ALL CAPS') == 'AlL cApS'
+# p staggered_case4('ignore 77 the 444 numbers') == 'IgNoRe 77 ThE 444 nUmBeRs'
+
+# p staggered_case4('I Love Launch School!', true) == 'I LoVe lAuNcH ScHoOl!'
+# p staggered_case4('ALL_CAPS', true) == 'AlL_CaPs'
+# p staggered_case4('ignore 77 the 444 numbers', true) == 'IgNoRe 77 ThE 444 NuMbErS'
 
 =begin
 7. Multiplicative Average
