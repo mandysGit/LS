@@ -263,31 +263,57 @@ def show_multiplicative_average(arr)
   puts "The result is #{result}"
 end
 
-show_multiplicative_average([3, 5])
-show_multiplicative_average([6])
-show_multiplicative_average([2, 5, 7, 11, 13, 17])
+# show_multiplicative_average([3, 5])
+# show_multiplicative_average([6])
+# show_multiplicative_average([2, 5, 7, 11, 13, 17])
 
 =begin
 8. Multiply Lists
 =====================
-Input: 
-Output:
+Input: Two Arrays, each list contains numbers
+Output: New Array, product of each pair of numbers 
 
 Rules:
+- new arrays contain the same number of arguments
 
 Algorithm:
+3. SET products as empty Array
+4. Loop times the size of arr1, Integer#times
+5. multiply the two elements of each array, append the result to the products array
+6. return the products array
 =end
+def multiply_list(arr1, arr2)
+  products = []
+  arr1.size.times do |index|
+    products << arr1[index] * arr2[index]
+  end
+  products
+end
+
+# Further Exploration
+def multiply_list2(arr1, arr2)
+  arr1.zip(arr2).map {|items| items[0] * items[1]}
+end
+
+# p multiply_list2([3, 5, 7], [9, 10, 11]) == [27, 50, 77]
 
 =begin
-9. Multiply All Piars
+9. Multiply All Pairs
 =====================
-Input: 
-Output:
-
-Rules:
+Input: Two Arrays
+Output: New Array, product of every pair in increasing order
 
 Algorithm:
+1. Get cartesian product of the two arrays. Use Array#product
+2. Multiple every pair, Use Array#map
+3. sort by increasing order, Array#sort
 =end
+
+def multiply_all_pairs(arr1, arr2)
+  arr1.product(arr2).map { |items| items[0] * items[1] }.sort
+end
+
+# p multiply_all_pairs([2, 4], [4, 3, 1, 2]) == [2, 4, 4, 6, 8, 8, 12, 16]
 
 =begin
 10. The End is Near But Not Here
