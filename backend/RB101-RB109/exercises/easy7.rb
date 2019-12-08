@@ -318,10 +318,26 @@ end
 =begin
 10. The End is Near But Not Here
 ================================
-Input: 
-Output:
+Input: String
+Output: Second last word in the string
 
 Rules:
+- words are any sequence of non-blank characters
 
 Algorithm:
+- Convert Input String to Array, String#split
+- return Array [-2]
+
+# Further Exploration
+- Strings that contain no words
+- strings that contain one word
+- odd length
+- even length
 =end
+
+def penultimate(str)
+  str.split[-2]
+end
+
+p penultimate('last word') == 'last'
+p penultimate('Launch School is great!') == 'is'
