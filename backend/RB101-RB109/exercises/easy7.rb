@@ -248,13 +248,24 @@ end
 =begin
 7. Multiplicative Average
 =====================
-Input: 
-Output:
-
-Rules:
+Input: Array of Integers
+Output: Float
 
 Algorithm:
+- multiple all numbers of array together (product)
+- divide the product by the number of entries in array (Array length)
+- print result round by 3
 =end
+
+def show_multiplicative_average(arr)
+  product = arr.inject(:*)
+  result = format("%.3f", product/Float(arr.size))
+  puts "The result is #{result}"
+end
+
+show_multiplicative_average([3, 5])
+show_multiplicative_average([6])
+show_multiplicative_average([2, 5, 7, 11, 13, 17])
 
 =begin
 8. Multiply Lists
