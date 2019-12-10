@@ -63,13 +63,36 @@ end
 =begin
 3. Leading Substrings
 ======================
-Input: 
-Output: 
-
-Rules:
+Input: String
+Output: Array, all substrings in shortest to longest order
 
 Algorithm:
+1. set substrings = [] 
+2. set counter = 0
+
+4. Iterate over String
+5. Break loop when counter > String.size
+7. Append char with index 0 until counter to substrings Array, Use String#slice 
+9. increment counter
+
+10. return substring
 =end
+
+def substrings_at_start(str)
+  substrings = []
+  counter = 1
+
+  until counter > str.size
+    substrings << str.slice(0, counter)
+    counter += 1
+  end
+
+  substrings
+end
+
+# p substrings_at_start('abc') == ['a', 'ab', 'abc']
+# p substrings_at_start('a') == ['a']
+# p substrings_at_start('xyzzy') == ['x', 'xy', 'xyz', 'xyzz', 'xyzzy']
 
 =begin
 4. All Substrings
