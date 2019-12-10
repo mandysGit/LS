@@ -36,13 +36,29 @@ end
 =begin
 2. Madlibs
 ===========
-Input: 
-Output: 
-
-Rules:
+Input: 4 user inputs, noun, verb, adjective, adverb
+Output: A sentence combining the user inputs 
 
 Algorithm:
+1. use Kernel#gets, String#chomp to get noun, verb, adjective, and adverb from user
+2. Use string literal to inject those variables in a String
+3. print out the string
 =end
+
+def madlibs
+  print "Enter a noun: "
+  noun = gets.chomp
+  print "Enter a verb: "
+  verb = gets.chomp
+  print "Enter an adjective: "
+  adjective = gets.chomp
+  print "Enter an adverb: "
+  adverb = gets.chomp
+
+  puts "Do you #{verb} your #{adjective} #{noun} #{adverb}? That's hilarious!"
+end
+
+# madlibs
 
 =begin
 3. Leading Substrings
