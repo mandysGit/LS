@@ -90,6 +90,7 @@ def substrings_at_start(str)
   substrings
 end
 
+
 # p substrings_at_start('abc') == ['a', 'ab', 'abc']
 # p substrings_at_start('a') == ['a']
 # p substrings_at_start('xyzzy') == ['x', 'xy', 'xyz', 'xyzz', 'xyzzy']
@@ -147,7 +148,7 @@ end
 def substrings2(str)
   substrings = []
   start_index = 0
-  
+
   loop do 
     break if start_index >= str.size 
     substrings << substrings_at_start(str[start_index..-1])
@@ -169,13 +170,56 @@ end
 =begin
 5. Palindromic Substrings
 ==========================
-Input: 
-Output: 
+Input: String
+Output: Array, contains all palindrome substrings
 
 Rules:
+- Palindrome is a string with same sequence of characters forwards as it does backwards
+- return value should be arranged in the same sequence as the substrings appear in the string
+- Duplicate palindromes should be included
+- use the substrings method
+- pay attention to case: "AbcbA" is a palindrome, but neither "Abcba" nor "Abc-bA" are
+- single characters do not count as palindrome
 
 Algorithm:
+1. Create palindrome? helper method
+    - take in one argument as a string
+    - compare the input string with reverse of the input string
+    - return the result as a boolean
+2. initalize palindromes as an empty array
+3. initalize substrings and set it equal to the return value of invoking substrings(input_string)
+4. Iterate over substrings, use Array#select
+    - Pass in substring as an argument to palindrome? 
+    - If it's true, append it to palindromes
+5. return palindromes array
 =end
+
+def palindrome?(str)
+  str == str.reverse && str.size > 1
+end
+
+def palindromes(str)
+  substrings = substrings2(str)
+  substrings.select { |substring| palindrome?(substring) }
+end
+
+
+def palindromes_ignore_case(str)
+  substrings = substrings2(str)
+  substrings.select { |substring| palindrome?(substring.downcase) }
+end
+
+# p palindromes('abcd') == []
+# p palindromes('madam') == ['madam', 'ada']
+# p palindromes('hello-madam-did-madam-goodbye') == [
+#   'll', '-madam-', '-madam-did-madam-', 'madam', 'madam-did-madam', 'ada',
+#   'adam-did-mada', 'dam-did-mad', 'am-did-ma', 'm-did-m', '-did-', 'did',
+#   '-madam-', 'madam', 'ada', 'oo'
+# ]
+# p palindromes('knitting cassettes') == [
+#   'nittin', 'itti', 'tt', 'ss', 'settes', 'ette', 'tt'
+# ]
+# p palindromes_ignore_case("Abcba") == ["Abcba", 'bcb']
 
 =begin
 6. fizzbuzz
