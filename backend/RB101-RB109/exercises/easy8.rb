@@ -97,13 +97,74 @@ end
 =begin
 4. All Substrings
 ==================
-Input: 
-Output: 
+Input: string
+Output: Array, containg all possible substrings
 
-Rules:
+Rules: substrings to be returned from their position, and shortest to longest
 
 Algorithm:
+1. initalize an empty array called substrings
+2. initalize an outer_start_index = 0
+3. initalize an inner_start_index = 0
+
+outer loop
+break if outer_start_index >= str.size
+
+    inner loop
+    break if inner_start_index >= str.size
+      - increment substring with str.slice(inner_start_index, )
+    increment inner_start_index
+
+increment outer_start_index
+inner_start_index = outer_start_index
+
+3. return the substrings array
 =end
+
+# Without using substrings_at_start
+def substrings(str)
+  substrings = []
+  outer_start_index = 0
+  inner_start_index = 0
+
+  until outer_start_index >= str.size
+    substring = ''
+    until inner_start_index >= str.size
+      substring += str[inner_start_index]
+      substrings << substring
+      inner_start_index += 1
+    end
+
+    outer_start_index += 1
+    inner_start_index = outer_start_index
+  end
+
+  substrings
+end
+
+
+# Using substrings_at_start
+def substrings2(str)
+  substrings = []
+  start_index = 0
+  
+  loop do 
+    break if start_index >= str.size 
+    substrings << substrings_at_start(str[start_index..-1])
+    start_index += 1
+  end
+
+  substrings.flatten
+end
+
+# p substrings2('abcde') == [
+#   'a', 'ab', 'abc', 'abcd', 'abcde', 
+#   'b', 'bc', 'bcd', 'bcde',
+#   'c', 'cd', 'cde',
+#   'd', 'de',
+#   'e'
+# ]
+
 
 =begin
 5. Palindromic Substrings
