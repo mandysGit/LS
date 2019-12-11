@@ -224,13 +224,38 @@ end
 =begin
 6. fizzbuzz
 ============
-Input: 
-Output: 
-
-Rules:
+Input: 2 integers, first one is start number, second is end number
+Output: print out all numbers between the new numbers
+if number is divisible by 3 print "Fizz"
+if number is divisible by 5 print "Buzz"
+if number is divisible by 3 & 5 print "FizzBuzz"
 
 Algorithm:
+1. Use Integer#upto, start_num.upto.endnum, print each num
+2. if num MOD 3 == 0 && num MOD 5 == 0, print "FizzBuzz"
+3. if num MOD 3 == 0, print "Fizz"
+4. if num MOD 5 == 0, print "Buzz"
+5. else print num
 =end
+
+def fizzbuzz(start, finish)
+  result = []
+  start.upto(finish) do |num|
+    if num % 3 == 0 && num % 5 == 0 
+      result << "FizzBuzz"
+    elsif num % 3 == 0
+      result << "Fizz"
+    elsif num % 5 == 0 
+      result << "Buzz"
+    else
+      result << num
+    end
+  end
+
+  puts result.join(', ')
+end
+
+# fizzbuzz(1, 15)
 
 =begin
 7. Double Char (Part 1)
