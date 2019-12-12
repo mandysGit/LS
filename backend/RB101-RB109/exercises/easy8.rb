@@ -354,12 +354,27 @@ end
 # p reversed_number(1) == 1
 
 =begin
-1. Get the Middle Character
+10. Get the Middle Character
 ============================
-Input: 
-Output: 
+Input: String
+Output: String, middle character or characters
 
 Rules:
+- if length of string is odd, return exactly one char
+- if length of string is even, return two char
 
 Algorithm:
+1. return str[size/2] if str is odd
+2. return str[size/2-1, size/2] if str is even
 =end
+
+def center_of(str)
+  return str[str.size/2] if str.size.odd?
+  return str[(str.size/2)-1..str.size/2] if str.size.even?
+end
+
+# p center_of('I love ruby') == 'e'
+# p center_of('Launch School') == ' '
+# p center_of('Launch') == 'un'
+# p center_of('Launchschool') == 'hs'
+# p center_of('x') == 'x'
