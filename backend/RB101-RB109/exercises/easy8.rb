@@ -330,13 +330,28 @@ end
 =begin
 9. Convert number to reversed array of digits
 =============================================
-Input: 
-Output: 
+Input: Positive Integer
+Output: Returns Number reversed
 
 Rules:
+- remove leading zeros
 
 Algorithm:
+- Convert Integer to String, use String#to_s
+- Reverse String, use String#reverse
+- Convert String to Integer, use String#to_i
 =end
+
+def reversed_number(int)
+  int.to_s.reverse.to_i
+end
+
+# p reversed_number(12345) == 54321
+# p reversed_number(12213) == 31221
+# p reversed_number(456) == 654
+# p reversed_number(12000) == 21 # No leading zeros in return value!
+# p reversed_number(12003) == 30021
+# p reversed_number(1) == 1
 
 =begin
 1. Get the Middle Character
