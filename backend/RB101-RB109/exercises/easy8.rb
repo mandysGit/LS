@@ -294,13 +294,38 @@ end
 =begin
 8. Double Char (Part 2)
 ========================
-Input: 
-Output: 
+Input: String
+Output: New String, every consonant character is doubled
 
-Rules:
+Rules:  Vowels (a,e,i,o,u), digits, punctuation, and whitespace should not be doubled.
 
 Algorithm:
+1. initalize all_letters, non-vowels
+2. initalize result = ''
+3. iterate through each character, Using String#each_char
+4. append each character to result, if consonate, multiple it by 2
+5. return result
 =end
+
+ALL_LETTERS = /[A-Za-z]/
+NOT_VOWELS = /[^AEIOUaeiou]/
+
+def double_consonants(str)
+  result = ''
+
+  str.each_char do |char|
+    char.match?(ALL_LETTERS) && char.match?(NOT_VOWELS) ? 
+    result << char * 2  : 
+    result << char
+  end
+
+  result
+end
+
+# p double_consonants('String') == "SSttrrinngg"
+# p double_consonants("Hello-World!") == "HHellllo-WWorrlldd!"
+# p double_consonants("July 4th") == "JJullyy 4tthh"
+# p double_consonants('') == ""
 
 =begin
 9. Convert number to reversed array of digits
