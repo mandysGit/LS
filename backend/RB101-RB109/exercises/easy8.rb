@@ -260,13 +260,36 @@ end
 =begin
 7. Double Char (Part 1)
 ========================
-Input: 
-Output: 
-
-Rules:
+Input: String
+Output: New string with each character doubled
 
 Algorithm:
+1. Set doubled_string = ''
+2. Iterate through the Input String
+3. On each element, append element*2 to doubled_string. Use String#<<
+4. return doubled_string
 =end
+
+def repeater(str)
+  doubled_string = ''
+  counter = 0
+  until counter >= str.size
+    doubled_string << str[counter]*2
+    counter += 1
+  end
+
+  doubled_string
+end
+
+def repeater2(str)
+  doubled_string = ''
+  str.each_char { |char| doubled_string << char * 2 }
+  doubled_string
+end
+
+# p repeater2('Hello') == "HHeelllloo"
+# p repeater2("Good job!") == "GGoooodd  jjoobb!!"
+# p repeater2('') == ''
 
 =begin
 8. Double Char (Part 2)
