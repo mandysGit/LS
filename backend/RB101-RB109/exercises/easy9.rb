@@ -29,13 +29,42 @@ end
 =begin
 2. Double Doubles
 ============================
-Input:
-Output:
+Input: Integer
+Output: Integer, return the Integer*2 if it's not a double number
 
 Rules:
+- double number is a number with an even number of digits whose left-side digits are exactly the same as its right-side digits
+- 44, 3333, 103103, 7676 are all double numbers
+- 444, 334433, and 107 are not
 
 Algorithm:
+1. Convert Input Intger to String, Integer#to_s
+3. Check if length of String is even, String.size, String#even?
+4. If even: check if it's a double number by comparing first and second half of the String
+    - String index 0 up until (String.size/2) -1
+    - String index String.size/2 until String.size
+5. Return String converted to Integer if it's a double number
+5. Return String converted to Integer*2 if it's non-double number
 =end
+
+def twice(num)
+  string = num.to_s
+  length = string.size
+  return num*2 if length.odd?
+  return num if string[0..(length/2)-1] == string[length/2..length]
+  num*2
+end
+
+# p twice(37) == 74
+# p twice(44) == 44
+# p twice(334433) == 668866
+# p twice(444) == 888
+# p twice(107) == 214
+# p twice(103103) == 103103
+# p twice(3333) == 3333
+# p twice(7676) == 7676
+# p twice(123_456_789_123_456_789) == 123_456_789_123_456_789
+# p twice(5) == 10
 
 =begin
 3. Always Return Negative
