@@ -69,13 +69,15 @@ end
 =begin
 3. Always Return Negative
 ============================
-Input:
-Output:
-
-Rules:
-
-Algorithm:
 =end
+
+def negative(num)
+  num > 0 ? -num : num
+end
+
+# p negative(5) == -5
+# p negative(-3) == -3
+# p negative(0) == 0 
 
 =begin
 4. Counting Up
