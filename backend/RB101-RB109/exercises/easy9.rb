@@ -82,13 +82,24 @@ end
 =begin
 4. Counting Up
 ============================
-Input:
-Output:
-
-Rules:
+Input: Integer
+Output: Array, sequence of integers from 1 to the Input Integer value
 
 Algorithm:
+1. declare results variable and initialize it as an empty array
+2. Use Integer#times to appends integers from 1 to the input integer value to results array
+3. For each iteration of Integer#times, append num+1 to results array
 =end
+
+def sequence(num)
+  result = []
+  num.times { |num| result << num+1 }
+  result
+end
+
+# p sequence(5) == [1, 2, 3, 4, 5]
+# p sequence(3) == [1, 2, 3]
+# p sequence(1) == [1]
 
 =begin
 5. Uppercase Check
