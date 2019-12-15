@@ -86,3 +86,12 @@ arr[1][0] -= a
 arr #=> [4, [3,8]]
 a #=> 2
 b #=> [3,8]
+
+# Problem 8
+hsh = {first: ['the', 'quick'], second: ['brown', 'fox'], third: ['jumped'], fourth: ['over', 'the', 'lazy', 'dog']}
+
+# VOWELS = /[aeiou]/
+
+# hsh.each do |_, value|
+#   value.join.chars { |char| puts char if char.match?(VOWELS)}
+# end
