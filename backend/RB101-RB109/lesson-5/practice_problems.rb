@@ -44,3 +44,20 @@ hsh1[:first][2][0] = 4
 hsh2 = {['a'] => {a: ['1', :two, 3], b: 4}, 'b' => 5}
 hsh2[['a']][:a][2] = 4
 # p hsh2
+
+# Problem 5
+munsters = {
+  "Herman" => { "age" => 32, "gender" => "male" },
+  "Lily" => { "age" => 30, "gender" => "female" },
+  "Grandpa" => { "age" => 402, "gender" => "male" },
+  "Eddie" => { "age" => 10, "gender" => "male" },
+  "Marilyn" => { "age" => 23, "gender" => "female"}
+}
+
+# total = 0
+
+# munsters.each do |_, value|
+#   total += value["age"] if value["gender"] == "male"
+# end
+
+# p total
