@@ -237,13 +237,61 @@ end
 =begin
 9. Grade book
 ============================
-Input:
-Output:
-
-Rules:
+Input: 3 Integers
+Output: String, the letter value associated with the grade
 
 Algorithm:
+- initalize average variable as adding the 3 inputsm then divide by 3
+- Use case statement to return the letter:
+    90 <= score <= 100 	'A'
+    80 <= score < 90 	'B'
+    70 <= score < 80 	'C'
+    60 <= score < 70 	'D'
+    0 <= score < 60 	'F'
 =end
+def get_grade(num1, num2, num3)
+  avg = (num1+num2+num3)/3
+
+  case
+  when avg >= 90 && avg <=100
+    "A"
+  when avg >= 80 && avg < 90
+    "B"
+  when avg >= 70 && avg < 80
+    "C"
+  when avg >= 60 && avg < 70
+    "D"
+  when avg >= 0 && avg < 60
+    "F"
+  else
+    "average not in grade range"
+  end
+end
+
+def get_grade2(num1, num2, num3)
+  avg = (num1+num2+num3)/3
+
+  case avg
+  when 90..100
+    "A"
+  when 80..89
+    "B"
+  when 70..79
+    "C"
+  when 60..69
+    "D"
+  when 0..59
+    "F"
+  else
+    "average not in grade range"
+  end
+end
+
+# p get_grade(95, 90, 93) == "A"
+# p get_grade(85, 87, 90) == "B"
+# p get_grade(70, 75, 79) == "C"
+# p get_grade(50, 50, 95) == "D"
+# p get_grade(0, 2, 1) == "F"
 
 =begin
 10. Grocery List
