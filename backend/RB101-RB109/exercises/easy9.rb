@@ -104,13 +104,37 @@ end
 =begin
 5. Uppercase Check
 ============================
-Input:
-Output:
+Input: String
+Output: Boolean
 
-Rules:
+Rules: 
+- Returns true if all alphabetic characters are uppercase
+- Ignore characters that are not alphabetic
 
 Algorithm:
+- initalize constant for non upper case alphabet chars
+- initalize result = true
+- Iterate through string by converting it to Array, String#chars
+- If char is lowercase reassign result to false
+- return result
 =end
+
+LOWERCASE = /[a-z]/
+
+def uppercase?(str)
+  result = true
+  str.chars do |char|
+    result = false if char.match?(LOWERCASE)
+  end
+  result
+end
+
+# p uppercase?('t') == false
+# p uppercase?('T') == true
+# p uppercase?('Four Score') == false
+# p uppercase?('FOUR SCORE') == true
+# p uppercase?('4SCORE!') == true
+# p uppercase?('') == true
 
 =begin
 6. How long are you?s
