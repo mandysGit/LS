@@ -173,13 +173,29 @@ end
 =begin
 7. Name Swapping
 ============================
-Input:
-Output:
-
-Rules:
+Input: String, contains first name, space, last name
+Output: String, contains lastname, common, first name
 
 Algorithm:
+- Convert Input String to Array, Use String#split
+- Reverse the Array elements orders
+    - arr[1], arr[0] = arr[0], arr[1]
+- Convert Array to String, Use Array#join(', ')
+- return String
 =end
+
+def swap_name(str)
+  arr = str.split
+  arr[1], arr[0] = arr[0], arr[1]
+  arr.join(', ')
+end
+
+def swap_name2(str)
+  arr = str.split
+  "#{arr[1]}, #{arr[0]}"
+end
+
+# p swap_name('Joe Roberts') == 'Roberts, Joe'
 
 =begin
 8. Sequence Count
