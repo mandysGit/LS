@@ -296,10 +296,24 @@ end
 =begin
 10. Grocery List
 ============================
-Input:
-Output:
-
-Rules:
+Input: 2D nested Array, each subarray contains a fruit and the quantity
+Output: An Array, correct number of each fruit
 
 Algorithm:
+- initalize result variable as empty array
+- Use Array#each to access each subarray
+- Use Integer#times on the second element, to append the first element into the result array
+- arr[1].times, append arr[0] to results
+- return result array
 =end
+
+def buy_fruit(arr)
+  result = []
+  arr.each do |sub_array|
+    sub_array[1].times { result << sub_array[0] }
+  end
+  result
+end
+
+# p buy_fruit([["apples", 3], ["orange", 1], ["bananas", 2]]) ==
+#   ["apples", "apples", "apples", "orange", "bananas","bananas"]
