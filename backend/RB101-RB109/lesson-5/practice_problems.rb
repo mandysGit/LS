@@ -95,3 +95,12 @@ hsh = {first: ['the', 'quick'], second: ['brown', 'fox'], third: ['jumped'], fou
 # hsh.each do |_, value|
 #   value.join.chars { |char| puts char if char.match?(VOWELS)}
 # end
+
+# Problem 9
+arr = [['b', 'c', 'a'], [2, 1, 3], ['blue', 'black', 'green']]
+
+# result = arr.map do |sub_array|
+#   sub_array.sort { |a, b| b <=> a}
+# end
+
+# p result
