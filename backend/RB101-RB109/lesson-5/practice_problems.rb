@@ -115,3 +115,12 @@ result = [{a: 1}, {b: 2, c: 3}, {d: 4, e: 5, f: 6}].map do |hash|
 end
 
 # p result
+
+# Problem 11
+arr = [[2], [3, 5, 7], [9], [11, 13, 15]]
+
+result = arr.map do |sub_array|
+  sub_array.select { |num| num % 3 == 0}
+end
+
+# p result
