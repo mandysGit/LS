@@ -133,3 +133,22 @@ hsh = arr.each_with_object({}) do |sub_array, hash|
 end
 
 # p hsh
+
+# Problem 13
+arr = [[1, 6, 7], [1, 4, 9], [1, 8, 3]]
+
+def remove_evens(arr)
+  result = []
+
+  for num in arr
+    result << num if num.odd?
+  end
+
+  result
+end
+
+result = arr.sort do |a, b|
+  remove_evens(a) <=> remove_evens(b)
+end
+
+# p result 
