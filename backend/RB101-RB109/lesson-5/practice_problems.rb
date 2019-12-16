@@ -188,3 +188,16 @@ result = arr.select do |hash|
 end
 
 # p result
+
+# Problem 16
+HEX_DIGITS = 'abcdef0123456789'.chars
+
+def hex(length)
+  HEX_DIGITS.sample(length).join
+end
+
+def uuid
+  "#{hex(8)}-#{hex(4)}-#{hex(4)}-#{hex(4)}-#{hex(12)}"
+end
+
+# p uuid
