@@ -173,3 +173,18 @@ hsh.each_pair do |key, value|
 end
 
 # p result
+
+# Problem 15
+arr = [{a: [1, 2, 3]}, {b: [2, 4, 6], c: [3, 6], d: [4]}, {e: [8], f: [6, 10]}]
+
+result = arr.select do |hash|
+  nums_even = true
+
+  hash.each_pair do |_, array|
+    array.each { |num| nums_even = false if num.odd? }
+  end
+
+  nums_even
+end
+
+# p result
