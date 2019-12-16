@@ -152,3 +152,24 @@ result = arr.sort do |a, b|
 end
 
 # p result 
+
+# Problem 14
+hsh = {
+  'grape' => {type: 'fruit', colors: ['red', 'green'], size: 'small'},
+  'carrot' => {type: 'vegetable', colors: ['orange'], size: 'medium'},
+  'apple' => {type: 'fruit', colors: ['red', 'green'], size: 'medium'},
+  'apricot' => {type: 'fruit', colors: ['orange'], size: 'medium'},
+  'marrow' => {type: 'vegetable', colors: ['green'], size: 'large'},
+}
+
+result = []
+
+hsh.each_pair do |key, value|
+  if value[:type] == 'fruit'
+    result << value[:colors].map { |color| color.capitalize}
+  else
+    result << value[:size].upcase
+  end 
+end
+
+# p result
