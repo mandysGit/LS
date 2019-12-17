@@ -31,8 +31,8 @@ def rotate_integer(int)
   rotate_array(int.to_s.chars).join.to_i
 end
 
-# p rotate_string('hello')
-# p rotate_integer(1234)
+# p rotate_string('hello') == 'elloh'
+# p rotate_integer(1234) == 2341
 # p rotate_array([7, 3, 5, 2, 9, 1]) == [3, 5, 2, 9, 1, 7]
 # p rotate_array(['a', 'b', 'c']) == ['b', 'c', 'a']
 # p rotate_array(['a']) == ['a']
@@ -78,13 +78,46 @@ end
 =begin
 3. Rotation (Part 3)
 ====================
-Input: 
-Output: 
+Input: An Integer
+Output: An Integer, maxium rotated Integer
 
 Rules: 
+- Maximum rotation means every substring from the right has it's rightmost digit rotated
 
 Algorithm:
+- initalize result = input integer converted to string, Use Integer#to_s
+- initalize counter = 1
+
+- loop until counter is equal or greater than string.size - 1
+  - initalize left_digits = result[0...counter]
+  - initalize right_digits = result[counter..-1]
+  - rotated_right_digits = rotate_string(right_digits)
+  - result = left_digits + rotated_right_digits
+  - increment counter 
+
+= return result.to_i
 =end
+
+def max_rotation(num)
+  result = num.to_s
+  counter = 0
+
+  until counter >= num.to_s.size - 1
+    left_digits = result[0...counter]
+    right_digits = result[counter..-1]
+    rotated_right_digits = rotate_string(right_digits)
+    result = left_digits + rotated_right_digits
+    counter += 1
+  end
+
+  result.to_i
+end
+
+# p max_rotation(735291) == 321579
+# p max_rotation(3) == 3
+# p max_rotation(35) == 53
+# p max_rotation(105) == 15 # the leading zero gets dropped
+# p max_rotation(8_703_529_146) == 7_321_609_845
 
 =begin
 4. 1000 Lights
