@@ -44,13 +44,36 @@ end
 =begin
 2. Rotation (Part 2)
 ====================
-Input: 
-Output: 
+Input: Two Integers, the number, last n digits of a number
+Output: Integer, the rotated number
 
 Rules: 
+- rotating 1 digit results in original number
+- n is always positive
 
 Algorithm:
+- Convert Input Integer to String, Use Integer#to_s, initalize it as string
+- Retrieve the substring by reference, string[0...-n], initalize it as substring
+- Retrieve the rest of the string by reference, string[-n..-1], initialize it as rotate_substring
+- Rotate the rotate_substring, use rotate_string method
+- return rotate_substring + substring
 =end
+
+def rotate_rightmost_digits(num, n)
+  string = num.to_s
+  substring = string[0...-n]
+  rotate_substring = string[-n..-1]
+
+  result = substring + rotate_string(rotate_substring)
+  result.to_i
+end
+
+# p rotate_rightmost_digits(735291, 1) == 735291
+# p rotate_rightmost_digits(735291, 2) == 735219
+# p rotate_rightmost_digits(735291, 3) == 735912
+# p rotate_rightmost_digits(735291, 4) == 732915
+# p rotate_rightmost_digits(735291, 5) == 752913
+# p rotate_rightmost_digits(735291, 6) == 352917
 
 =begin
 3. Rotation (Part 3)
