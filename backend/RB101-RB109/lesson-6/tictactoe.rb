@@ -31,6 +31,17 @@ def display_board(brd)
 end
 # rubocop:enable Metrics/AbcSize
 
+def joinor(arr, delimiter=', ', last_delimiter='or')
+  return "#{arr[0]}" if arr.length == 1
+  return "#{arr[0]} #{last_delimiter}#{arr[1]}" if arr.length == 2
+
+  arr.reduce('') do |sentence, item|
+    arr.last == item ?
+    sentence << "#{last_delimiter} #{item.to_s}" :
+    sentence << "#{item.to_s}#{delimiter}"
+  end
+end
+
 def initialize_board
   new_board = {}
   (1..9).each { |num| new_board[num] = INITIAL_MARKER }
@@ -44,7 +55,7 @@ end
 def player_places_piece!(brd)
   square = ''
   loop do
-    prompt "Choose a square (#{emtpy_squares(brd).join(',')}):"
+    prompt "Choose a square (#{joinor(emtpy_squares(brd))}):"
     square = gets.chomp.to_i
     break if emtpy_squares(brd).include?(square)
     prompt "Sorry, that's not a valid choice"
