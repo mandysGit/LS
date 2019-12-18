@@ -65,7 +65,7 @@ def detect_winner(brd)
   winning_lines = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                   [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
                   [[1, 5, 9], [3, 5, 7]]              # diagonals
-  
+
   winning_lines.each do |line|
     if brd[line[0]] == PLAYER_MARKER &&
        brd[line[1]] == PLAYER_MARKER &&
@@ -85,13 +85,13 @@ loop do
 
   loop do
     display_board(board)
-    
+
     player_places_piece!(board)
     break if someone_won?(board) || board_full?(board)
 
     computer_places_piece!(board)
     break if someone_won?(board) || board_full?(board)
-  end 
+  end
 
   display_board(board)
 
@@ -100,7 +100,7 @@ loop do
   else
     prompt "It's a tie!"
   end
-  
+
   prompt "Play again? (y or n)"
   answer = gets.chomp
   break unless answer.downcase.start_with?('y')
