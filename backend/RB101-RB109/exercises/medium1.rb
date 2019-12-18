@@ -122,13 +122,68 @@ end
 =begin
 4. 1000 Lights
 ==============
-Input: 
-Output: 
+Input: Integer, the total number of switches
+Output: Array, identifies which lights are on after n repetitions
 
 Rules: 
+- each switch is conneted to one light
+- initally, all lights are off
+- on the first round (1), toggle all the switches, turns all lights on
+- on other rounds, toggle the switches based on the round number
+    - each switch that is toggle, is a multiple of the round number
+    - each next switch is the round number plus the current switch position
+    - Ex. if it's round 2, then 2,4,6,8, etc switches are toggled
 
 Algorithm:
+- initalize a hash that contain the switch number as the key and true or false as value
+- Use Integer#upto to initalize the hash, 1 up to n, setting each key's value as false
+
+Subprocess: toggling the switches
+- Use Integer#upto to iterate n times
+- initalize round_number, to keep track of which round
+- initalize toggle_switch = round_number
+- Iterate through the lights_hash, use Hash#each
+    - If toggle_switch matches switch number: 
+      - toggle switch by reassigning value, hash[key] = !value
+      - change toggle_switch += round_number
+
+Subprocess: append all on switches to array
+- Use Hash#each to loop through lights
+- if lights[switch] == true, append switch to results
+
+- return results
 =end
+
+def toggle_lights(n)
+  lights = {}
+  result = []
+
+  # Initalize hash by turning all switches off
+  1.upto(n) { |switch| lights[switch] = false }
+
+  # Toggle switches for each round
+  1.upto(n) do |round_number|
+    toggle_switch = round_number
+
+    lights.each_pair do |switch, state|
+      if switch == toggle_switch
+        lights[switch] = !state 
+        toggle_switch += round_number
+      end
+    end
+  end
+
+  # Create array with switches that are on
+  lights.each_pair do |switch, state|
+    result << switch if state == true
+  end
+
+  result
+end
+
+# p toggle_lights(1000) == [1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900, 961]
+# p toggle_lights(5) == [1, 4]
+# p toggle_lights(10) == [1, 4, 9]
 
 =begin
 5. Diamonds!
