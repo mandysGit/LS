@@ -1,16 +1,16 @@
 =begin
 1. Rotation (Part 1)
 ====================
-Input: Array 
+Input: Array
 Output: New Array, where first element is moved to the end of Array
 
-Rules: 
+Rules:
 - Dont' use Array#rotate
 - don't modify the original Array
 
 Algorithm:
 - Object#dup to create shallow copy of input Array and save it as result
-- initalize first_elm as first element of result, use Array#shift 
+- initalize first_elm as first element of result, use Array#shift
 - Use Array#push to insert the first_elm in last position
 =end
 
@@ -47,7 +47,7 @@ end
 Input: Two Integers, the number, last n digits of a number
 Output: Integer, the rotated number
 
-Rules: 
+Rules:
 - rotating 1 digit results in original number
 - n is always positive
 
@@ -81,7 +81,7 @@ end
 Input: An Integer
 Output: An Integer, maxium rotated Integer
 
-Rules: 
+Rules:
 - Maximum rotation means every substring from the right has it's rightmost digit rotated
 
 Algorithm:
@@ -93,7 +93,7 @@ Algorithm:
   - initalize right_digits = result[counter..-1]
   - rotated_right_digits = rotate_string(right_digits)
   - result = left_digits + rotated_right_digits
-  - increment counter 
+  - increment counter
 
 = return result.to_i
 =end
@@ -125,7 +125,7 @@ end
 Input: Integer, the total number of switches
 Output: Array, identifies which lights are on after n repetitions
 
-Rules: 
+Rules:
 - each switch is conneted to one light
 - initally, all lights are off
 - on the first round (1), toggle all the switches, turns all lights on
@@ -143,7 +143,7 @@ Subprocess: toggling the switches
 - initalize round_number, to keep track of which round
 - initalize toggle_switch = round_number
 - Iterate through the lights_hash, use Hash#each
-    - If toggle_switch matches switch number: 
+    - If toggle_switch matches switch number:
       - toggle switch by reassigning value, hash[key] = !value
       - change toggle_switch += round_number
 
@@ -167,7 +167,7 @@ def toggle_lights(n)
 
     lights.each_pair do |switch, state|
       if switch == toggle_switch
-        lights[switch] = !state 
+        lights[switch] = !state
         toggle_switch += round_number
       end
     end
@@ -188,21 +188,59 @@ end
 =begin
 5. Diamonds!
 ============
-Input: 
-Output: 
-
-Rules: 
+Input: Integer, assume it's always odd
+Output: String, 4 pointed diamond
 
 Algorithm:
+- initalize stars = 1
+- initalize spaces = n/2
+- initalize row = 1
+
+- loop, break when rows is greater than n
+    - puts spaces + stars + spaces
+
+    IF row <= n/2
+    - decrement spaces by 1
+    - increment stars by 2
+
+    IF row > n/2
+    - increment spaces by 1
+    - decrement stars by 2
+
+    - increment row by 1
 =end
+
+def diamond(n)
+  stars = 1
+  spaces = n/2
+  row = 1
+
+  until row > n
+    puts " "*spaces + "*"*stars + " "*spaces
+
+    if row <= (n/2)
+      spaces -= 1
+      stars += 2
+    else
+      spaces += 1
+      stars -= 2
+    end
+
+    row += 1
+  end
+end
+
+# diamond(1)
+# diamond(3)
+# diamond(9)
 
 =begin
 6. Stack Machine Interpretation
 ===============================
-Input: 
-Output: 
+Input:
+Output:
 
-Rules: 
+Rules:
 
 Algorithm:
 =end
@@ -210,10 +248,10 @@ Algorithm:
 =begin
 7. Word to Digit
 ================
-Input: 
-Output: 
+Input:
+Output:
 
-Rules: 
+Rules:
 
 Algorithm:
 =end
@@ -221,10 +259,10 @@ Algorithm:
 =begin
 8. Fibonacci Numbers (Recursion)
 ===============================
-Input: 
-Output: 
+Input:
+Output:
 
-Rules: 
+Rules:
 
 Algorithm:
 =end
@@ -232,10 +270,10 @@ Algorithm:
 =begin
 9. Fibonacci Numbers (Procedural)
 =================================
-Input: 
-Output: 
+Input:
+Output:
 
-Rules: 
+Rules:
 
 Algorithm:
 =end
@@ -243,10 +281,10 @@ Algorithm:
 =begin
 10. Fibonacci Numbers (Last Digit)
 ==================================
-Input: 
-Output: 
+Input:
+Output:
 
-Rules: 
+Rules:
 
 Algorithm:
 =end
