@@ -211,19 +211,19 @@ Algorithm:
 =end
 
 def diamond(n)
-  stars = 1
-  spaces = n/2
+  number_of_stars = 1
+  number_of_spaces = n/2
   row = 1
 
   until row > n
-    puts " "*spaces + "*"*stars + " "*spaces
+    puts " "*number_of_spaces + "*"*number_of_stars + " "*number_of_spaces
 
-    if row <= (n/2)
-      spaces -= 1
-      stars += 2
-    else
-      spaces += 1
-      stars -= 2
+    if row <= n/2
+      number_of_spaces -= 1
+      number_of_stars += 2
+    else # row > n/2
+      number_of_spaces += 1
+      number_of_stars -= 2
     end
 
     row += 1
@@ -233,6 +233,43 @@ end
 # diamond(1)
 # diamond(3)
 # diamond(9)
+
+# Further Exploration
+def print_middle_rows(grid, number_of_middle_spaces)
+  space = ' '
+  puts "*#{space*number_of_middle_spaces}*".center(grid)
+end
+
+def print_end_rows(grid)
+  puts "*".center(grid)
+end
+
+def diamond2(grid)
+  number_of_middle_spaces = 1
+
+  1.upto(grid/2) do |row|
+    if row == 1
+      print_end_rows(grid)
+    else
+      print_middle_rows(grid, number_of_middle_spaces)
+      number_of_middle_spaces += 2
+    end
+  end
+
+  (grid/2 + 1).upto(grid) do |row|
+    if row == grid
+      print_end_rows(grid)
+    else
+      print_middle_rows(grid, number_of_middle_spaces)
+      number_of_middle_spaces -= 2
+    end
+  end
+end
+
+diamond2(3)
+diamond2(5)
+diamond2(9)
+diamond2(21)
 
 =begin
 6. Stack Machine Interpretation
