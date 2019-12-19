@@ -417,13 +417,45 @@ end
 =begin
 7. Word to Digit
 ================
-Input:
-Output:
+Input: String
+Output: Same String, number words converted to string of digts 
 
 Rules:
+-  'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine' converted to a string of digits
 
 Algorithm:
+- initialize hash constant, with keys that are word strings and values that are string digit 
+- loop over each key in the hash
+  - for each key value, use it as the second argument for String#sub!
+  - Use String#gsub! to replace word number with string digit, the key's value
+
+- return string
 =end
+HASH = {
+  'zero'=> '0',
+  'one'=> '1',
+  'two'=> '2',
+  'three'=> '3',
+  'four'=> '4',
+  'five'=> '5',
+  'six'=> '6',
+  'seven'=> '7',
+  'eight'=> '8',
+  'nine' => '9'
+}
+
+def word_to_digit(str)
+  HASH.keys.each do |word|
+    str.gsub!(/\b#{word}\b/, HASH[word])
+  end
+
+  str
+end
+
+# string = 'Please call me at five five five one two three four. Thanks.'
+# puts string.object_id
+# p word_to_digit(string) == 'Please call me at 5 5 5 1 2 3 4. Thanks.'
+
 
 =begin
 8. Fibonacci Numbers (Recursion)
