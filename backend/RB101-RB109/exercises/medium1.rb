@@ -266,21 +266,153 @@ def diamond2(grid)
   end
 end
 
-diamond2(3)
-diamond2(5)
-diamond2(9)
-diamond2(21)
+# diamond2(3)
+# diamond2(5)
+# diamond2(9)
+# diamond2(21)
 
 =begin
 6. Stack Machine Interpretation
 ===============================
-Input:
-Output:
+Input: String, with commands and a value (n)
+Output: String if there's a Print command, otherwise perform the command without printing anything
 
 Rules:
+- data structures:
+  - stack, implement as an Array
+  - register, current value, not part of the stack
+
+- Operations that require two values:
+  - pops the topmost item from stack
+  - performs the operation on the topmost item from stack and the value in the register
+  - result is stored back in register
+
+- Assume all programs are correct programs, won't pop non-existene value, or contain unknown operations
+
+commands:
+--------
+Update Register:
+- n Place a value n in the "register". Do not modify the stack.
+
+Display Register: 
+- PRINT Print the register value
+
+Update Stack: 
+- PUSH Push the register value on to the stack. Leave the value in the register.
+- POP Remove the topmost item from the stack and place in register
+
+=========================================
+- ADD Pops a value from the stack and adds it to the register value, storing the result in the register.
+
+- SUB Pops a value from the stack and subtracts it from the register value, storing the result in the register.
+
+- MULT Pops a value from the stack and multiplies it by the register value, storing the result in the register.
+
+- DIV Pops a value from the stack and divides it into the register value, storing the integer result in the register.
+
+- MOD Pops a value from the stack and divides it into the register value, storing the integer remainder of the division in the register.
+
 
 Algorithm:
+- initalize register = []
+- initalize stack = []
+- initalize operations = convert input string to Array, use String#split
+- loop over commands to perform each of the subprocesses
+
+
+subprocess: update_register 
+- reassign register new value
+
+subprocess: display_register
+- print register
+
+subprocess: update_stack (destructive)
+- takes in one argument, command
+- if PUSH, push the register value onto stack
+  - get register value
+  - Use Array#push to push register value to stack
+- if POP, pop topmost value from stack 
+  - use Array#pop to get topmost value, and reassign the value to register
+
+subprocess: perform operation
+- use case statement
+- If ADD, SUB, MULT, DIV, MOD
+- Pop a value from stack, and perform operation with that value and register value
+- store result in register
+
 =end
+
+def operation_result(command, register_value, stack_value)
+  case command
+  when 'ADD'
+    stack_value + register_value
+  when 'SUB'
+    register_value - stack_value  
+  when 'MULT'
+    stack_value * register_value
+  when 'DIV'
+    register_value / stack_value
+  when 'MOD'
+    register_value % stack_value
+  end
+end
+
+def minilang(program)
+  register = 0
+  stack = []
+  commands = program.split
+
+  commands.each do |command|
+    case command
+    when /^[-+]?\d+$/
+      register = command.to_i
+    when 'PRINT'
+      puts register
+    when 'PUSH'
+      stack.push(register)
+    when 'POP'
+      register = stack.pop
+    when 'ADD', 'SUB', 'MULT', 'DIV', 'MOD'
+      stack_value = stack.pop
+      register_value = register
+      register = operation_result(command, register_value, stack_value)
+    else 
+      puts 'error'
+    end
+  end
+end
+
+# minilang('PRINT')
+# # 0
+
+# minilang('5 PUSH 3 MULT PRINT')
+# # 15
+
+# minilang('5 PRINT PUSH 3 PRINT ADD PRINT')
+# # 5
+# # 3
+# # 8
+
+# minilang('5 PUSH POP PRINT')
+# # 5
+
+# minilang('3 PUSH 4 PUSH 5 PUSH PRINT ADD PRINT POP PRINT ADD PRINT')
+# # 5
+# # 10
+# # 4
+# # 7
+
+# minilang('3 PUSH PUSH 7 DIV MULT PRINT ')
+# # 6
+
+# minilang('4 PUSH PUSH 7 MOD MULT PRINT ')
+# 12
+
+# minilang('-3 PUSH 5 SUB PRINT')
+# # 8
+
+# minilang('6 PUSH')
+# (nothing printed; no PRINT commands)
 
 =begin
 7. Word to Digit
