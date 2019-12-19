@@ -468,7 +468,6 @@ F(1) = 1
 F(2) = 1
 F(n) = F(n - 1) + F(n - 2) where n > 2
 
-Algorithm:
 =end
 
 def fibonacci(n)
@@ -485,16 +484,46 @@ end
 # p fibonacci(5) == 5
 # p fibonacci(12) == 144
 # p fibonacci(20) == 6765
+
 =begin
 9. Fibonacci Numbers (Procedural)
 =================================
-Input:
-Output:
-
-Rules:
-
-Algorithm:
 =end
+
+def fibonacci(n)
+  return 1 if n <= 2
+  sequence = 1
+  fib_first = 0
+  fib_second = 0
+  fib_num = 0
+
+  loop do
+    if sequence == 1
+      fib_first = 1
+    elsif sequence == 2
+      fib_second = 1
+    else
+      fib_num = fib_first + fib_second
+      fib_second = fib_first
+      fib_first = fib_num
+    end
+
+    sequence += 1
+    break if sequence > n
+  end
+
+  fib_num
+end
+
+def fibonacci(n)
+  first, second = [1, 1]
+  3.upto(n) { first, second = [second, first + second]}
+  second
+end
+
+# p fibonacci(20) == 6765
+# p fibonacci(100) == 354224848179261915075
+# fibonacci(100_001)
 
 =begin
 10. Fibonacci Numbers (Last Digit)
