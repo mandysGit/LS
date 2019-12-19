@@ -6,6 +6,7 @@ WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
 INITIAL_MARKER = ' '
 PLAYER_MARKER = 'X'
 COMPUTER_MARKER = 'O'
+WIN_SCORE = 5
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -80,38 +81,97 @@ end
 def detect_winner(brd)
   WINNING_LINES.each do |line|
     if brd.values_at(*line).all?(PLAYER_MARKER)
-      return 'Player'
+      return 'player'
     elsif brd.values_at(*line).all?(COMPUTER_MARKER)
-      return 'Computer'
+      return 'computer'
     end
   end
   nil
 end
 
-loop do
-  board = initialize_board
+def welcome
+  "Welcome to Tic Tac Toe.
+  The rules to win a round is to mark 3 squares in a row with the same marker.
+  You must win #{WIN_SCORE} rounds to win the entire game. 
+  "
+end
 
+def display_score(score)
+  prompt "
+  ~~~~~Scoreboard~~~~~
+  Player has won #{score['player']} rounds.
+  Computer has won #{score['computer']} rounds.
+  There were #{score['tie']} ties.
+  "
+end
+
+def update_score_board(score_board, board)
+  if someone_won?(board)
+    score_board[detect_winner(board)] += 1
+  else
+    score_board['tie'] += 1
+  end
+end
+
+def match_ended?(score_board)
+  score_board['player'] == WIN_SCORE || score_board['computer'] == WIN_SCORE
+end
+
+def display_match_winner(score_board)
+  if score_board['player'] == WIN_SCORE
+    "Congrats! You won #{WIN_SCORE} matches, You are the winner!"
+  elsif score_board['computer'] == WIN_SCORE
+    "Congrats! Computer won #{WIN_SCORE} matches, Computer is the winner!"
+  end
+end
+
+prompt welcome
+sleep(3)
+
+loop do
+  score_board = {
+    'player'=> 0,
+    'computer' => 0,
+    'tie' => 0
+  }
+  
   loop do
+    board = initialize_board
+
+    loop do
+      display_board(board)
+      display_score(score_board)
+
+      player_places_piece!(board)
+      break if someone_won?(board) || board_full?(board)
+
+      computer_places_piece!(board)
+      break if someone_won?(board) || board_full?(board)
+    end
+
     display_board(board)
 
-    player_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
+    if someone_won?(board)
+      prompt "#{detect_winner(board)} won!"
+      sleep(1)
+    else
+      prompt "It's a tie!"
+      sleep(1)
+    end
 
-    computer_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
+    update_score_board(score_board, board)
+
+    if match_ended?(score_board)
+      prompt(display_match_winner(score_board))
+      display_score(score_board)
+      break
+    end
   end
 
-  display_board(board)
-
-  if someone_won?(board)
-    prompt "#{detect_winner(board)} won!"
-  else
-    prompt "It's a tie!"
-  end
-
-  prompt "Play again? (y or n)"
+  prompt "Do you want to play again?
+  Enter Y/y to play again. Enter anything else to exit."
   answer = gets.chomp
-  break unless answer.downcase.start_with?('y')
+  break unless answer.downcase == ('y')
 end
 
 prompt "Thanks for playing Tic Tac Toe! Goodbye!"
