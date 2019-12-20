@@ -53,6 +53,10 @@ def emtpy_squares(brd)
   brd.keys.select { |num| brd[num] == INITIAL_MARKER }
 end
 
+def player_squares(brd)
+  brd.keys.select { |num| brd[num] == PLAYER_MARKER }
+end
+
 def player_places_piece!(brd)
   square = ''
   loop do
@@ -65,8 +69,39 @@ def player_places_piece!(brd)
   brd[square] = PLAYER_MARKER
 end
 
+=begin
+- find out players squares
+- find an "immediate threat": two squares in a row
+- mark the 3rd square to prevent player from winning
+
+- loop over the player's squares, 
+- loop over the winning lines
+- does the player squares have 2 squares mark in any of the winning lines? 
+- 
+=end
+def players_possible_wins(brd)
+  player_squares = player_squares(brd)
+  
+  WINNING_LINES.select do |win_combo|
+    values_marked = 0
+    player_squares.each do |square|
+      values_marked += 1 if win_combo.include?(square)
+    end
+
+    values_marked == 2 
+  end
+end
+
+def find_squares_at_risk(brd)
+  emtpy_squares(brd).select do |square|
+    players_possible_wins(brd).any? do |win_combo|
+      win_combo.include?(square)
+    end
+  end
+end
+
 def computer_places_piece!(brd)
-  square = emtpy_squares(brd).sample
+  square = find_squares_at_risk(brd).sample || emtpy_squares(brd).sample
   brd[square] = COMPUTER_MARKER
 end
 
@@ -143,6 +178,7 @@ loop do
       display_score(score_board)
 
       player_places_piece!(board)
+
       break if someone_won?(board) || board_full?(board)
 
       computer_places_piece!(board)
