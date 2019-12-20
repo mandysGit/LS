@@ -69,16 +69,6 @@ def player_places_piece!(brd)
   brd[square] = PLAYER_MARKER
 end
 
-=begin
-- find out players squares
-- find an "immediate threat": two squares in a row
-- mark the 3rd square to prevent player from winning
-
-- loop over the player's squares, 
-- loop over the winning lines
-- does the player squares have 2 squares mark in any of the winning lines? 
-- 
-=end
 def players_possible_wins(brd)
   player_squares = player_squares(brd)
   
