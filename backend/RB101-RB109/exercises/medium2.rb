@@ -19,7 +19,7 @@ subprocess: parsing the file
 - read the text file
 - initialize text variable as the file's text
 
-subprocess: longest_sentences
+subprocess: longest_sentence
 - Use String#split and regex, text.split(/[.|?|!]/) to split up each sentence into elements of an Array
 - Loop through the Array, use Array#reduce to find the longest sentence
   - use the subprocess: number_of_words to determine the longer sentence
@@ -48,13 +48,73 @@ def longest_sentence(text)
   puts "The longest sentence in this book is #{longest.split.size} words long."
 end
 
-text = ''
+# text = ''
 
-File.open("file.txt").each do |line|
-  text << line
+# File.open("file.txt").each do |line|
+#   text << line
+# end
+
+# longest_sentence(text)
+
+# Further Exploration
+# ===================
+# Use a positive lookbehind regular expression (i.e. ?<=) inside a parenthesis capture group to keep the delimiter at the end of each string
+
+def longest_sentence2(text)
+  longest = text.split(/(?<=[.|?|!])/).reduce do |longest, sentence|
+    number_of_words(longest) > number_of_words(sentence) ?
+    longest :
+    sentence
+  end
+  
+  puts longest
+  puts "------------------------------------"
+  puts "The longest sentence in this book is #{longest.split.size} words long."
 end
 
-longest_sentence(text)
+# longest paragraph
+def longest_paragraph(text)
+  longest = text.split(/\n\n/).reduce do |longest, sentence|
+    number_of_words(longest) > number_of_words(sentence) ?
+    longest :
+    sentence
+  end
+  
+  puts longest
+  puts "------------------------------------"
+  puts "The longest paragraph in this book is #{longest.split.size} words long."
+end
+
+# text = ''
+
+# File.open("file.txt").each do |line|
+#   text << line
+# end
+
+# longest_paragraph(text)
+
+# longest word
+def longest_word(text)
+  longest = text.split.reduce do |longest, word|
+    longest.length > word.length ?
+    longest :
+    word
+  end
+  
+  puts longest
+  puts "------------------------------------"
+  puts "The longest word in this book is #{longest.size} letters long."
+end
+
+
+# text = ''
+
+# File.open("file.txt").each do |line|
+#   text << line
+# end
+
+# longest_word(text)
+
 =begin
 2. Now I Know my ABCs
 ============================
