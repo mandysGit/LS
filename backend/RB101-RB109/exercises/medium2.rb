@@ -1,15 +1,60 @@
+require 'pry'
 =begin
 1. Longest Sentence
 ====================
-Input: 
-Output:  
+Input: text file
+Output: 
+- Print two things:
+- String, longest sentence in the file based on words
+- String, number of words in the longest sentence
 
 Rules:
+- Sentences may end with period, exclamation, or question marks
+- any sequence of characters that are not spaces,  or sentence ending characters is a word
 
 
 Algorithm:
+subprocess: parsing the file
+- open text file
+- read the text file
+- initialize text variable as the file's text
+
+subprocess: longest_sentences
+- Use String#split and regex, text.split(/[.|?|!]/) to split up each sentence into elements of an Array
+- Loop through the Array, use Array#reduce to find the longest sentence
+  - use the subprocess: number_of_words to determine the longer sentence
+
+subprocess: number_of_words
+- takes in one argument, a String sentence
+- Use String#split to convert string to array that holds elements that are each word of the string
+- Use Array#size to return the number of words
+
+- return longest sentence and number of words
 =end
 
+def number_of_words(str)
+  str.split.size
+end
+
+def longest_sentence(text)
+  longest = text.split(/[.|?|!]/).reduce do |longest, sentence|
+    number_of_words(longest) > number_of_words(sentence) ?
+    longest :
+    sentence
+  end
+  
+  puts longest
+  puts "------------------------------------"
+  puts "The longest sentence in this book is #{longest.split.size} words long."
+end
+
+text = ''
+
+File.open("file.txt").each do |line|
+  text << line
+end
+
+longest_sentence(text)
 =begin
 2. Now I Know my ABCs
 ============================
