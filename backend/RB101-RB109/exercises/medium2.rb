@@ -190,21 +190,88 @@ def block_word?(word)
   valid_block_word
 end
 
-p block_word?('BATCH') == true
-p block_word?('BUTCH') == false
-p block_word?('jest') == true
+# p block_word?('BATCH') == true
+# p block_word?('BUTCH') == false
+# p block_word?('jest') == true
 
 =begin
 3. Lettercase Percentage Ratio 
 ==============================
-Input: 
-Output:  
+Input: String
+Output: Hash, keys: lowercase, uppercase, neither. values: percentage.
 
-Rules:
-
+Rules: string will always contain at least one character
 
 Algorithm:
+- initalize 2 constants, uppercase, lowercase, using regex /[A-Z]/, /[a-z]/
+- Convert String to Array, use String#chars
+- initalize empty hash
+- initialize total = array.size.to_f
+- initalize lowercase = 0
+- initalize uppercase = 0
+- initalize neither = 0
+
+- Iterate through the array
+- use case statement to match each item with lower, upper, and neither constants
+- increment lowercase, uppercase, or neither depending on the match
+
+- hsh[:lowercase] = lowercase/ total
+- hsh[:uppercase] = uppercase/ total
+- hsh[:neither] = neither/ total
+
+- return hash
 =end
+
+UPPPERCASE = /[A-Z]/
+LOWERCASE = /[a-z]/
+
+def create_hash(total, lowercase, uppercase, neither)
+  hsh = {}
+
+  hsh[:lowercase] = (lowercase/total)*100
+  hsh[:uppercase] = (uppercase/total)*100
+  hsh[:neither] = (neither/total)*100
+
+  hsh
+end
+
+def create_hash_2_decimal_places(total, lowercase, uppercase, neither)
+  hsh = {}
+
+  hsh[:lowercase] = format("%.2f", (lowercase/total)*100).to_f
+  hsh[:uppercase] = format("%.2f", (uppercase/total)*100).to_f
+  hsh[:neither] = format("%.2f", (neither/total)*100).to_f
+
+  hsh
+end
+
+def letter_percentages(str)
+  total = str.chars.size.to_f
+  lowercase = 0
+  uppercase = 0
+  neither = 0
+
+  str.chars.each do |char|
+    case char
+    when UPPPERCASE
+      uppercase += 1
+    when LOWERCASE
+      lowercase += 1
+    else
+      neither += 1
+    end
+  end
+
+  create_hash_2_decimal_places(total, lowercase, uppercase, neither)
+end
+
+# p letter_percentages('abCdef 123') == { lowercase: 50, uppercase: 10, neither: 40 }
+# p letter_percentages('AbCd +Ef') == { lowercase: 37.5, uppercase: 37.5, neither: 25 }
+# p letter_percentages('123') == { lowercase: 0, uppercase: 0, neither: 100 }
+
+# Further Exploration
+# ====================
+# p letter_percentages('abcdefGHI') == {:lowercase=>66.67, :uppercase=>33.33, :neither=>0.0}
 
 =begin
 4. Matching Parentheses?
