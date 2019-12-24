@@ -118,14 +118,70 @@ end
 =begin
 2. Now I Know my ABCs
 ============================
-Input: 
-Output:  
+Input: String, a word
+
+Output: Boolean
 
 Rules:
+- valid words do not contain both letters from any given block
+- Each block can only be used once
 
+Data struture:
+- A collection of spelling blocks, two letters per block
+{
+  ['b','0'] => 'not used',
+  ['n','a'] => 'used'
+}
 
 Algorithm:
+- SET hash, where the key is an array that contains the two letters of the block, and the value is "not used" or "used"
+
+- Use String#downcase on input string to convert characters to lowercase
+- Use String#chars to create an Array of elements that is each character
+- initalize valid = true
+- Iterate through each character of the array
+
+  - Iterate on the keys of the hash 
+  - If key includes character
+    - check the value
+    - If value is "not used", change to used
+    - if value is "used", set valid to false
 =end
+
+def block_word?(word)
+  blocks = {
+    ['b','0'] => 'not used',
+    ['g','t'] => 'not used',
+    ['v','i'] => 'not used',
+    ['x','k'] => 'not used',
+    ['r','e'] => 'not used',
+    ['l','y'] => 'not used',
+    ['d','q'] => 'not used',
+    ['f','s'] => 'not used',
+    ['z','m'] => 'not used',
+    ['c','p'] => 'not used',
+    ['j','w'] => 'not used',
+    ['n','a'] => 'not used',
+    ['h','u'] => 'not used',
+  }
+  valid = true
+
+  word.downcase.chars do |char|
+    blocks.keys.each do |block|
+      if block.include?(char)
+        blocks[block] == "not used" ? 
+        blocks[block] = "used" : 
+        valid = false
+      end
+    end
+  end
+
+  valid
+end
+
+# p block_word?('BATCH') == true
+# p block_word?('BUTCH') == false
+# p block_word?('jest') == true
 
 =begin
 3. Lettercase Percentage Ratio 
