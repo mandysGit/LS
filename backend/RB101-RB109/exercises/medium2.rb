@@ -148,6 +148,19 @@ Algorithm:
     - if value is "used", set valid to false
 =end
 
+def block_used?(block, char)
+  block.include?(char)
+end
+
+def validate_block(blocks, block)
+  if blocks[block] == "not used"
+    blocks[block] = "used"
+    return true
+  else
+    return false
+  end
+end
+
 def block_word?(word)
   blocks = {
     ['b','0'] => 'not used',
@@ -164,24 +177,22 @@ def block_word?(word)
     ['n','a'] => 'not used',
     ['h','u'] => 'not used',
   }
-  valid = true
+  validate_block_word = true
 
   word.downcase.chars do |char|
     blocks.keys.each do |block|
-      if block.include?(char)
-        blocks[block] == "not used" ? 
-        blocks[block] = "used" : 
-        valid = false
+      if block_used?(block, char)
+        valid_block_word = validate_block(blocks, block)
       end
     end
   end
 
-  valid
+  valid_block_word
 end
 
-# p block_word?('BATCH') == true
-# p block_word?('BUTCH') == false
-# p block_word?('jest') == true
+p block_word?('BATCH') == true
+p block_word?('BUTCH') == false
+p block_word?('jest') == true
 
 =begin
 3. Lettercase Percentage Ratio 
