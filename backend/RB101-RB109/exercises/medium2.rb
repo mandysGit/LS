@@ -276,14 +276,48 @@ end
 =begin
 4. Matching Parentheses?
 ========================
-Input: 
-Output:  
+Input: String
+Output: Boolean, if all parenthesis in string are properly balanced
 
 Rules:
-
+- To be properly balanced, parentheses must occur in matching '(' and ')' pairs
 
 Algorithm:
+- initalize parentheses_need_pair = 0
+- initalize counter = 0
+- Convert input String to Array, Use String#char
+- Iterate through Array, use until do end
+
+- until counter >= Array.size || parantheses_need_pair < 0
+- If item == '(' then parentheses_need_pair += 1
+- If item == '?' then parentheses_need_pair -= 1
+
+- If parentheses_need_pair > 0 or negative return false
+- If parentheses_need_pair == 0 return true
 =end
+
+def balanced?(str)
+  parentheses_need_pair = 0
+  counter = 0
+  characters = str.chars
+
+  until counter >= characters.size || parentheses_need_pair < 0
+    parentheses_need_pair += 1 if characters[counter] == '('
+    parentheses_need_pair -= 1 if characters[counter] == ')'
+    counter += 1
+  end
+
+  parentheses_need_pair == 0
+end
+
+# p balanced?('What (is) this?') == true
+# p balanced?('What is) this?') == false
+# p balanced?('What (is this?') == false
+# p balanced?('((What) (is this))?') == true
+# p balanced?('((What)) (is this))?') == false
+# p balanced?('Hey!') == true
+# p balanced?(')Hey!(') == false
+# p balanced?('What ((is))) up(') == false
 
 =begin
 5. Triangle Sides
