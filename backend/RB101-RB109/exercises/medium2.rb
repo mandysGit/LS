@@ -431,14 +431,81 @@ end
 =begin
 5. Triangle Sides
 =================
-Input: 
-Output:  
+Input: 3 Integers
+Output: Symbol, :equilateral, :isosceles, :scalene, or :invalid
 
 Rules:
-
+- equilateral All 3 sides are of equal length
+- isosceles 2 sides are of equal length, while the 3rd is different
+- scalene All 3 sides are of different length
+- Valid triangle: 
+    - all sides must have lengths greater than 0
+    - sum of two shortest sides > longest side 
+- invalid: 
+  - at least one side is <= 0
+  - sum of two shortest sides <= longest side
 
 Algorithm:
+- subprocess invalid_triangle?, returns symbol or false: 
+- Store input Integers as elements in an Array
+- use Array#any? to check for <= 0 side
+- Use Array#max to retrieve max_side
+- Use Array#index to retrieve index of max_side
+- Use Array#each_with_index to retrieve sum of the shorter sides, as long as those sides do not equal to max_side
+
+- subprocess: equilateral?
+- return :equilateral if all elements are not equal, s1 === s2 === s3
+
+- subprocess: scalene?
+- return :scale if all elements are not equal, s1 !== s2 !== s3
+
+- subprocess: isosceles?
+- return :isosceles if s1 == s2 || s2 === s3 || s1 === s3
 =end
+
+def invalid?(s1, s2, s3)
+  sides = [s1, s2, s3]
+  max_side = sides.max
+  max_side_index = sides.index(max_side)
+  
+  
+  sum_shorter_sides = 0
+  sides.each_with_index do |side, index|
+    sum_shorter_sides += side if index != max_side_index
+  end
+  
+  return :invalid if sides.any? { |side| side <= 0 }
+  return :invalid if sum_shorter_sides <= max_side
+  false
+end
+
+def equilateral?(s1, s2, s3)
+  return :equilateral if s1 == s2 && s2 == s3
+  false
+end
+
+def scalene?(s1, s2, s3)
+  return :scalene if s1 != s2 && s2 != s3
+  false
+end
+
+def isosceles?(s1, s2, s3)
+  return :isosceles if s1 == s2 || s2 == s3 || s1 == s3
+  false
+end 
+
+def triangle(s1, s2, s3)
+  invalid?(s1, s2, s3) ||
+  equilateral?(s1, s2, s3) ||
+  scalene?(s1, s2, s3) ||
+  isosceles?(s1, s2, s3)
+end
+
+p triangle(3, 3, 3) == :equilateral
+p triangle(3, 3, 1.5) == :isosceles
+p triangle(3, 4, 5) == :scalene
+p triangle(0, 3, 3) == :invalid
+p triangle(3, 1, 1) == :invalid
 
 =begin
 6. Tri-Angles 
