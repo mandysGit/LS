@@ -501,23 +501,59 @@ def triangle(s1, s2, s3)
   isosceles?(s1, s2, s3)
 end
 
-p triangle(3, 3, 3) == :equilateral
-p triangle(3, 3, 1.5) == :isosceles
-p triangle(3, 4, 5) == :scalene
-p triangle(0, 3, 3) == :invalid
-p triangle(3, 1, 1) == :invalid
+# p triangle(3, 3, 3) == :equilateral
+# p triangle(3, 3, 1.5) == :isosceles
+# p triangle(3, 4, 5) == :scalene
+# p triangle(0, 3, 3) == :invalid
+# p triangle(3, 1, 1) == :invalid
 
 =begin
 6. Tri-Angles 
 ==============
-Input: 
-Output:  
+Input: 3 Integers, angles
+Output: Symbol, :acute, :right, :obturse, :invalid
 
 Rules:
-
+- Invalid:
+  - Sum of all 3 angles != 180
+  - at least one angle is <= 0
+- Acute: All 3 angles are < 90
+- Right: one angle == 90 degrees
+- Obtuse: one angle is > 90
 
 Algorithm:
+- Use a CASE statement to validate the conditions for each triangle, and return the correct symbol
+- WHEN: a1 + a2 + a3 != 180 || (a1 <= 0 || a2 <= 0 || a3 <=0)
+- THEN: INVALID
+
+- WHEN (a1 < 90 && a2 < 90 && a3 <90)
+- THEN: ACUTE
+
+- WHEN Use Enumerable#one? [a1, a2, a3].one? {|angle| angle == 90 }
+- THEN: RIGHT
+
+- WHEN Use Enumerable#one? [a1, a2, a3].one? {|angle| angle > 90 }
+- THEN: OBTUSE
 =end
+
+def triangle(a1, a2, a3)
+  case 
+  when (a1 + a2 + a3) != 180 || (a1 <= 0 || a2 <= 0 || a3 <=0)
+    :invalid
+  when (a1 < 90 && a2 < 90 && a3 <90)
+    :acute
+  when [a1, a2, a3].one? { |angle| angle == 90 }
+    :right
+  when [a1, a2, a3].one? { |angle| angle > 90 }
+    :obtuse
+  end
+end
+
+# p triangle(60, 70, 50) == :acute
+# p triangle(30, 90, 60) == :right
+# p triangle(120, 50, 10) == :obtuse
+# p triangle(0, 90, 90) == :invalid
+# p triangle(50, 50, 50) == :invalid
 
 =begin
 7. Unlucky Days 
