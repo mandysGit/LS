@@ -558,14 +558,85 @@ end
 =begin
 7. Unlucky Days 
 ================
-Input: 
-Output:  
+Input: Integer, Year
+Output:  Integer, Number of Friday the 13ths
 
 Rules:
+- assume input year is greater than 1752
 
+Questions: 
+- What day does the Year start on? Mon, Tues, Wed..?
+- How many days in each Month? 
 
 Algorithm:
+- initalize count_friday_13th = 0
+- require 'date'
+- Use Integer#upto, 1.upto(12) to check each month's Friday
+  - Initalize new Date object, Use Date.new(input year) and set it as variable date
+  - date + 12
+  - date.friday? if true, increment count_friday_13th
+- return count_friday_13th
 =end
+require 'date'
+
+def friday_13th(year)
+  count_friday_13th = 0
+
+  1.upto(12) do |month|
+    date = Date.new(year, month, 13)
+    count_friday_13th += 1 if date.friday?
+  end
+  count_friday_13th
+end
+
+# p friday_13th(2015) == 3
+# p friday_13th(1986) == 1
+# p friday_13th(2019) == 2
+
+# Further Exploration
+#####################
+# Given the year, count the number of months that have five Fridays
+# Account for leap years
+
+def fridays_in_a_month(year, month)
+  fridays = 0
+  date = Date.new(year, month)
+  
+  if month == 12 # December
+    until date.year == year + 1
+      fridays += 1 if date.friday?
+      date = date.next_day
+    end
+  else # January - November
+    until date.month == month + 1
+      fridays += 1 if date.friday?
+      date = date.next_day
+    end
+  end
+
+
+  fridays
+end
+
+def fridays_months(year)
+  months_count = 0
+  month = 1
+  date = Date.new(year)
+
+  until month > 12
+    months_count += 1 if fridays_in_a_month(year, month) == 5 
+    month += 1
+  end
+  
+  months_count
+end
+
+# p fridays_months(2019) == 4
+# p fridays_months(2021) == 5
+
+# # leap years
+# p fridays_months(2012) == 4
+# p fridays_months(2024) == 4
 
 =begin
 8. Next Featured Number Higher than a Given Value 
