@@ -319,6 +319,110 @@ end
 # p balanced?(')Hey!(') == false
 # p balanced?('What ((is))) up(') == false
 
+# Further Exploration
+# ===================
+# other characters should be matched:
+# - Square brackets
+# - Curly brackets
+# - Quotation marks (single and double)
+def any_pairs_unbalanced?(*pairs)
+  [*pairs].any? { |pair| pair < 0 }
+end
+
+def all_pairs_balanced?(*pairs)
+  [*pairs].all?(0)
+end
+
+def extended_balanced?(str)
+  round = 0
+  square = 0
+  curly = 0
+  double_quotes = 0
+  single_quotes = 0
+  open_double_quote = true
+  open_single_quote = true
+
+  str.chars.each do |character|
+    case character
+    when '(' then round += 1
+    when ')' then round -= 1
+    when '[' then square += 1
+    when ']' then square -= 1
+    when '{' then curly += 1
+    when '}' then curly -= 1
+    when '"'
+      open_double_quote ? double_quotes += 1 : double_quotes -= 1
+      open_double_quote = !open_double_quote
+    when "'"
+      open_single_quote ? single_quotes += 1 : single_quotes -= 1
+      open_single_quote = !open_single_quote
+    end
+    break if any_pairs_unbalanced?(round, square, curly, double_quotes)
+  end
+
+  all_pairs_balanced?(round, square, curly, double_quotes)
+end
+
+# False test cases
+# ---------------
+# round brackets
+# p extended_balanced?('What is) this?') == false
+# p extended_balanced?('What (is this?') == false
+# p extended_balanced?('((What)) (is this))?') == false
+# p extended_balanced?(')Hey!(') == false
+# p extended_balanced?('What ((is))) up(') == false
+
+# square brackets
+# p extended_balanced?('What is] this?') == false
+# p extended_balanced?('What [is this?') == false
+# p extended_balanced?('[[What]] [is this]]?') == false
+# p extended_balanced?(']Hey![') == false
+# p extended_balanced?('What [[is]]] up[') == false
+
+# curly brackets
+# p extended_balanced?('What is} this?') == false
+# p extended_balanced?('What {is this?') == false
+# p extended_balanced?('{{What}} {is this}}?') == false
+# p extended_balanced?('}Hey!{') == false
+# p extended_balanced?('What {{is}}} up{') == false
+
+# Double quote
+# p extended_balanced?('What is" this?') == false
+# p extended_balanced?('What "is this?') == false
+# p extended_balanced?('""What"" "is this""?') == false
+
+# single quote
+# p extended_balanced?('What is\' this?') == false
+# p extended_balanced?('What \'is this?') == false
+# p extended_balanced?('\'\'What\'\' \'is this\'\'?') == false
+
+# Mixed
+# p extended_balanced?('What][ "is" this?') == false
+# p extended_balanced?('(What (is "this"?') == false
+# p extended_balanced?('{[What]} "is this""?') == false
+# p extended_balanced?('((Hey!))(""{}[]') == false
+
+
+# True test cases
+# ---------------
+# round brackets
+# p extended_balanced?('What (is) this?') == true
+# p extended_balanced?('((What) (is this))?') == true
+# p extended_balanced?('Hey!') == true
+
+# square brackets
+# p extended_balanced?('What [is] this?') == true
+# p extended_balanced?('[[What] [is this]]?') == true
+
+# curly brackets
+# p extended_balanced?('What {is} this?') == true
+# p extended_balanced?('{{What} {is this}}?') == true
+
+# quotation marks
+#p balanced?('What "is" this?') == true
+#p balanced?('""What" "is this""?') == true
+
+
 =begin
 5. Triangle Sides
 =================
