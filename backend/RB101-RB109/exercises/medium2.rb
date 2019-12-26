@@ -357,10 +357,10 @@ def extended_balanced?(str)
       open_single_quote ? single_quotes += 1 : single_quotes -= 1
       open_single_quote = !open_single_quote
     end
-    break if any_pairs_unbalanced?(round, square, curly, double_quotes)
+    break if any_pairs_unbalanced?(round, square, curly, double_quotes, single_quotes)
   end
 
-  all_pairs_balanced?(round, square, curly, double_quotes)
+  all_pairs_balanced?(round, square, curly, double_quotes, single_quotes)
 end
 
 # False test cases
@@ -392,9 +392,10 @@ end
 # p extended_balanced?('""What"" "is this""?') == false
 
 # single quote
-# p extended_balanced?('What is\' this?') == false
-# p extended_balanced?('What \'is this?') == false
-# p extended_balanced?('\'\'What\'\' \'is this\'\'?') == false
+# p extended_balanced?("What is' this?") == false
+# p extended_balanced?("What 'is this?") == false
+# p extended_balanced?("''What'' 'isthis''?") == false
+
 
 # Mixed
 # p extended_balanced?('What][ "is" this?') == false
@@ -418,9 +419,13 @@ end
 # p extended_balanced?('What {is} this?') == true
 # p extended_balanced?('{{What} {is this}}?') == true
 
-# quotation marks
-#p balanced?('What "is" this?') == true
-#p balanced?('""What" "is this""?') == true
+# double quotation marks
+# p extended_balanced?('What "is" this?') == true
+# p extended_balanced?('""What" "is this""?') == true
+
+# single quotation marks
+# p extended_balanced?("What 'is' this?") == true
+# p extended_balanced?("''What' 'is this''?") == true
 
 
 =begin
