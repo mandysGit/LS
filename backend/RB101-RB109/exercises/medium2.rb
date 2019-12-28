@@ -705,11 +705,61 @@ end
 Input: 
 Output:  
 
-Rules:
-
-
 Algorithm:
+- initalize iteration variable as true
+
+
+- outer loop: break if iteration equals false
+  - initalize index = 0
+  - initalize next_index = 1
+  - initalize swap_happened = false
+  
+- inner loop: Iterate through input array
+  - break if index >= array.size
+  - IF array[index] > array[next_index]
+      SWAP: 
+      - array[index], array[next_index] = array[next_index], array[index]
+      - SET swap_happened = true  
+  - increment index
+  - increment next_index
+
+- SET iteration false if swap_happened is false
+
 =end
+
+def bubble_sort!(array)
+  iteration = true
+
+  until iteration == false
+    index = 0
+    next_index = 1
+    swap_happened = false
+
+    until next_index >= array.size
+      if array[index] > array[next_index]
+        array[index], array[next_index] = array[next_index], array[index]
+        swap_happened = true
+      end
+      index += 1
+      next_index += 1
+    end
+
+    iteration = false if swap_happened == false
+  end
+end
+
+array = [5, 3]
+bubble_sort!(array)
+p array == [3, 5]
+
+array = [6, 2, 7, 1, 4]
+bubble_sort!(array)
+p array == [1, 2, 4, 6, 7]
+
+array = %w(Sue Pete Alice Tyler Rachel Kim Bonnie)
+bubble_sort!(array)
+p array == %w(Alice Bonnie Kim Pete Rachel Sue Tyler)
+
 
 =begin
 10. Sum Square - Square Sum 
