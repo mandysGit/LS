@@ -794,11 +794,41 @@ end
 =begin
 10. Sum Square - Square Sum 
 ============================
-Input: 
-Output:  
+Input: Integer
+Output:  Integer, The difference between square of sum and sum of squares
 
 Rules:
-
+- example:
+sum_square_difference(3) == 22
+   # -> (1 + 2 + 3)**2 - (1**2 + 2**2 + 3**2)
 
 Algorithm:
+- initalize square_of_sums as 0
+- initalize sum_of_squares as 0
+
+Use Integer#upto to loop over n (input Integer) times
+  - increment square_of_sums each loop by n
+  - increment sum_of_squares each by n**2
+
+- square_of_sums = square_of_sums**2
+
+return square_of_sums - sum_of_squares
 =end
+
+def sum_square_difference(n)
+  square_of_sums = 0
+  sum_of_squares = 0
+
+  1.upto(n) do |n|
+    square_of_sums += n 
+    sum_of_squares += n**2
+  end
+
+  square_of_sums**2 - sum_of_squares
+end
+
+# p sum_square_difference(3) == 22
+#    # -> (1 + 2 + 3)**2 - (1**2 + 2**2 + 3**2)
+# p sum_square_difference(10) == 2640
+# p sum_square_difference(1) == 0
+# p sum_square_difference(100) == 25164150
