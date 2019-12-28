@@ -641,14 +641,63 @@ end
 =begin
 8. Next Featured Number Higher than a Given Value 
 =================================================
-Input: 
-Output:  
+Input: Integer
+Output: Integer, returns next feature number greater than input Integer
+- error message if no next featured number
 
 Rules:
-
+- featured number: 
+- odd
+- multiple of 7
+- digits do not repeat
 
 Algorithm:
+- generate featured number that is greater than input integer
+- initalize multiply variable as 0
+- initalize featured_number as 0
+- loop until featured_number?(featured_number) is true and featured_number is greater than input Integer
+- Increment multiply
+
+subprocess: featured_number?
+- takes in one argument, an integer
+- returns true if:
+- it's odd, use Integer#odd?
+- digits do not repeat:
+  - use Integer#digits to convert to an Array
+  - Compare array.size with array.uniq.size
+  - If same size, digits don't repeat
+
+Error handling: 
+- if input integer is 9_999_999_999 or greater
+- return error message
 =end
+
+def featured(num)
+  return "There is no possible number that fulfills those requirements" if num >= 9_999_999_999
+
+  multiply = (num/7)
+  featured_number = 7 * multiply
+
+  until featured_number?(featured_number) && (num < featured_number)
+    multiply += 1 
+    featured_number = 7 * multiply
+  end
+
+  featured_number
+end
+
+def featured_number?(num)
+  num.odd? && num.digits.size == num.digits.uniq.size
+end
+
+# p featured(12) == 21
+# p featured(20) == 21
+# p featured(21) == 35
+# p featured(997) == 1029
+# p featured(1029) == 1043
+# p featured(999_999) == 1_023_547
+# # p featured(999_999_987) == 1_023_456_987
+# p featured(9_999_999_999) == "There is no possible number that fulfills those requirements"
 
 =begin
 9. Bubble Sort 
