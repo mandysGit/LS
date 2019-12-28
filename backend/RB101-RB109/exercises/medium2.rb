@@ -748,18 +748,48 @@ def bubble_sort!(array)
   end
 end
 
-array = [5, 3]
-bubble_sort!(array)
-p array == [3, 5]
+# array = [5, 3]
+# bubble_sort!(array)
+# p array == [3, 5]
 
-array = [6, 2, 7, 1, 4]
-bubble_sort!(array)
-p array == [1, 2, 4, 6, 7]
+# array = [6, 2, 7, 1, 4]
+# bubble_sort!(array)
+# p array == [1, 2, 4, 6, 7]
 
-array = %w(Sue Pete Alice Tyler Rachel Kim Bonnie)
-bubble_sort!(array)
-p array == %w(Alice Bonnie Kim Pete Rachel Sue Tyler)
+# array = %w(Sue Pete Alice Tyler Rachel Kim Bonnie)
+# bubble_sort!(array)
+# p array == %w(Alice Bonnie Kim Pete Rachel Sue Tyler)
 
+# Further Exploration
+def optimized_bubble_sort!(array)
+  length = array.size
+
+  until length <= 1
+    index = 0
+    new_length = 0
+
+    until index >= array.size - 1
+      if array[index] > array[index + 1]
+        array[index], array[index + 1] = array[index + 1], array[index]
+        new_length = index
+      end
+      index += 1
+      length = new_length
+    end
+  end
+end
+
+# array = [5, 3]
+# optimized_bubble_sort!(array)
+# p array == [3, 5]
+
+# array = [6, 2, 7, 1, 4]
+# optimized_bubble_sort!(array)
+# p array == [1, 2, 4, 6, 7]
+
+# array = %w(Sue Pete Alice Tyler Rachel Kim Bonnie)
+# optimized_bubble_sort!(array)
+# p array == %w(Alice Bonnie Kim Pete Rachel Sue Tyler)
 
 =begin
 10. Sum Square - Square Sum 
