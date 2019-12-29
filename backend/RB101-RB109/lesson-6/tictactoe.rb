@@ -57,6 +57,10 @@ def player_squares(brd)
   brd.keys.select { |num| brd[num] == PLAYER_MARKER }
 end
 
+def computer_squares(brd)
+  brd.keys.select { |num| brd[num] == COMPUTER_MARKER }
+end
+
 def player_places_piece!(brd)
   square = ''
   loop do
@@ -70,11 +74,10 @@ def player_places_piece!(brd)
 end
 
 def players_possible_wins(brd)
-  player_squares = player_squares(brd)
-  
+  # returns a 2D array of winning combinations
   WINNING_LINES.select do |win_combo|
     values_marked = 0
-    player_squares.each do |square|
+    player_squares(brd).each do |square|
       values_marked += 1 if win_combo.include?(square)
     end
 
@@ -82,16 +85,36 @@ def players_possible_wins(brd)
   end
 end
 
-def find_squares_at_risk(brd)
-  emtpy_squares(brd).select do |square|
-    players_possible_wins(brd).any? do |win_combo|
-      win_combo.include?(square)
+def computers_possible_wins(brd)  
+  # returns a 2D array of winning combinations
+  WINNING_LINES.select do |win_combo|
+    values_marked = 0
+    computer_squares(brd).each do |square|
+      values_marked += 1 if win_combo.include?(square)
     end
+
+    values_marked == 2 
   end
 end
 
+def find_at_risk_square(brd)
+  squares_at_risk = emtpy_squares(brd).select do |square|
+    players_possible_wins(brd).any? { |win_combo| win_combo.include?(square) }
+  end
+
+  squares_to_win = emtpy_squares(brd).select do |square|
+    computers_possible_wins(brd).any? { |win_combo| win_combo.include?(square) }
+  end 
+
+  return squares_to_win.first unless squares_to_win.empty?
+  squares_at_risk.first
+end
+
 def computer_places_piece!(brd)
-  square = find_squares_at_risk(brd).sample || emtpy_squares(brd).sample
+  square = find_at_risk_square(brd) || 
+  emtpy_squares(brd).find { |square| square == 5} || 
+  emtpy_squares(brd).sample
+
   brd[square] = COMPUTER_MARKER
 end
 
