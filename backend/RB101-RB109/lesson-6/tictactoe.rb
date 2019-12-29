@@ -3,7 +3,7 @@ require 'pry'
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
                 [[1, 5, 9], [3, 5, 7]]              # diagonals
-INITIAL_MARKER = ' '
+EMPTY_MARKER = ' '
 PLAYER_MARKER = 'X'
 COMPUTER_MARKER = 'O'
 WIN_SCORE = 5
@@ -45,51 +45,31 @@ end
 
 def initialize_board
   new_board = {}
-  (1..9).each { |num| new_board[num] = INITIAL_MARKER }
+  (1..9).each { |num| new_board[num] = EMPTY_MARKER }
   new_board
 end
 
-def emtpy_squares(brd)
-  brd.keys.select { |num| brd[num] == INITIAL_MARKER }
-end
-
-def player_squares(brd)
-  brd.keys.select { |num| brd[num] == PLAYER_MARKER }
-end
-
-def computer_squares(brd)
-  brd.keys.select { |num| brd[num] == COMPUTER_MARKER }
+def select_squares(brd, marker)
+  brd.keys.select { |num| brd[num] == marker}
 end
 
 def player_places_piece!(brd)
   square = ''
   loop do
-    prompt "Choose a square (#{joinor(emtpy_squares(brd))}):"
+    prompt "Choose a square (#{joinor(select_squares(brd, EMPTY_MARKER))}):"
     square = gets.chomp.to_i
-    break if emtpy_squares(brd).include?(square)
+    break if select_squares(brd, EMPTY_MARKER).include?(square)
     prompt "Sorry, that's not a valid choice"
   end
 
   brd[square] = PLAYER_MARKER
 end
 
-def players_possible_wins(brd)
+def possible_wins(brd, marker)
   # returns a 2D array of winning combinations
   WINNING_LINES.select do |win_combo|
     values_marked = 0
-    player_squares(brd).each do |square|
-      values_marked += 1 if win_combo.include?(square)
-    end
-
-    values_marked == 2 
-  end
-end
-
-def computers_possible_wins(brd)  
-  # returns a 2D array of winning combinations
-  WINNING_LINES.select do |win_combo|
-    values_marked = 0
-    computer_squares(brd).each do |square|
+    select_squares(brd, marker).each do |square|
       values_marked += 1 if win_combo.include?(square)
     end
 
@@ -98,12 +78,12 @@ def computers_possible_wins(brd)
 end
 
 def find_at_risk_square(brd)
-  squares_at_risk = emtpy_squares(brd).select do |square|
-    players_possible_wins(brd).any? { |win_combo| win_combo.include?(square) }
+  squares_at_risk = select_squares(brd, EMPTY_MARKER).select do |square|
+    possible_wins(brd, PLAYER_MARKER).any? { |win_combo| win_combo.include?(square) }
   end
 
-  squares_to_win = emtpy_squares(brd).select do |square|
-    computers_possible_wins(brd).any? { |win_combo| win_combo.include?(square) }
+  squares_to_win = select_squares(brd, EMPTY_MARKER).select do |square|
+    possible_wins(brd, COMPUTER_MARKER).any? { |win_combo| win_combo.include?(square) }
   end 
 
   return squares_to_win.first unless squares_to_win.empty?
@@ -112,14 +92,14 @@ end
 
 def computer_places_piece!(brd)
   square = find_at_risk_square(brd) || 
-  emtpy_squares(brd).find { |square| square == 5} || 
-  emtpy_squares(brd).sample
+  select_squares(brd, EMPTY_MARKER).find { |square| square == 5} || 
+  select_squares(brd, EMPTY_MARKER).sample
 
   brd[square] = COMPUTER_MARKER
 end
 
 def board_full?(brd)
-  emtpy_squares(brd).empty?
+  select_squares(brd, EMPTY_MARKER).empty?
 end
 
 def someone_won?(brd)
