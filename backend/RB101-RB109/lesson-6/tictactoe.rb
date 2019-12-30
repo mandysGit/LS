@@ -7,6 +7,7 @@ EMPTY_MARKER = ' '
 PLAYER_MARKER = 'X'
 COMPUTER_MARKER = 'O'
 WIN_SCORE = 5
+current_player = 'choose'
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -177,12 +178,33 @@ loop do
       display_board(board)
       display_score(score_board)
 
-      player_places_piece!(board)
+      case current_player
+      when 'player'
+        player_places_piece!(board)
+        break if someone_won?(board) || board_full?(board)
 
-      break if someone_won?(board) || board_full?(board)
+        computer_places_piece!(board)
+        break if someone_won?(board) || board_full?(board)
+      when 'computer'
+        computer_places_piece!(board)
+        break if someone_won?(board) || board_full?(board)
 
-      computer_places_piece!(board)
-      break if someone_won?(board) || board_full?(board)
+        display_board(board)
+        display_score(score_board)
+
+        player_places_piece!(board)
+        break if someone_won?(board) || board_full?(board)
+      when 'choose'
+        choice = ''
+        loop do
+          puts 'Choose the starting player, enter "computer" or "player": '
+          choice = gets.chomp
+          break if choice == 'player' || choice == 'computer'
+          puts "#{choice} is an invalid choice."
+        end
+
+        current_player = choice
+      end
     end
 
     display_board(board)
