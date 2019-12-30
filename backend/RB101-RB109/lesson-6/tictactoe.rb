@@ -33,13 +33,15 @@ end
 # rubocop:enable Metrics/AbcSize
 
 def joinor(arr, delimiter=', ', last_delimiter='or')
-  return "#{arr[0]}" if arr.length == 1
+  return arr[0].to_s if arr.length == 1
   return "#{arr[0]} #{last_delimiter}#{arr[1]}" if arr.length == 2
 
   arr.reduce('') do |sentence, item|
-    arr.last == item ?
-    sentence << "#{last_delimiter} #{item.to_s}" :
-    sentence << "#{item.to_s}#{delimiter}"
+    if arr.last == item
+      sentence + "#{last_delimiter} #{item}"
+    else
+      sentence + "#{item}#{delimiter}"
+    end
   end
 end
 
@@ -50,7 +52,7 @@ def initialize_board
 end
 
 def select_squares(brd, marker)
-  brd.keys.select { |num| brd[num] == marker}
+  brd.keys.select { |num| brd[num] == marker }
 end
 
 def player_places_piece!(brd)
@@ -73,27 +75,32 @@ def possible_wins(brd, marker)
       values_marked += 1 if win_combo.include?(square)
     end
 
-    values_marked == 2 
+    values_marked == 2
   end
 end
 
 def find_at_risk_square(brd)
   squares_at_risk = select_squares(brd, EMPTY_MARKER).select do |square|
-    possible_wins(brd, PLAYER_MARKER).any? { |win_combo| win_combo.include?(square) }
+    possible_wins(brd, PLAYER_MARKER).any? do |win_combo|
+      win_combo.include?(square)
+    end
   end
 
   squares_to_win = select_squares(brd, EMPTY_MARKER).select do |square|
-    possible_wins(brd, COMPUTER_MARKER).any? { |win_combo| win_combo.include?(square) }
-  end 
+    possible_wins(brd, COMPUTER_MARKER).any? do |win_combo|
+      win_combo.include?(square)
+    end
+  end
 
   return squares_to_win.first unless squares_to_win.empty?
   squares_at_risk.first
 end
 
 def computer_places_piece!(brd)
-  square = find_at_risk_square(brd) || 
-  select_squares(brd, EMPTY_MARKER).find { |square| square == 5} || 
-  select_squares(brd, EMPTY_MARKER).sample
+  square =
+    find_at_risk_square(brd) ||
+    select_squares(brd, EMPTY_MARKER).find { |num| num == 5 } ||
+    select_squares(brd, EMPTY_MARKER).sample
 
   brd[square] = COMPUTER_MARKER
 end
@@ -120,7 +127,7 @@ end
 def welcome
   "Welcome to Tic Tac Toe.
   The rules to win a round is to mark 3 squares in a row with the same marker.
-  You must win #{WIN_SCORE} rounds to win the entire game. 
+  You must win #{WIN_SCORE} rounds to win the entire game.
   "
 end
 
@@ -158,11 +165,11 @@ sleep(3)
 
 loop do
   score_board = {
-    'player'=> 0,
+    'player' => 0,
     'computer' => 0,
     'tie' => 0
   }
-  
+
   loop do
     board = initialize_board
 
@@ -182,11 +189,10 @@ loop do
 
     if someone_won?(board)
       prompt "#{detect_winner(board)} won!"
-      sleep(1)
     else
       prompt "It's a tie!"
-      sleep(1)
     end
+    sleep(1)
 
     update_score_board(score_board, board)
 
