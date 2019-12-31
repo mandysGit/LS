@@ -35,7 +35,7 @@ end
 
 def joinor(arr, delimiter=', ', last_delimiter='or')
   return arr[0].to_s if arr.length == 1
-  return "#{arr[0]} #{last_delimiter}#{arr[1]}" if arr.length == 2
+  return "#{arr[0]} #{last_delimiter} #{arr[1]}" if arr.length == 2
 
   arr.reduce('') do |sentence, item|
     if arr.last == item
@@ -68,6 +68,20 @@ def player_places_piece!(brd)
   brd[square] = PLAYER_MARKER
 end
 
+def computer_places_piece!(brd)
+  square =
+  find_at_risk_square(brd) ||
+  select_squares(brd, EMPTY_MARKER).find { |num| num == 5 } ||
+  select_squares(brd, EMPTY_MARKER).sample
+
+  brd[square] = COMPUTER_MARKER
+end
+
+def place_piece!(brd, player)
+  computer_places_piece!(brd) if player == 'computer'
+  player_places_piece!(brd) if player == 'player'
+end
+
 def possible_wins(brd, marker)
   # returns a 2D array of winning combinations
   WINNING_LINES.select do |win_combo|
@@ -95,15 +109,6 @@ def find_at_risk_square(brd)
 
   return squares_to_win.first unless squares_to_win.empty?
   squares_at_risk.first
-end
-
-def computer_places_piece!(brd)
-  square =
-    find_at_risk_square(brd) ||
-    select_squares(brd, EMPTY_MARKER).find { |num| num == 5 } ||
-    select_squares(brd, EMPTY_MARKER).sample
-
-  brd[square] = COMPUTER_MARKER
 end
 
 def board_full?(brd)
@@ -161,6 +166,22 @@ def display_match_winner(score_board)
   end
 end
 
+def alternate_player(player)
+  player == 'computer' ? 'player' : 'computer'
+end
+
+def choose_current_player
+  choice = ''
+  loop do
+    puts 'Choose the starting player, enter "computer" or "player": '
+    choice = gets.chomp
+    break if choice == 'player' || choice == 'computer'
+    puts "#{choice} is an invalid choice."
+  end
+
+  choice
+end
+
 prompt welcome
 sleep(3)
 
@@ -178,33 +199,11 @@ loop do
       display_board(board)
       display_score(score_board)
 
-      case current_player
-      when 'player'
-        player_places_piece!(board)
-        break if someone_won?(board) || board_full?(board)
+      current_player = choose_current_player if current_player == 'choose'
+      place_piece!(board, current_player)
+      current_player = alternate_player(current_player)
 
-        computer_places_piece!(board)
-        break if someone_won?(board) || board_full?(board)
-      when 'computer'
-        computer_places_piece!(board)
-        break if someone_won?(board) || board_full?(board)
-
-        display_board(board)
-        display_score(score_board)
-
-        player_places_piece!(board)
-        break if someone_won?(board) || board_full?(board)
-      when 'choose'
-        choice = ''
-        loop do
-          puts 'Choose the starting player, enter "computer" or "player": '
-          choice = gets.chomp
-          break if choice == 'player' || choice == 'computer'
-          puts "#{choice} is an invalid choice."
-        end
-
-        current_player = choice
-      end
+      break if someone_won?(board) || board_full?(board)
     end
 
     display_board(board)
