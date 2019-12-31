@@ -70,9 +70,9 @@ end
 
 def computer_places_piece!(brd)
   square =
-  find_at_risk_square(brd) ||
-  select_squares(brd, EMPTY_MARKER).find { |num| num == 5 } ||
-  select_squares(brd, EMPTY_MARKER).sample
+    find_at_risk_square(brd) ||
+    select_squares(brd, EMPTY_MARKER).find { |num| num == 5 } ||
+    select_squares(brd, EMPTY_MARKER).sample
 
   brd[square] = COMPUTER_MARKER
 end
