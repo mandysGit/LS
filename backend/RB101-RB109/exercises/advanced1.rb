@@ -87,10 +87,7 @@ def transpose!(matrix)
   col = 0
 
   until row >= matrix.size
-    # puts row
     until col >= matrix.size
-      puts matrix[row][col]
-      puts matrix[col][row]
       matrix[row][col], matrix[col][row] = matrix[col][row],  matrix[row][col]
       col += 1
     end
