@@ -12,7 +12,7 @@ player_total = 0
 dealer_total = 0
 
 def prompt(msg)
-  puts "=> #{msg}"
+  puts "=> #{msg} \n \n"
 end
 
 def shuffle!(deck)
@@ -42,7 +42,7 @@ end
 def display_winner(player, dealer)
   winner = calculate_winner(player, dealer)
   winner_total = winner == 'player' ? total(player) : total(dealer)
-  "Congratulations, the winner is #{winner} with a total of #{winner_total}."
+  "Congrats!! The winner is #{winner} with a total of #{winner_total}."
 end
 
 def display_totals(player, dealer)
@@ -51,7 +51,11 @@ def display_totals(player, dealer)
 end
 
 def calculate_winner(player, dealer)
-  total(player) > total(dealer) ? 'player' : 'dealer'
+  if total(player) <= 21 && total(dealer) <= 21
+    total(player) > total(dealer) ? 'player' : 'dealer'
+  else
+    total(player) < total(dealer) ? 'player' : 'dealer'
+  end
 end
 
 def joinand(arr, delimiter=', ', word='and')
@@ -98,11 +102,12 @@ def busted?(total)
 end
 
 def player_turn(deck, player, dealer)
-  loop do # Player Turn
+  loop do
     prompt "hit or stay?"
     answer = gets.chomp
   
     if answer == 'hit'
+      system 'clear'
       deal_card!(deck, player)
       prompt display_cards(player, dealer)
       prompt "player total: #{total(player)}"
@@ -114,34 +119,52 @@ def player_turn(deck, player, dealer)
       puts "#{answer} is an invalid choice. Please choose hit or stay."
     end
   end
-  
-  if busted?(total(player))
-    puts "You busted"
-  else
-    puts "You chose to stay!"
-  end
 end
 
 def dealer_turn(deck, player, dealer)
-  loop do # Dealer Turn
+  loop do
     break if total(dealer) >= 17 || busted?(total(dealer))
     deal_card!(deck, dealer)
   end
-  
-  if busted?(total(dealer))
-    puts "Dealer busted"
-  else
-    puts "Dealer chose to stay!"
-  end
 end
 
-deal_initial_cards!(deck, player, dealer)
-prompt display_cards(player, dealer)
-player_turn(deck, player, dealer)
-dealer_turn(deck, player, dealer)
+loop do
+  loop do 
+    system 'clear'
+    deal_initial_cards!(deck, player, dealer)
+    prompt display_cards(player, dealer)
+    player_turn(deck, player, dealer)
 
-prompt display_totals(player, dealer)
-prompt display_winner(player, dealer)
+    if busted?(total(player))
+      system 'clear'
+      prompt "You busted!"
+      break
+    else
+      system 'clear'
+      prompt "You chose to stay!"
+    end
+
+    dealer_turn(deck, player, dealer)
+
+    if busted?(total(dealer))
+      prompt "Dealer busted!"
+      break
+    else
+      prompt "Dealer chose to stay!"
+      break
+    end
+  end 
+
+  prompt display_totals(player, dealer)
+  prompt display_winner(player, dealer)
+
+  prompt "Do you want to play again?
+  Enter Y/y to play again. Enter anything else to exit."
+  answer = gets.chomp
+  break unless answer.downcase == ('y')
+end
+
+prompt "Thanks for playing Twenty One! Goodbye!"
 
 # Test cases for total method
 # player = ['ace', 10, 5]
