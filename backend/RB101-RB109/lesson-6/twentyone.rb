@@ -6,7 +6,7 @@ deck = { hearts: ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen',
          spades: ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'] 
         }
 
-player = ['ace']
+player = []
 dealer = []
 player_total = 0
 dealer_total = 0
@@ -71,39 +71,69 @@ def total(current_player_cards)
   ace_total + total_without_aces(current_player_cards)
 end
 
-2.times do 
-  deal_card!(deck, player)
-  deal_card!(deck, dealer)
+def deal_initial_cards!(deck, player, dealer)
+  2.times do 
+    deal_card!(deck, player)
+    deal_card!(deck, dealer)
+  end
 end
 
-# Test cases total method
-player = ['ace', 10, 5]
-p total(player) == 16
+def busted?(total)
+  total > 21
+end
 
-player = ['ace', 5, 5]
-p total(player) == 21
+deal_initial_cards!(deck, player, dealer)
+p dealer
+p player
+prompt display_cards(player, dealer)
 
-player = ['ace','ace', 5, 5]
-p total(player) == 12
+loop do
+  prompt "hit or stay?"
+  answer = gets.chomp
+  
+  if answer == 'hit'
+    deal_card!(deck, player)
+    prompt display_cards(player, dealer)
+    prompt "player total: #{total(player)}"
+  end
 
-player = ['ace', 'ace', 5, 4]
-p total(player) == 21
+  if answer == 'stay' || busted?(total(player))
+    break
+  else
+    puts "#{answer} is an invalid choice. Please choose hit or stay."
+  end
+end
 
-player = ['ace','ace', 'ace', 'jack', 5]
-p total(player) == 18
+if busted?(total(player))
+  puts "You busted"
+else
+  puts "You chose to stay!"
+end
 
-player = ['ace', 'ace', 'ace', 5, 3]
-p total(player) == 21
+# ... continue on to Dealer turn
 
-player = ['ace','ace', 'ace', 'ace', 'queen', 5]
-p total(player) == 19
 
-player = ['ace', 'ace', 'ace', 'ace', 5, 2]
-p total(player) == 21
+# Test cases for total method
+# player = ['ace', 10, 5]
+# p total(player) == 16
 
-# pp deck
-# p player
-# p dealer
-# prompt display_cards(player, dealer)
-# p total_without_aces(player)
-# p total(player)
+# player = ['ace', 5, 5]
+# p total(player) == 21
+
+# player = ['ace','ace', 5, 5]
+# p total(player) == 12
+
+# player = ['ace', 'ace', 5, 4]
+# p total(player) == 21
+
+# player = ['ace','ace', 'ace', 'jack', 5]
+# p total(player) == 18
+
+# player = ['ace', 'ace', 'ace', 5, 3]
+# p total(player) == 21
+
+# player = ['ace','ace', 'ace', 'ace', 'queen', 5]
+# p total(player) == 19
+
+# player = ['ace', 'ace', 'ace', 'ace', 5, 2]
+# p total(player) == 21
