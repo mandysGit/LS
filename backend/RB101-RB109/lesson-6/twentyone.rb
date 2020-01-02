@@ -122,6 +122,13 @@ def dealer_turn(deck, dealer)
   end
 end
 
+def play_again?
+  prompt "Do you want to play again?
+  Enter Y/y to play again. Enter anything else to exit."
+  answer = gets.chomp
+  answer.downcase.start_with?('y')
+end
+
 loop do
   player = []
   dealer = []
@@ -151,11 +158,7 @@ loop do
   prompt display_totals(player, dealer)
   prompt display_game_result(player, dealer)
 
-  prompt "Do you want to play again?
-   Enter Y/y to play again. Enter anything else to exit."
-  answer = gets.chomp
-  break unless answer.downcase == ('y')
+  break unless play_again?
 end
 
 prompt "Thanks for playing Twenty One! Goodbye!"
-
