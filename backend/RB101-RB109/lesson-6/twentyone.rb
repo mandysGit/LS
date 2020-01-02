@@ -27,9 +27,31 @@ def deal_card!(deck, current_player_cards)
   current_player_cards << deck[suit].pop
 end
 
+def deal_initial_cards!(deck, player, dealer)
+  2.times do 
+    deal_card!(deck, player)
+    deal_card!(deck, dealer)
+  end
+end
+
 def display_cards(player, dealer)
   "Dealer has: #{dealer.first} and unknown card
    You have: #{joinand(player)}"
+end
+
+def display_winner(player, dealer)
+  winner = calculate_winner(player, dealer)
+  winner_total = winner == 'player' ? total(player) : total(dealer)
+  "Congratulations, the winner is #{winner} with a total of #{winner_total}."
+end
+
+def display_totals(player, dealer)
+  "Dealer has: #{joinand(dealer)}. A total score of #{total(dealer)}.
+   You have: #{joinand(player)}. A total score of #{total(player)}."
+end
+
+def calculate_winner(player, dealer)
+  total(player) > total(dealer) ? 'player' : 'dealer'
 end
 
 def joinand(arr, delimiter=', ', word='and')
@@ -71,30 +93,8 @@ def total(current_player_cards)
   ace_total + total_without_aces(current_player_cards)
 end
 
-def deal_initial_cards!(deck, player, dealer)
-  2.times do 
-    deal_card!(deck, player)
-    deal_card!(deck, dealer)
-  end
-end
-
 def busted?(total)
   total > 21
-end
-
-def display_winner(player, dealer)
-  winner = calculate_winner(player, dealer)
-  winner_total = winner == 'player' ? total(player) : total(dealer)
-  "Congratulations, the winner is #{winner} with a total of #{winner_total}."
-end
-
-def calculate_winner(player, dealer)
-  total(player) > total(dealer) ? 'player' : 'dealer'
-end
-
-def display_totals(player, dealer)
-  "Dealer has: #{joinand(dealer)}. A total score of #{total(dealer)}.
-   You have: #{joinand(player)}. A total score of #{total(player)}."
 end
 
 def player_turn(deck, player, dealer)
