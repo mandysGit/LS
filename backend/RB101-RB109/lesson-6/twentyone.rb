@@ -82,48 +82,66 @@ def busted?(total)
   total > 21
 end
 
+def display_winner(player, dealer)
+  winner = calculate_winner(player, dealer)
+  winner_total = winner == 'player' ? total(player) : total(dealer)
+  "Congratulations, the winner is #{winner} with a total of #{winner_total}."
+end
+
+def calculate_winner(player, dealer)
+  total(player) > total(dealer) ? 'player' : 'dealer'
+end
+
+def display_totals(player, dealer)
+  "Dealer has: #{joinand(dealer)}. A total score of #{total(dealer)}.
+   You have: #{joinand(player)}. A total score of #{total(player)}."
+end
+
+def player_turn(deck, player, dealer)
+  loop do # Player Turn
+    prompt "hit or stay?"
+    answer = gets.chomp
+  
+    if answer == 'hit'
+      deal_card!(deck, player)
+      prompt display_cards(player, dealer)
+      prompt "player total: #{total(player)}"
+    end
+  
+    if answer == 'stay' || busted?(total(player))
+      break
+    elsif answer != 'stay' && answer != 'hit'
+      puts "#{answer} is an invalid choice. Please choose hit or stay."
+    end
+  end
+  
+  if busted?(total(player))
+    puts "You busted"
+  else
+    puts "You chose to stay!"
+  end
+end
+
+def dealer_turn(deck, player, dealer)
+  loop do # Dealer Turn
+    break if total(dealer) >= 17 || busted?(total(dealer))
+    deal_card!(deck, dealer)
+  end
+  
+  if busted?(total(dealer))
+    puts "Dealer busted"
+  else
+    puts "Dealer chose to stay!"
+  end
+end
+
 deal_initial_cards!(deck, player, dealer)
-p dealer
-p player
 prompt display_cards(player, dealer)
+player_turn(deck, player, dealer)
+dealer_turn(deck, player, dealer)
 
-loop do # Player Turn
-  prompt "hit or stay?"
-  answer = gets.chomp
-
-  if answer == 'hit'
-    deal_card!(deck, player)
-    prompt display_cards(player, dealer)
-    prompt "player total: #{total(player)}"
-  end
-
-  if answer == 'stay' || busted?(total(player))
-    break
-  elsif answer != 'stay' && answer != 'hit'
-    puts "#{answer} is an invalid choice. Please choose hit or stay."
-  end
-end
-
-if busted?(total(player))
-  puts "You busted"
-else
-  puts "You chose to stay!"
-end
-
-loop do # Dealer Turn
-  break if total(dealer) >= 17 || busted?(total(dealer))
-  deal_card!(deck, dealer)
-end
-
-p dealer
-p player
-
-if busted?(total(dealer))
-  puts "Dealer busted"
-else
-  puts "Dealer chose to stay!"
-end
-
+prompt display_totals(player, dealer)
+prompt display_winner(player, dealer)
 
 # Test cases for total method
 # player = ['ace', 10, 5]
