@@ -62,34 +62,22 @@ def joinand(arr, delimiter=', ', word='and')
   end
 end
 
-def total_without_aces(current_player_cards)
+def total(cards)
   sum = 0
-  current_player_cards.each do |card|
+  cards.each do |card|
     case card
     when 'jack', 'queen', 'king' then sum += 10
-    when 'ace' then sum += 0
+    when 'ace' then sum += 11
     else
       sum += card.to_i
     end
   end
-  sum
-end
 
-def total(cards)
-  ace_total =
-    case cards.count('ace')
-    when 1
-      (total_without_aces(cards) + 11) <= 21 ? 11 : 1
-    when 2
-      (total_without_aces(cards) + 12) <= 21 ? 12 : 2
-    when 3
-      (total_without_aces(cards) + 13) <= 21 ? 13 : 3
-    when 4
-      (total_without_aces(cards) + 14) <= 21 ? 14 : 4
-    else
-      0
-    end
-  ace_total + total_without_aces(cards)
+  cards.count('ace').times do
+    sum -= 10 if sum > 21
+  end
+
+  sum
 end
 
 def busted?(total)
