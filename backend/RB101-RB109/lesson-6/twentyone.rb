@@ -1,15 +1,11 @@
 require 'pry'
 
-deck = { hearts: ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'],
-         diamonds: ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'],
-         clubs: ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'],
-         spades: ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'] 
-        }
-
-player = []
-dealer = []
-player_total = 0
-dealer_total = 0
+deck = {
+  hearts: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+  diamonds: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+  clubs: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+  spades: %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
+}
 
 def prompt(msg)
   puts "=> #{msg} \n \n"
@@ -28,7 +24,7 @@ def deal_card!(deck, current_player_cards)
 end
 
 def deal_initial_cards!(deck, player, dealer)
-  2.times do 
+  2.times do
     deal_card!(deck, player)
     deal_card!(deck, dealer)
   end
@@ -79,22 +75,21 @@ def total_without_aces(current_player_cards)
   sum
 end
 
-def total(current_player_cards)
-  sum = total_without_aces(current_player_cards)
-  ace_total = 0 
-
-  case current_player_cards.count('ace')
-  when 1
-    (sum += 11) <= 21 ? ace_total += 11 : ace_total += 1
-  when 2
-    (sum += 12) <= 21 ? ace_total += 12 : ace_total += 2
-  when 3
-    (sum += 13) <= 21 ? ace_total += 13 : ace_total += 3
-  when 4
-    (sum += 14) <= 21 ? ace_total += 14 : ace_total += 4
-  end
-
-  ace_total + total_without_aces(current_player_cards)
+def total(cards)
+  ace_total =
+    case cards.count('ace')
+    when 1
+      (total_without_aces(cards) + 11) <= 21 ? 11 : 1
+    when 2
+      (total_without_aces(cards) + 12) <= 21 ? 12 : 2
+    when 3
+      (total_without_aces(cards) + 13) <= 21 ? 13 : 3
+    when 4
+      (total_without_aces(cards) + 14) <= 21 ? 14 : 4
+    else
+      0
+    end
+  ace_total + total_without_aces(cards)
 end
 
 def busted?(total)
@@ -105,14 +100,14 @@ def player_turn(deck, player, dealer)
   loop do
     prompt "hit or stay?"
     answer = gets.chomp
-  
+
     if answer == 'hit'
       system 'clear'
       deal_card!(deck, player)
       prompt display_cards(player, dealer)
       prompt "player total: #{total(player)}"
     end
-  
+
     if answer == 'stay' || busted?(total(player))
       break
     elsif answer != 'stay' && answer != 'hit'
@@ -121,7 +116,7 @@ def player_turn(deck, player, dealer)
   end
 end
 
-def dealer_turn(deck, player, dealer)
+def dealer_turn(deck, dealer)
   loop do
     break if total(dealer) >= 17 || busted?(total(dealer))
     deal_card!(deck, dealer)
@@ -129,7 +124,10 @@ def dealer_turn(deck, player, dealer)
 end
 
 loop do
-  loop do 
+  player = []
+  dealer = []
+
+  loop do
     system 'clear'
     deal_initial_cards!(deck, player, dealer)
     prompt display_cards(player, dealer)
@@ -144,16 +142,15 @@ loop do
       prompt "You chose to stay!"
     end
 
-    dealer_turn(deck, player, dealer)
+    dealer_turn(deck, dealer)
 
     if busted?(total(dealer))
       prompt "Dealer busted!"
-      break
     else
       prompt "Dealer chose to stay!"
-      break
     end
-  end 
+    break
+  end
 
   prompt display_totals(player, dealer)
   prompt display_winner(player, dealer)
