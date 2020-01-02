@@ -87,10 +87,10 @@ p dealer
 p player
 prompt display_cards(player, dealer)
 
-loop do
+loop do # Player Turn
   prompt "hit or stay?"
   answer = gets.chomp
-  
+
   if answer == 'hit'
     deal_card!(deck, player)
     prompt display_cards(player, dealer)
@@ -99,7 +99,7 @@ loop do
 
   if answer == 'stay' || busted?(total(player))
     break
-  else
+  elsif answer != 'stay' && answer != 'hit'
     puts "#{answer} is an invalid choice. Please choose hit or stay."
   end
 end
@@ -110,7 +110,19 @@ else
   puts "You chose to stay!"
 end
 
-# ... continue on to Dealer turn
+loop do # Dealer Turn
+  break if total(dealer) >= 17 || busted?(total(dealer))
+  deal_card!(deck, dealer)
+end
+
+p dealer
+p player
+
+if busted?(total(dealer))
+  puts "Dealer busted"
+else
+  puts "Dealer chose to stay!"
+end
 
 
 # Test cases for total method
