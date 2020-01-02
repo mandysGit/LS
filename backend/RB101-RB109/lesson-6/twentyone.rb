@@ -1,5 +1,3 @@
-require 'pry'
-
 deck = {
   hearts: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
   diamonds: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
@@ -8,7 +6,7 @@ deck = {
 }
 
 def prompt(msg)
-  puts "=> #{msg} \n \n"
+  puts "=> #{msg}"
 end
 
 def shuffle!(deck)
@@ -31,26 +29,33 @@ def deal_initial_cards!(deck, player, dealer)
 end
 
 def display_cards(player, dealer)
-  "Dealer has: #{dealer.first} and unknown card
-   You have: #{joinand(player)}"
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Dealer has: #{dealer.first} and unknown card
+    You have: #{joinand(player)}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 end
 
-def display_winner(player, dealer)
-  winner = calculate_winner(player, dealer)
-  winner_total = winner == 'player' ? total(player) : total(dealer)
-  "Congrats!! The winner is #{winner} with a total of #{winner_total}."
+def display_game_result(player, dealer)
+  return "It's a Tie!" if game_result(player, dealer) == 'tie'
+  "Congrats!! The winner is #{game_result(player, dealer)}!"
 end
 
 def display_totals(player, dealer)
-  "Dealer has: #{joinand(dealer)}. A total score of #{total(dealer)}.
-   You have: #{joinand(player)}. A total score of #{total(player)}."
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Dealer has: #{joinand(dealer)}. A total of #{total(dealer)}.
+    You have: #{joinand(player)}. A total of #{total(player)}.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 end
 
-def calculate_winner(player, dealer)
-  if total(player) <= 21 && total(dealer) <= 21
-    total(player) > total(dealer) ? 'player' : 'dealer'
+def game_result(player, dealer)
+  if busted?(total(player))
+    'dealer'
+  elsif busted?(total(dealer))
+    'player'
+  elsif total(player) == total(dealer)
+    'tie'
   else
-    total(player) < total(dealer) ? 'player' : 'dealer'
+    total(player) > total(dealer) ? 'player' : 'dealer'
   end
 end
 
@@ -68,8 +73,7 @@ def total(cards)
     case card
     when 'jack', 'queen', 'king' then sum += 10
     when 'ace' then sum += 11
-    else
-      sum += card.to_i
+    else sum += card.to_i
     end
   end
 
@@ -84,23 +88,30 @@ def busted?(total)
   total > 21
 end
 
+def validate_answer(answer)
+  loop do
+    answer = gets.chomp.downcase
+    break if answer == 'h' || answer == 's'
+    prompt "#{answer} is an invalid choice.
+    Please choose hit or stay. Enter 'h' or 's'"
+  end
+
+  answer
+end
+
 def player_turn(deck, player, dealer)
   loop do
-    prompt "hit or stay?"
-    answer = gets.chomp
+    prompt display_cards(player, dealer)
+    prompt "player total: #{total(player)}"
+    prompt "hit or stay? Enter 'h' or 's'"
 
-    if answer == 'hit'
+    answer = validate_answer(answer)
+    if answer == 'h'
       system 'clear'
       deal_card!(deck, player)
-      prompt display_cards(player, dealer)
-      prompt "player total: #{total(player)}"
     end
 
-    if answer == 'stay' || busted?(total(player))
-      break
-    elsif answer != 'stay' && answer != 'hit'
-      puts "#{answer} is an invalid choice. Please choose hit or stay."
-    end
+    break if answer == 's' || busted?(total(player))
   end
 end
 
@@ -118,22 +129,19 @@ loop do
   loop do
     system 'clear'
     deal_initial_cards!(deck, player, dealer)
-    prompt display_cards(player, dealer)
     player_turn(deck, player, dealer)
 
     if busted?(total(player))
-      system 'clear'
-      prompt "You busted!"
+      prompt "You busted!!"
       break
     else
-      system 'clear'
       prompt "You chose to stay!"
     end
 
     dealer_turn(deck, dealer)
 
     if busted?(total(dealer))
-      prompt "Dealer busted!"
+      prompt "Dealer busted!!"
     else
       prompt "Dealer chose to stay!"
     end
@@ -141,37 +149,13 @@ loop do
   end
 
   prompt display_totals(player, dealer)
-  prompt display_winner(player, dealer)
+  prompt display_game_result(player, dealer)
 
   prompt "Do you want to play again?
-  Enter Y/y to play again. Enter anything else to exit."
+   Enter Y/y to play again. Enter anything else to exit."
   answer = gets.chomp
   break unless answer.downcase == ('y')
 end
 
 prompt "Thanks for playing Twenty One! Goodbye!"
 
-# Test cases for total method
-# player = ['ace', 10, 5]
-# p total(player) == 16
-
-# player = ['ace', 5, 5]
-# p total(player) == 21
-
-# player = ['ace','ace', 5, 5]
-# p total(player) == 12
-
-# player = ['ace', 'ace', 5, 4]
-# p total(player) == 21
-
-# player = ['ace','ace', 'ace', 'jack', 5]
-# p total(player) == 18
-
-# player = ['ace', 'ace', 'ace', 5, 3]
-# p total(player) == 21
-
-# player = ['ace','ace', 'ace', 'ace', 'queen', 5]
-# p total(player) == 19
-
-# player = ['ace', 'ace', 'ace', 'ace', 5, 2]
-# p total(player) == 21
