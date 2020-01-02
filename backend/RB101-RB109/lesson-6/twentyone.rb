@@ -30,32 +30,32 @@ end
 
 def display_cards(player, dealer)
   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Dealer has: #{dealer.first} and unknown card
-    You have: #{joinand(player)}
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    Dealer has: #{dealer.first} and unknown card.
+    You have: #{joinand(player)}.
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 end
 
-def display_game_result(player, dealer)
-  return "It's a Tie!" if game_result(player, dealer) == 'tie'
-  "Congrats!! The winner is #{game_result(player, dealer)}!"
+def display_game_result(player_total, dealer_total)
+  return "It's a Tie!" if game_result(player_total, dealer_total) == 'tie'
+  "Congrats!! The winner is #{game_result(player_total, dealer_total)}!"
 end
 
-def display_totals(player, dealer)
+def display_totals(player_cards, dealer_cards, player_total, dealer_total)
   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Dealer has: #{joinand(dealer)}. A total of #{total(dealer)}.
-    You have: #{joinand(player)}. A total of #{total(player)}.
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    Dealer has: #{joinand(dealer_cards)}. A total of #{dealer_total}.
+    You have: #{joinand(player_cards)}. A total of #{player_total}.
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 end
 
-def game_result(player, dealer)
-  if busted?(total(player))
+def game_result(player_total, dealer_total)
+  if busted?(player_total)
     'dealer'
-  elsif busted?(total(dealer))
+  elsif busted?(dealer_total)
     'player'
-  elsif total(player) == total(dealer)
+  elsif player_total == dealer_total
     'tie'
   else
-    total(player) > total(dealer) ? 'player' : 'dealer'
+    player_total > dealer_total ? 'player' : 'dealer'
   end
 end
 
@@ -99,55 +99,65 @@ def validate_answer(answer)
   answer
 end
 
-def player_turn(deck, player, dealer)
+def player_turn(deck, player_cards, dealer_cards, player_total)
   loop do
-    prompt display_cards(player, dealer)
-    prompt "player total: #{total(player)}"
+    prompt display_cards(player_cards, dealer_cards)
+    prompt "player total: #{player_total}"
     prompt "hit or stay? Enter 'h' or 's'"
 
     answer = validate_answer(answer)
     if answer == 'h'
       system 'clear'
-      deal_card!(deck, player)
+      deal_card!(deck, player_cards)
+      player_total = total(player_cards)
     end
 
-    break if answer == 's' || busted?(total(player))
+    break if answer == 's' || busted?(player_total)
   end
 end
 
-def dealer_turn(deck, dealer)
+def dealer_turn(deck, dealer_cards, dealer_total)
   loop do
-    break if total(dealer) >= 17 || busted?(total(dealer))
-    deal_card!(deck, dealer)
+    break if dealer_total >= 17 || busted?(dealer_total)
+    deal_card!(deck, dealer_cards)
+    dealer_total = total(dealer_cards)
   end
 end
 
 def play_again?
   prompt "Do you want to play again?
-  Enter Y/y to play again. Enter anything else to exit."
+   Enter Y/y to play again. Enter anything else to exit."
   answer = gets.chomp
   answer.downcase.start_with?('y')
 end
 
 loop do
-  player = []
-  dealer = []
+  player_cards = []
+  dealer_cards = []
+  player_total = 0
+  dealer_total = 0
 
   loop do
     system 'clear'
-    deal_initial_cards!(deck, player, dealer)
-    player_turn(deck, player, dealer)
+    deal_initial_cards!(deck, player_cards, dealer_cards)
+    player_total = total(player_cards)
+    dealer_total = total(dealer_cards)
 
-    if busted?(total(player))
+    player_turn(deck, player_cards, dealer_cards, player_total)
+    player_total = total(player_cards)
+    system 'clear'
+
+    if busted?(player_total)
       prompt "You busted!!"
       break
     else
       prompt "You chose to stay!"
     end
 
-    dealer_turn(deck, dealer)
+    dealer_turn(deck, dealer_cards, dealer_total)
+    dealer_total = total(dealer_cards)
 
-    if busted?(total(dealer))
+    if busted?(dealer_total)
       prompt "Dealer busted!!"
     else
       prompt "Dealer chose to stay!"
@@ -155,8 +165,8 @@ loop do
     break
   end
 
-  prompt display_totals(player, dealer)
-  prompt display_game_result(player, dealer)
+  prompt display_totals(player_cards, dealer_cards, player_total, dealer_total)
+  prompt display_game_result(player_total, dealer_total)
 
   break unless play_again?
 end
