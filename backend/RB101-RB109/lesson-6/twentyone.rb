@@ -1,4 +1,6 @@
 WIN_SCORE = 5
+WHATEVER_ONE = 21
+DEALER_LIMIT = 17
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -75,14 +77,14 @@ def total(cards)
   end
 
   cards.count('ace').times do
-    sum -= 10 if sum > 21
+    sum -= 10 if sum > WHATEVER_ONE
   end
 
   sum
 end
 
 def busted?(total)
-  total > 21
+  total > WHATEVER_ONE
 end
 
 def validate_answer(answer)
@@ -115,7 +117,7 @@ end
 
 def dealer_turn(deck, dealer_cards, dealer_total)
   loop do
-    break if dealer_total >= 17 || busted?(dealer_total)
+    break if dealer_total >= DEALER_LIMIT || busted?(dealer_total)
     deal_card!(deck, dealer_cards)
     dealer_total = total(dealer_cards)
   end
