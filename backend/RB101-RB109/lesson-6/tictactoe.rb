@@ -1,8 +1,6 @@
-require 'pry'
-
-WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
-                [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
-                [[1, 5, 9], [3, 5, 7]]              # diagonals
+WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
+                [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +
+                [[1, 5, 9], [3, 5, 7]]
 EMPTY_MARKER = ' '
 PLAYER_MARKER = 'X'
 COMPUTER_MARKER = 'O'
@@ -16,6 +14,7 @@ end
 # rubocop:disable Metrics/AbcSize
 def display_board(brd)
   system 'clear'
+  prompt welcome
   puts "You're a #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
   puts ""
   puts "     |     |"
@@ -83,7 +82,6 @@ def place_piece!(brd, player)
 end
 
 def possible_wins(brd, marker)
-  # returns a 2D array of winning combinations
   WINNING_LINES.select do |win_combo|
     values_marked = 0
     select_squares(brd, marker).each do |square|
@@ -132,17 +130,16 @@ end
 
 def welcome
   "Welcome to Tic Tac Toe.
-  The rules to win a round is to mark 3 squares in a row with the same marker.
-  You must win #{WIN_SCORE} rounds to win the entire game.
+   The rules to win a round is to mark 3 squares in a row with the same marker.
+   You must win #{WIN_SCORE} rounds to win the entire game.
   "
 end
 
 def display_score(score)
-  prompt "
-  ~~~~~Scoreboard~~~~~
-  Player has won #{score['player']} rounds.
-  Computer has won #{score['computer']} rounds.
-  There were #{score['tie']} ties.
+  "~~~~~Scoreboard~~~~~
+   Player has won #{score['player']} rounds.
+   Computer has won #{score['computer']} rounds.
+   There were #{score['tie']} ties.
   "
 end
 
@@ -173,17 +170,15 @@ end
 def choose_current_player
   choice = ''
   loop do
-    puts 'Choose the starting player, enter "computer" or "player": '
+    puts 'Choose the starting player, enter "c" for computer or "p" for player:'
     choice = gets.chomp
-    break if choice == 'player' || choice == 'computer'
+    break if choice == 'p' || choice == 'c'
     puts "#{choice} is an invalid choice."
   end
 
-  choice
+  return 'player' if choice == 'p'
+  'computer'
 end
-
-prompt welcome
-sleep(3)
 
 loop do
   score_board = {
@@ -197,7 +192,7 @@ loop do
 
     loop do
       display_board(board)
-      display_score(score_board)
+      prompt display_score(score_board)
 
       current_player = choose_current_player if current_player == 'choose'
       place_piece!(board, current_player)
