@@ -59,12 +59,12 @@ def player_places_piece!(brd)
   square = ''
   loop do
     prompt "Choose a square (#{joinor(select_squares(brd, EMPTY_MARKER))}):"
-    square = gets.chomp.to_i
-    break if select_squares(brd, EMPTY_MARKER).include?(square)
+    square = gets.chomp
+    break if select_squares(brd, EMPTY_MARKER).map(&:to_s).include?(square)
     prompt "Sorry, that's not a valid choice"
   end
 
-  brd[square] = PLAYER_MARKER
+  brd[square.to_i] = PLAYER_MARKER
 end
 
 def computer_places_piece!(brd)
@@ -77,8 +77,11 @@ def computer_places_piece!(brd)
 end
 
 def place_piece!(brd, player)
-  computer_places_piece!(brd) if player == 'computer'
-  player_places_piece!(brd) if player == 'player'
+  if player == 'computer'
+    computer_places_piece!(brd)
+  else
+    player_places_piece!(brd)
+  end
 end
 
 def possible_wins(brd, marker)
