@@ -25,3 +25,33 @@ deck = { :hearts   => [2, 3, 4, 5, 6, 7, 8, 9, 10, :jack, :queen, :king, :ace],
          :spades   => [2, 3, 4, 5, 6, 7, 8, 9, 10, :jack, :queen, :king, :ace] }
 ```
 
+**Tests**
+
+```ruby
+
+# Test cases for total method
+player = ['ace', 10, 5]
+p total(player) == 16
+
+player = ['ace', 5, 5]
+p total(player) == 21
+
+player = ['ace','ace', 5, 5]
+p total(player) == 12
+
+player = ['ace', 'ace', 5, 4]
+p total(player) == 21
+
+player = ['ace','ace', 'ace', 'jack', 5]
+p total(player) == 18
+
+player = ['ace', 'ace', 'ace', 5, 3]
+p total(player) == 21
+
+player = ['ace','ace', 'ace', 'ace', 'queen', 5]
+p total(player) == 19
+
+player = ['ace', 'ace', 'ace', 'ace', 5, 2]
+p total(player) == 21
+```
+
