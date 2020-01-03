@@ -5,6 +5,8 @@ deck = {
   spades: %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
 }
 
+WIN_SCORE = 5
+
 def prompt(msg)
   puts "=> #{msg}"
 end
@@ -131,6 +133,21 @@ def play_again?
   answer.downcase.start_with?('y')
 end
 
+def welcome
+  "Welcome to Twenty-one!h You and the dealer will be dealt two cards initially.
+   You can hit to get another card or stay with the cards you currently have.
+
+   Cards 1-10 are worth face value. Jack, Queen, King are worth 10, and
+   Ace is 1 or 11.
+
+   The objective of the game is to get as close to 21 as possible.
+   If you go over 21, it's a bust and you lose that round.
+   You must win #{WIN_SCORE} rounds to win the entire game.
+  "
+end
+
+prompt welcome
+
 loop do
   player_cards = []
   dealer_cards = []
@@ -138,7 +155,6 @@ loop do
   dealer_total = 0
 
   loop do
-    system 'clear'
     deal_initial_cards!(deck, player_cards, dealer_cards)
     player_total = total(player_cards)
     dealer_total = total(dealer_cards)
