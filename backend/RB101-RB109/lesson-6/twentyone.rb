@@ -1,10 +1,3 @@
-deck = {
-  hearts: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
-  diamonds: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
-  clubs: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
-  spades: %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
-}
-
 WIN_SCORE = 5
 
 def prompt(msg)
@@ -31,22 +24,24 @@ def deal_initial_cards!(deck, player, dealer)
 end
 
 def display_cards(player, dealer)
-  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Dealer has: #{dealer.first} and unknown card.
     You have: #{joinand(player)}.
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   "
 end
 
 def display_game_result(player_total, dealer_total)
   return "It's a Tie!" if game_result(player_total, dealer_total) == 'tie'
-  "Congrats!! The winner is #{game_result(player_total, dealer_total)}!"
+  "The winner of this round is #{game_result(player_total, dealer_total)}!"
 end
 
 def display_totals(player_cards, dealer_cards, player_total, dealer_total)
-  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Dealer has: #{joinand(dealer_cards)}. A total of #{dealer_total}.
     You have: #{joinand(player_cards)}. A total of #{player_total}.
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   "
 end
 
 def game_result(player_total, dealer_total)
@@ -104,7 +99,7 @@ end
 def player_turn(deck, player_cards, dealer_cards, player_total)
   loop do
     prompt display_cards(player_cards, dealer_cards)
-    prompt "player total: #{player_total}"
+    prompt "You have a total of #{player_total}"
     prompt "hit or stay? Enter 'h' or 's'"
 
     answer = validate_answer(answer)
@@ -134,7 +129,7 @@ def play_again?
 end
 
 def welcome
-  "Welcome to Twenty-one!h You and the dealer will be dealt two cards initially.
+  "Welcome to Twenty-one! You and the dealer will be dealt two cards initially.
    You can hit to get another card or stay with the cards you currently have.
 
    Cards 1-10 are worth face value. Jack, Queen, King are worth 10, and
@@ -146,43 +141,92 @@ def welcome
   "
 end
 
+def display_score(score_board)
+  "~~~~~~Scoreboard~~~~~~~~
+   Player has won #{score_board['player']} rounds.
+   Dealer has won #{score_board['dealer']} rounds.
+   There were #{score_board['tie']} ties.
+   ~~~~~~~~~~~~~~~~~~~~~~~~
+  "
+end
+
+def update_score_board!(score_board, player_total, dealer_total)
+  result = game_result(player_total, dealer_total)
+  score_board[result] += 1
+end
+
+def match_ended?(score_board)
+  score_board['player'] == WIN_SCORE || score_board['dealer'] == WIN_SCORE
+end
+
+def display_match_winner(score_board)
+  if score_board['player'] == WIN_SCORE
+    "Congrats! You won #{WIN_SCORE} matches, You are the winner!"
+  elsif score_board['dealer'] == WIN_SCORE
+    "Congrats! Dealer won #{WIN_SCORE} matches, Dealer is the winner!"
+  end
+end
+
 prompt welcome
 
 loop do
-  player_cards = []
-  dealer_cards = []
-  player_total = 0
-  dealer_total = 0
+  score_board = {
+    'player' => 0,
+    'dealer' => 0,
+    'tie' => 0
+  }
+
+  deck = {
+    hearts: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+    diamonds: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+    clubs: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+    spades: %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
+  }
 
   loop do
-    deal_initial_cards!(deck, player_cards, dealer_cards)
-    player_total = total(player_cards)
-    dealer_total = total(dealer_cards)
+    player_cards = []
+    dealer_cards = []
+    player_total = 0
+    dealer_total = 0
 
-    player_turn(deck, player_cards, dealer_cards, player_total)
-    player_total = total(player_cards)
-    system 'clear'
+    loop do
+      deal_initial_cards!(deck, player_cards, dealer_cards)
+      player_total = total(player_cards)
+      dealer_total = total(dealer_cards)
 
-    if busted?(player_total)
-      prompt "You busted!!"
+      prompt display_score(score_board)
+      player_turn(deck, player_cards, dealer_cards, player_total)
+      player_total = total(player_cards)
+
+      if busted?(player_total)
+        prompt "You busted!!"
+        break
+      else
+        system 'clear'
+        prompt "You chose to stay!"
+      end
+
+      dealer_turn(deck, dealer_cards, dealer_total)
+      dealer_total = total(dealer_cards)
+
+      if busted?(dealer_total)
+        prompt "Dealer busted!!"
+      else
+        prompt "Dealer chose to stay!"
+      end
       break
-    else
-      prompt "You chose to stay!"
     end
 
-    dealer_turn(deck, dealer_cards, dealer_total)
-    dealer_total = total(dealer_cards)
+    prompt display_game_result(player_total, dealer_total)
+    prompt display_totals(player_cards, dealer_cards, player_total, dealer_total)
+    update_score_board!(score_board, player_total, dealer_total)
 
-    if busted?(dealer_total)
-      prompt "Dealer busted!!"
-    else
-      prompt "Dealer chose to stay!"
+    if match_ended?(score_board)
+      prompt(display_match_winner(score_board))
+      display_score(score_board)
+      break
     end
-    break
   end
-
-  prompt display_totals(player_cards, dealer_cards, player_total, dealer_total)
-  prompt display_game_result(player_total, dealer_total)
 
   break unless play_again?
 end
