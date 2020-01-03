@@ -14,7 +14,6 @@ end
 # rubocop:disable Metrics/AbcSize
 def display_board(brd)
   system 'clear'
-  prompt welcome
   puts "You're a #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
   puts ""
   puts "     |     |"
@@ -146,9 +145,9 @@ def display_score(score)
   "
 end
 
-def update_score_board(score_board, board)
-  if someone_won?(board)
-    score_board[detect_winner(board)] += 1
+def update_score_board(score_board, result)
+  if result
+    score_board[result] += 1
   else
     score_board['tie'] += 1
   end
@@ -183,6 +182,14 @@ def choose_current_player
   'computer'
 end
 
+def display_game_result(result)
+  if result == 'computer' || result == 'player'
+    prompt "#{result} won!"
+  else
+    prompt "It's a tie!"
+  end
+end
+
 loop do
   score_board = {
     'player' => 0,
@@ -195,6 +202,7 @@ loop do
 
     loop do
       display_board(board)
+      prompt welcome
       prompt display_score(score_board)
 
       current_player = choose_current_player if current_player == 'choose'
@@ -206,14 +214,10 @@ loop do
 
     display_board(board)
 
-    if someone_won?(board)
-      prompt "#{detect_winner(board)} won!"
-    else
-      prompt "It's a tie!"
-    end
+    game_result = detect_winner(board)
+    update_score_board(score_board, game_result)
+    display_game_result(game_result)
     sleep(1)
-
-    update_score_board(score_board, board)
 
     if match_ended?(score_board)
       prompt(display_match_winner(score_board))
