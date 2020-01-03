@@ -1,6 +1,12 @@
 WIN_SCORE = 5
 WHATEVER_ONE = 21
 DEALER_LIMIT = 17
+deck = {
+  hearts: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+  diamonds: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+  clubs: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+  spades: %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
+}
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -12,9 +18,20 @@ def shuffle!(deck)
   end
 end
 
+def refill_deck!(deck)
+  deck.each do |suit, _|
+    deck[suit] = %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
+  end
+end
+
+def deck_empty?(deck)
+  deck.keys.all? { |suit| deck[suit].empty? }
+end
+
 def deal_card!(deck, current_player_cards)
+  refill_deck!(deck) if deck_empty?(deck)
   shuffle!(deck)
-  suit = deck.keys.sample
+  suit = deck.keys.reject { |key| deck[key].empty? }.sample
   current_player_cards << deck[suit].pop
 end
 
@@ -178,13 +195,6 @@ loop do
     'tie' => 0
   }
 
-  deck = {
-    hearts: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
-    diamonds: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
-    clubs: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
-    spades: %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
-  }
-
   loop do
     player_cards = []
     dealer_cards = []
@@ -220,12 +230,17 @@ loop do
     end
 
     prompt display_game_result(player_total, dealer_total)
-    prompt display_totals(player_cards, dealer_cards, player_total, dealer_total)
+    prompt display_totals(
+      player_cards,
+      dealer_cards,
+      player_total,
+      dealer_total
+    )
     update_score_board!(score_board, player_total, dealer_total)
 
     if match_ended?(score_board)
-      prompt(display_match_winner(score_board))
-      display_score(score_board)
+      prompt display_match_winner(score_board)
+      prompt display_score(score_board)
       break
     end
   end
