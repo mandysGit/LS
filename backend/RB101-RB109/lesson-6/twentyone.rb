@@ -1,12 +1,6 @@
 WIN_SCORE = 5
 WHATEVER_ONE = 21
 DEALER_LIMIT = 17
-deck = {
-  '♥️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
-  '♦️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
-  '♣️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
-  '♠️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
-}
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -199,6 +193,12 @@ loop do
     'player' => 0,
     'dealer' => 0,
     'tie' => 0
+  }
+  deck = {
+    '♥️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+    '♦️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+    '♣️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+    '♠️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
   }
 
   loop do
