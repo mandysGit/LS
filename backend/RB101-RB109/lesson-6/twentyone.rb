@@ -42,10 +42,10 @@ def deal_initial_cards!(deck, player, dealer)
   end
 end
 
-def display_cards(player, dealer)
+def display_cards(player_cards, dealer_cards)
   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Dealer has: #{dealer.first} and unknown card.
-    You have: #{joinand(player)}.
+    Dealer has: #{dealer_cards.first} and unknown card.
+    You have: #{joinand(player_cards)}.
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    "
 end
