@@ -2,10 +2,10 @@ WIN_SCORE = 5
 WHATEVER_ONE = 21
 DEALER_LIMIT = 17
 deck = {
-  hearts: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
-  diamonds: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
-  clubs: %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
-  spades: %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
+  '♥️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+  '♦️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+  '♣️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
+  '♠️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
 }
 
 def prompt(msg)
@@ -32,7 +32,7 @@ def deal_card!(deck, current_player_cards)
   refill_deck!(deck) if deck_empty?(deck)
   shuffle!(deck)
   suit = deck.keys.reject { |key| deck[key].empty? }.sample
-  current_player_cards << deck[suit].pop
+  current_player_cards << [suit, deck[suit].pop]
 end
 
 def deal_initial_cards!(deck, player, dealer)
@@ -43,8 +43,10 @@ def deal_initial_cards!(deck, player, dealer)
 end
 
 def display_cards(player_cards, dealer_cards)
+  dealer_suit = dealer_cards.first.first
+  dealer_face = dealer_cards.first.last
   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Dealer has: #{dealer_cards.first} and unknown card.
+    Dealer has: #{dealer_suit} #{dealer_face} and unknown card.
     You have: #{joinand(player_cards)}.
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    "
@@ -76,6 +78,10 @@ def game_result(player_total, dealer_total)
 end
 
 def joinand(arr, delimiter=', ', word='and')
+  arr = arr.map do |card|
+    "#{card[0]} #{card[1]}"
+  end
+
   if arr.size == 2
     arr.join(" #{word} ")
   elsif arr.size > 2
@@ -85,7 +91,7 @@ end
 
 def total(cards)
   sum = 0
-  cards.each do |card|
+  cards.each do |_suit, card|
     case card
     when 'jack', 'queen', 'king' then sum += 10
     when 'ace' then sum += 11
@@ -93,7 +99,7 @@ def total(cards)
     end
   end
 
-  cards.count('ace').times do
+  cards.flatten.count('ace').times do
     sum -= 10 if sum > WHATEVER_ONE
   end
 
