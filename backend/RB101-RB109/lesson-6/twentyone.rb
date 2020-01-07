@@ -115,6 +115,11 @@ def validate_answer(answer)
   answer
 end
 
+def hit!(deck, player_cards)
+  system 'clear'
+  deal_card!(deck, player_cards)
+end
+
 def player_turn(deck, player_cards, dealer_cards, player_total)
   loop do
     prompt display_cards(player_cards, dealer_cards)
@@ -122,13 +127,17 @@ def player_turn(deck, player_cards, dealer_cards, player_total)
     prompt "hit or stay? Enter 'h' or 's'"
 
     answer = validate_answer(answer)
-    if answer == 'h'
-      system 'clear'
-      deal_card!(deck, player_cards)
-      player_total = total(player_cards)
-    end
+    hit!(deck, player_cards) if answer == 'h'
+    player_total = total(player_cards)
 
     break if answer == 's' || busted?(player_total)
+  end
+
+  if busted?(player_total)
+    prompt "You busted!!"
+  else
+    system 'clear'
+    prompt "You chose to stay!"
   end
 end
 
@@ -137,6 +146,12 @@ def dealer_turn(deck, dealer_cards, dealer_total)
     break if dealer_total >= DEALER_LIMIT || busted?(dealer_total)
     deal_card!(deck, dealer_cards)
     dealer_total = total(dealer_cards)
+  end
+
+  if busted?(dealer_total)
+    prompt "Dealer busted!!"
+  else
+    prompt "Dealer chose to stay!"
   end
 end
 
@@ -186,8 +201,6 @@ def display_match_winner(score_board)
   end
 end
 
-prompt welcome
-
 loop do
   score_board = {
     'player' => 0,
@@ -200,40 +213,23 @@ loop do
     '♣️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace),
     '♠️' => %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
   }
+  system 'clear'
+  prompt welcome
 
   loop do
     player_cards = []
     dealer_cards = []
-    player_total = 0
-    dealer_total = 0
 
-    loop do
-      deal_initial_cards!(deck, player_cards, dealer_cards)
-      player_total = total(player_cards)
-      dealer_total = total(dealer_cards)
+    deal_initial_cards!(deck, player_cards, dealer_cards)
+    player_total = total(player_cards)
+    dealer_total = total(dealer_cards)
+    prompt display_score(score_board)
 
-      prompt display_score(score_board)
-      player_turn(deck, player_cards, dealer_cards, player_total)
-      player_total = total(player_cards)
+    player_turn(deck, player_cards, dealer_cards, player_total)
+    player_total = total(player_cards)
 
-      if busted?(player_total)
-        prompt "You busted!!"
-        break
-      else
-        system 'clear'
-        prompt "You chose to stay!"
-      end
-
-      dealer_turn(deck, dealer_cards, dealer_total)
-      dealer_total = total(dealer_cards)
-
-      if busted?(dealer_total)
-        prompt "Dealer busted!!"
-      else
-        prompt "Dealer chose to stay!"
-      end
-      break
-    end
+    dealer_turn(deck, dealer_cards, dealer_total)
+    dealer_total = total(dealer_cards)
 
     prompt display_game_result(player_total, dealer_total)
     prompt display_totals(
