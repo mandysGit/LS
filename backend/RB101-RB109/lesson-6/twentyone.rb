@@ -228,8 +228,10 @@ loop do
     player_turn(deck, player_cards, dealer_cards, player_total)
     player_total = total(player_cards)
 
-    dealer_turn(deck, dealer_cards, dealer_total)
-    dealer_total = total(dealer_cards)
+    if !busted?(player_total)
+      dealer_turn(deck, dealer_cards, dealer_total)
+      dealer_total = total(dealer_cards)
+    end
 
     prompt display_game_result(player_total, dealer_total)
     prompt display_totals(
