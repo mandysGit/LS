@@ -53,32 +53,58 @@ Examples:
 
   - return count
 =end
-def count_deaf_rats(str)
+
+# def count_deaf_rats(str)
+#   count = 0
+#   left_rat = 'O~'
+#   right_rat = '~O'
+
+#   str = str.delete(' ')
+#   index_P = str.index('P')
+
+#   before_P = str.slice(0...index_P)
+#   after_P = str.slice(index_P + 1..-1)
+
+#   idx = 0
+#   loop do
+#     break if idx >= str.size - 1
+#     count += 1 if before_P.slice(idx, 2) == left_rat
+#     idx += 2
+#   end
+
+#   idx = 0
+#   loop do
+#     break if idx >= str.size - 1
+#     count += 1 if after_P.slice(idx, 2) == right_rat
+#     idx += 2
+#   end
+
+#   count
+# end
+
+def count_rats(str, direction)
+  return 0 if str == nil
+
   count = 0
-  left_rat = 'O~'
-  right_rat = '~O'
-
-  str = str.delete(' ')
-  index_P = str.index('P')
-
-  before_P = str.slice(0...index_P)
-  after_P = str.slice(index_P + 1..-1)
-
   idx = 0
+
   loop do
     break if idx >= str.size - 1
-    count += 1 if before_P.slice(idx, 2) == left_rat
-    idx += 2
-  end
-
-  idx = 0
-  loop do
-    break if idx >= str.size - 1
-    count += 1 if after_P.slice(idx, 2) == right_rat
+    count += 1 if str.slice(idx, 2) == direction
     idx += 2
   end
 
   count
+end
+
+def count_deaf_rats(str)
+  count = 0
+  left = 'O~'
+  right = '~O'
+
+  str = str.delete(' ')
+  before_P, after_P = str.split('P')
+  count_rats(before_P, left) + count_rats(after_P, right)
 end
 
 p count_deaf_rats('~O~O~O~O P') == 0 
