@@ -1,12 +1,16 @@
 class MyCar
-  attr_accessor :color, :speed
+  attr_accessor :color, :model, :speed
   attr_reader :year
   
-  def initialize(year, color, model)
+  def initialize(year, model, color)
     @year = year
     @color = color
     @model = model
     @speed = 0
+  end
+
+  def self.gas_mileage(gallons, miles)
+    puts "#{miles / gallons } miles per gallon of gas"
   end
 
   def speed_up(number)
@@ -32,6 +36,10 @@ class MyCar
     self.color = color
     puts "Your new #{color} paint job looks great!"
   end
+
+  def to_s
+    puts "This car is a #{color} #{model} built in the year #{year}"
+  end
 end
 
 
@@ -51,3 +59,8 @@ lumina.color = 'black'
 puts lumina.color
 puts lumina.year
 lumina.spray_paint('red')
+
+MyCar.gas_mileage(13, 351)
+puts lumina
+my_car = MyCar.new("2010", "Ford Focus", "silver")
+puts my_car
