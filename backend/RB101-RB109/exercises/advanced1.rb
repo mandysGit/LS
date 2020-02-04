@@ -1,5 +1,6 @@
 require 'pry'
 =begin
+# 3. Tranpose 3x3
 input: 3 x 3 matrix, 2D array
 output: new 2D Array, transpose of the original matrix
 
@@ -29,6 +30,8 @@ def transpose(matrix)
 
   result
 end
+
+
 
 # matrix = [
 #   [1, 5, 8],
@@ -110,3 +113,50 @@ new_matrix = transpose!(matrix)
 # p new_matrix == [[1, 4, 3], [5, 7, 9], [8, 2, 6]]
 # p matrix == [[1, 4, 3], [5, 7, 9], [8, 2, 6]]
 # p new_matrix.object_id == matrix.object_id
+
+
+=begin
+6. Fix the Bug
+
+def my_method(array)
+  if array.empty?
+    []
+  elsif
+    array.map do |value|
+      value * value
+    end
+  else
+    [7 * array.first]
+  end
+end
+
+In the elsif conditional, the return value of Array#map is an array, which is truthy value. 
+The Array that's returned by Array#map is evaluated in the elsif conditional. 
+Then inside the elsif body returns nil because it has no code in that branch. 
+
+Like so: 
+
+  if array.empty?
+    []
+  elsif (array.map do |value| value * value end)
+  else
+    [7 * array.first]
+  end
+=end
+
+def my_method(array)
+  if array.empty?
+    []
+  elsif array.length == 1
+    [7 * array.first]
+  else
+    array.map do |value|
+      value * value
+    end 
+  end
+end
+
+# p my_method([])
+# p my_method([3])
+# p my_method([3, 4])
+# p my_method([5, 6, 7])
