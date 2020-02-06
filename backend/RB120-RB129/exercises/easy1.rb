@@ -25,8 +25,8 @@ class Banner
   end
 end
 
-banner = Banner.new('To boldly go where no one has gone before.')
-puts banner
+# banner = Banner.new('To boldly go where no one has gone before.')
+# puts banner
 # +--------------------------------------------+
 # |                                            |
 # | To boldly go where no one has gone before. |
@@ -34,8 +34,8 @@ puts banner
 # +--------------------------------------------+
 
 
-banner = Banner.new('')
-puts banner
+# banner = Banner.new('')
+# puts banner
 # +--+
 # |  |
 # |  |
@@ -70,8 +70,8 @@ class Banner
   end
 end
 
-banner = Banner.new('To boldly go where no one has gone before.', 80)
-puts banner
+# banner = Banner.new('To boldly go where no one has gone before.', 80)
+# puts banner
 # +--------------------------------------------+
 # |                                            |
 # | To boldly go where no one has gone before. |
@@ -79,10 +79,42 @@ puts banner
 # +--------------------------------------------+
 
 
-banner = Banner.new('')
-puts banner
+# banner = Banner.new('')
+# puts banner
 # +--+
 # |  |
 # |  |
 # |  |
 # +--+
+
+
+# 2. 
+class Pet
+  attr_reader :name
+
+  def initialize(name)
+    @name = name.to_s
+  end
+
+  def to_s
+    "My name is #{@name.upcase}."
+  end
+end
+
+# name = 'Fluffy'
+# fluffy = Pet.new(name)
+# puts fluffy.name
+# puts fluffy
+# puts fluffy.name
+# puts name
+
+name = 42
+fluffy = Pet.new(name)
+name += 1 # name is reassigned name = 42 + 1
+
+# String#to_s converts 42 to String '42', therefore
+# upcase is called on the String '42' on the expression @name.upcase
+puts fluffy.name
+puts fluffy
+puts fluffy.name
+puts name
