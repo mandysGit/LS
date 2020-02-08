@@ -155,8 +155,80 @@ class Book
   end
 end
 
-book = Book.new
-book.author = "Neil Stephenson"
-book.title = "Snow Crash"
-puts %(The author of "#{book.title}" is #{book.author}.)
-puts %(book = #{book}.)
+# book = Book.new
+# book.author = "Neil Stephenson"
+# book.title = "Snow Crash"
+# puts %(The author of "#{book.title}" is #{book.author}.)
+# puts %(book = #{book}.)
+
+# 5. Fix the Program Persons
+class Person
+  def initialize(first_name, last_name)
+    @first_name = first_name.capitalize
+    @last_name = last_name.capitalize
+  end
+
+  def to_s
+    "#{@first_name} #{@last_name}"
+  end
+
+  def first_name=(name)
+    @first_name = name.capitalize
+  end
+
+  def last_name=(name)
+    @last_name = name.capitalize
+  end
+end
+
+# person = Person.new('john', 'doe')
+# puts person
+
+# person.first_name = 'jane'
+# person.last_name = 'smith'
+# puts person
+
+# 6. Fix the Program - Flight Data
+class Flight
+  attr_accessor :database_handle # Remove this line
+
+  def initialize(flight_number)
+    @database_handle = Database.init
+    @flight_number = flight_number
+  end
+end
+
+=begin
+We don't want easy access to our database in this class. If we decide to
+not use the database in the future, and this class is already 
+modifying the database, it will be very difficult to remove because there's a depdency on it. 
+
+In otherwords, 
+Once that database handle is being used in real code, 
+future modifications to the class may break that code.
+You may even be prevented from modifying your class at all
+if the dependent code is of greater concern.
+=end
+
+# 7. Buggy Code - Car Mileage
+class Car
+  attr_accessor :mileage
+
+  def initialize
+    @mileage = 0
+  end
+
+  def increment_mileage(miles)
+    total = mileage + miles
+    self.mileage = total
+  end
+
+  def print_mileage
+    puts mileage
+  end
+end
+
+car = Car.new
+car.mileage = 5000
+car.increment_mileage(678)
+car.print_mileage  # should print 5678
