@@ -228,7 +228,93 @@ class Car
   end
 end
 
-car = Car.new
-car.mileage = 5000
-car.increment_mileage(678)
-car.print_mileage  # should print 5678
+# car = Car.new
+# car.mileage = 5000
+# car.increment_mileage(678)
+# car.print_mileage  # should print 5678
+
+# 8. Rectangles and Squares
+class Rectangle
+  def initialize(height, width)
+    @height = height
+    @width = width
+  end
+
+  def area
+    @height * @width
+  end
+end
+
+class Square < Rectangle
+  def initialize(side)
+    super(side, side)
+  end
+end
+
+# square = Square.new(5)
+# puts "area of square = #{square.area}"
+
+# 9. Complete the Program - Cats!
+class Pet
+  def initialize(name, age)
+    @name = name
+    @age = age
+  end
+end
+
+class Cat < Pet
+  attr_reader :name, :age, :color
+
+  def initialize(name, age, color)
+    super(name, age)
+    @color = color
+  end
+
+  def to_s
+    "My cat #{name} is #{age} years old and has #{color} fur."
+  end
+end
+
+pudding = Cat.new('Pudding', 7, 'black and white')
+butterscotch = Cat.new('Butterscotch', 10, 'tan and white')
+puts pudding, butterscotch
+
+
+# 10. Refactoring Vehicles
+class Vehicle
+  attr_reader :make, :model
+
+  def initialize(make, model)
+    @make = make
+    @model = model
+  end
+
+  def to_s
+    "#{make} #{model}"
+  end
+end
+
+class Car < Vehicle
+  def wheels
+    4
+  end
+end
+
+class Motorcycle < Vehicle
+  def wheels
+    2
+  end
+end
+
+class Truck < Vehicle
+  attr_reader :payload
+
+  def initialize(make, model, payload)
+    super(make, model)
+    @payload = payload
+  end
+
+  def wheels
+    6
+  end
+end
