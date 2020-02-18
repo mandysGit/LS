@@ -1,5 +1,5 @@
 class Move
-  VALUES = ['r', 'p', 'sc']
+  VALUES = ['r', 'p', 'sc', 'sp', 'l']
 
   def initialize(value)
     @value = value
@@ -17,20 +17,32 @@ class Move
     @value == 'p'
   end
 
+  def spock?
+    @value == 'sp'
+  end
+
+  def lizard?
+    @value == 'l'
+  end
+
   def to_s
     @value
   end
 
   def >(other_move)
-    (rock? && other_move.scissors?) ||
-      (paper? && other_move.rock?) ||
-      (scissors? && other_move.paper?)
+    (rock? && (other_move.scissors? || other_move.lizard?)) ||
+      (paper? && (other_move.rock? || other_move.spock?)) ||
+      (scissors? && (other_move.paper? || other_move.lizard?)) ||
+      (spock? && (other_move.rock? || other_move.scissors?)) ||
+      (lizard? && (other_move.paper? || other_move.spock?))
   end
 
   def <(other_move)
-    (rock? && other_move.paper?) ||
-      (paper? && other_move.scissors?) ||
-      (scissors? && other_move.rock?)
+    (rock? && (other_move.paper? || other_move.spock?)) ||
+      (paper? && (other_move.scissors? || other_move.lizard?)) ||
+      (scissors? && (other_move.rock? || other_move.spock?)) ||
+      (spock? && (other_move.lizard? || other_move.paper?)) ||
+      (lizard? && (other_move.rock? || other_move.scissors?))
   end
 end
 
@@ -61,7 +73,9 @@ class Human < Player
       "Choose one:
       'r'  for rock,
       'p'  for paper,
-      'sc' for scissors"
+      'sc' for scissors,
+      'sp' for spock,
+      'l' for lizard"
       )
       choice = gets.chomp
       break if Move::VALUES.include? choice
@@ -73,7 +87,7 @@ end
 
 class Computer < Player
   def set_name
-    self.name = ['R2D2', 'Hal', 'Chappie', 'Sonny', 'Number 5'].sample
+    self.name = ['Hal', 'Chappie', 'Sonny', 'Maki'].sample
   end
 
   def choose
