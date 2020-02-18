@@ -1,20 +1,20 @@
 class Move
-  VALUES = ['rock', 'paper', 'scissors']
+  VALUES = ['r', 'p', 'sc']
 
   def initialize(value)
     @value = value
   end
 
   def scissors?
-    @value == 'scissors'
+    @value == 'sc'
   end
 
   def rock?
-    @value == 'rock'
+    @value == 'r'
   end
 
   def paper?
-    @value == 'paper'
+    @value == 'p'
   end
 
   def to_s
@@ -57,7 +57,12 @@ class Human < Player
   def choose
     choice = nil
     loop do
-      puts "Please choose rock, paper, or scissors: "
+      puts(
+      "Choose one:
+      'r'  for rock,
+      'p'  for paper,
+      'sc' for scissors"
+      )
       choice = gets.chomp
       break if Move::VALUES.include? choice
       puts "Sorry, invalid choice."
