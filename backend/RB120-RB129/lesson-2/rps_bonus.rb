@@ -1,49 +1,117 @@
+require 'pry'
+
+class Rock
+  def greater_than(other_move)
+    ['Scissors', 'Lizard'].include? other_move.to_s
+  end
+
+  def less_than(other_move)
+    ['Spock', 'Paper'].include? other_move.to_s
+  end
+
+  def to_s
+    'Rock'
+  end
+end
+
+class Scissors
+  def greater_than(other_move)
+    ['Paper', 'Lizard'].include? other_move.to_s
+  end
+
+  def less_than(other_move)
+    ['Spock', 'Rock'].include? other_move.to_s
+  end
+
+  def to_s
+    'Scissors'
+  end
+end
+
+class Paper
+  def greater_than(other_move)
+    ['Rock', 'Spock'].include? other_move.to_s
+  end
+
+  def less_than(other_move)
+    ['Scissors', 'Lizard'].include? other_move.to_s
+  end
+
+  def to_s
+    'Paper'
+  end
+end
+
+class Lizard
+  def greater_than(other_move)
+    ['Paper', 'Spock'].include? other_move.to_s
+  end
+
+  def less_than(other_move)
+    ['Scissors', 'Rock'].include? other_move.to_s
+  end
+
+  def to_s
+    'Lizard'
+  end
+end
+
+class Spock
+  def greater_than(other_move)
+    ['Scissors', 'Rock'].include? other_move.class
+  end
+
+  def less_than(other_move)
+    ['Lizard', 'Paper'].include? other_move.class
+  end
+
+  def to_s
+    'Spock'
+  end
+end
+
 class Move
   VALUES = ['r', 'p', 'sc', 'sp', 'l']
 
   def initialize(value)
     @value = value
+    @choice = initialize_choice
   end
 
-  def scissors?
-    @value == 'sc'
-  end
-
-  def rock?
-    @value == 'r'
-  end
-
-  def paper?
-    @value == 'p'
-  end
-
-  def spock?
-    @value == 'sp'
-  end
-
-  def lizard?
-    @value == 'l'
+  def initialize_choice
+    case value
+    when 'r'
+      Rock.new
+    when 'p'
+      Scissors.new
+    when 'sc'
+      Paper.new
+    when 'sp'
+      Spock.new
+    when 'l'
+      Lizard.new
+    end
   end
 
   def to_s
-    @value
+    choice.to_s
   end
 
-  def >(other_move)
-    (rock? && (other_move.scissors? || other_move.lizard?)) ||
-      (paper? && (other_move.rock? || other_move.spock?)) ||
-      (scissors? && (other_move.paper? || other_move.lizard?)) ||
-      (spock? && (other_move.rock? || other_move.scissors?)) ||
-      (lizard? && (other_move.paper? || other_move.spock?))
+  def >(other)
+    choice.greater_than(other.choice)
   end
 
-  def <(other_move)
-    (rock? && (other_move.paper? || other_move.spock?)) ||
-      (paper? && (other_move.scissors? || other_move.lizard?)) ||
-      (scissors? && (other_move.rock? || other_move.spock?)) ||
-      (spock? && (other_move.lizard? || other_move.paper?)) ||
-      (lizard? && (other_move.rock? || other_move.scissors?))
+  def <(other)
+    choice.less_than(other.choice)
   end
+
+  protected
+
+  attr_reader :choice
+
+  private
+
+  attr_reader :value
 end
 
 class Player
@@ -70,7 +138,7 @@ class Human < Player
     choice = nil
     loop do
       puts(
-      "Choose one:
+        "Choose one:
       'r'  for rock,
       'p'  for paper,
       'sc' for scissors,
@@ -115,7 +183,7 @@ class RPSGame
 
   def display_moves
     puts "#{human.name} chose #{human.move}."
-    puts "#{computer.name} chose move #{computer.move}."
+    puts "#{computer.name} chose #{computer.move}."
   end
 
   def display_winner
@@ -142,9 +210,6 @@ class RPSGame
 
     return true if answer.downcase == 'y'
     return false if answer.downcase == 'n'
-  end
-
-  def display_score
   end
 
   def play
