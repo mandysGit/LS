@@ -117,6 +117,10 @@ class Game
     end
   end
 
+  def display_score
+    puts score.display(human.name, computer.name)
+  end
+
   def play_again?
     answer = nil
     loop do
@@ -130,19 +134,18 @@ class Game
     return false if answer.downcase == 'n'
   end
 
-  def display_score
-  end
-
   def play
     display_welcome_message
     loop do
       score.clear_points
       loop do
+        display_score
         human.choose
         computer.choose
         display_moves
         display_winner
-        puts score.display(human.name, computer.name)
+        sleep(2)
+        system 'clear'
         break if score.human == 10 || score.computer == 10
       end
 
@@ -176,11 +179,11 @@ class Score
   end
 
   def display(player_name, computer_name)
-    "Scoreboard~~~~~
+    "
+    ~~~~~Scoreboard~~~~~
     #{player_name} has won #{human} rounds.
     #{computer_name} has won #{computer} rounds.
-    There were #{tie} ties.
-   "
+    There were #{tie} ties."
   end
 
   private
