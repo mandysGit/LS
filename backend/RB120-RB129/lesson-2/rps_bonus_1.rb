@@ -1,117 +1,37 @@
-require 'pry'
-
-class Rock
-  def greater_than(other_move)
-    ['Scissors', 'Lizard'].include? other_move.to_s
-  end
-
-  def less_than(other_move)
-    ['Spock', 'Paper'].include? other_move.to_s
-  end
-
-  def to_s
-    'Rock'
-  end
-end
-
-class Scissors
-  def greater_than(other_move)
-    ['Paper', 'Lizard'].include? other_move.to_s
-  end
-
-  def less_than(other_move)
-    ['Spock', 'Rock'].include? other_move.to_s
-  end
-
-  def to_s
-    'Scissors'
-  end
-end
-
-class Paper
-  def greater_than(other_move)
-    ['Rock', 'Spock'].include? other_move.to_s
-  end
-
-  def less_than(other_move)
-    ['Scissors', 'Lizard'].include? other_move.to_s
-  end
-
-  def to_s
-    'Paper'
-  end
-end
-
-class Lizard
-  def greater_than(other_move)
-    ['Paper', 'Spock'].include? other_move.to_s
-  end
-
-  def less_than(other_move)
-    ['Scissors', 'Rock'].include? other_move.to_s
-  end
-
-  def to_s
-    'Lizard'
-  end
-end
-
-class Spock
-  def greater_than(other_move)
-    ['Scissors', 'Rock'].include? other_move.class
-  end
-
-  def less_than(other_move)
-    ['Lizard', 'Paper'].include? other_move.class
-  end
-
-  def to_s
-    'Spock'
-  end
-end
-
 class Move
-  VALUES = ['r', 'p', 'sc', 'sp', 'l']
+  VALUES = ['rock', 'paper', 'scissors']
 
   def initialize(value)
     @value = value
-    @choice = initialize_choice
   end
 
-  def initialize_choice
-    case value
-    when 'r'
-      Rock.new
-    when 'p'
-      Scissors.new
-    when 'sc'
-      Paper.new
-    when 'sp'
-      Spock.new
-    when 'l'
-      Lizard.new
-    end
+  def scissors?
+    @value == 'scissors'
+  end
+
+  def rock?
+    @value == 'rock'
+  end
+
+  def paper?
+    @value == 'paper'
   end
 
   def to_s
-    choice.to_s
+    @value
   end
 
-  def >(other)
-    choice.greater_than(other.choice)
+  def >(other_move)
+    (rock? && other_move.scissors?) ||
+      (paper? && other_move.rock?) ||
+      (scissors? && other_move.paper?)
   end
 
-  def <(other)
-    choice.less_than(other.choice)
+  def <(other_move)
+    (rock? && other_move.paper?) ||
+      (paper? && other_move.scissors?) ||
+      (scissors? && other_move.rock?)
   end
-
-  protected
-
-  attr_reader :choice
-
-  private
-
-  attr_reader :value
 end
 
 class Player
@@ -137,14 +57,7 @@ class Human < Player
   def choose
     choice = nil
     loop do
-      puts(
-        "Choose one:
-      'r'  for rock,
-      'p'  for paper,
-      'sc' for scissors,
-      'sp' for spock,
-      'l' for lizard"
-      )
+      puts "Please choose rock, paper, or scissors: "
       choice = gets.chomp
       break if Move::VALUES.include? choice
       puts "Sorry, invalid choice."
@@ -155,7 +68,7 @@ end
 
 class Computer < Player
   def set_name
-    self.name = ['Hal', 'Chappie', 'Sonny', 'Maki'].sample
+    self.name = ['R2D2', 'Hal', 'Chappie', 'Sonny', 'Number 5'].sample
   end
 
   def choose
@@ -163,7 +76,7 @@ class Computer < Player
   end
 end
 
-class Game
+class RPSGame
   attr_accessor :human, :computer
   attr_reader :score
 
@@ -183,19 +96,19 @@ class Game
 
   def display_moves
     puts "#{human.name} chose #{human.move}."
-    puts "#{computer.name} chose #{computer.move}."
+    puts "#{computer.name} chose move #{computer.move}."
   end
 
   def display_winner
     if human.move > computer.move
       puts "#{human.name} won!"
-      score.add_point('human')
+      score.human = score.human + 1
     elsif human.move < computer.move
       puts "#{computer.name} won!"
-      score.add_point('computer')
+      score.computer = score.computer + 1
     else
       puts "It's a tie!"
-      score.add_point('tie')
+      score.tie = score.tie + 1
     end
   end
 
@@ -212,6 +125,9 @@ class Game
     return false if answer.downcase == 'n'
   end
 
+  def display_score
+  end
+
   def play
     display_welcome_message
     loop do
@@ -221,15 +137,9 @@ class Game
         display_moves
         display_winner
         puts score.display(human.name, computer.name)
-        # TODO:
-        # refactor this IF conditional into a method
-        # display grand winner
-        if score.human == 10 || score.computer == 10
-          display_winner
-          score.clear_points
-          break
-        end
+        break if score.human == 10 || score.computer == 10
       end
+
       break unless play_again?
     end
     display_goodbye_message
@@ -237,26 +147,12 @@ class Game
 end
 
 class Score
-  attr_reader :human, :computer, :tie
+  attr_accessor :human, :computer, :tie
 
   def initialize
     @human = 0
     @computer = 0
     @tie = 0
-  end
-
-  def clear_points
-    self.human = 0
-    self.computer = 0
-    self.tie = 0
-  end
-
-  def add_point(player)
-    case player
-    when 'human' then self.human = human + 1
-    when 'computer' then self.computer = computer + 1
-    when 'tie' then self.tie = tie + 1
-    end
   end
 
   def display(player_name, computer_name)
@@ -266,10 +162,6 @@ class Score
     There were #{tie} ties.
    "
   end
-
-  private
-
-  attr_writer :human, :computer, :tie
 end
 
-Game.new.play
+RPSGame.new.play
