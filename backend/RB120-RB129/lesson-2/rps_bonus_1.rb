@@ -76,7 +76,7 @@ class Computer < Player
   end
 end
 
-class RPSGame
+class Game
   attr_accessor :human, :computer
   attr_reader :score
 
@@ -102,13 +102,13 @@ class RPSGame
   def display_winner
     if human.move > computer.move
       puts "#{human.name} won!"
-      score.human = score.human + 1
+      score.add_point('human')
     elsif human.move < computer.move
       puts "#{computer.name} won!"
-      score.computer = score.computer + 1
+      score.add_point('computer')
     else
       puts "It's a tie!"
-      score.tie = score.tie + 1
+      score.add_point('tie')
     end
   end
 
@@ -131,6 +131,7 @@ class RPSGame
   def play
     display_welcome_message
     loop do
+      score.clear_points
       loop do
         human.choose
         computer.choose
@@ -147,12 +148,26 @@ class RPSGame
 end
 
 class Score
-  attr_accessor :human, :computer, :tie
+  attr_reader :human, :computer, :tie
 
   def initialize
     @human = 0
     @computer = 0
     @tie = 0
+  end
+
+  def clear_points
+    self.human = 0
+    self.computer = 0
+    self.tie = 0
+  end
+
+  def add_point(player)
+    case player
+    when 'human' then self.human = human + 1
+    when 'computer' then self.computer = computer + 1
+    when 'tie' then self.tie = tie + 1
+    end
   end
 
   def display(player_name, computer_name)
@@ -162,6 +177,10 @@ class Score
     There were #{tie} ties.
    "
   end
+
+  private
+
+  attr_writer :human, :computer, :tie
 end
 
-RPSGame.new.play
+Game.new.play
