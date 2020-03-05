@@ -1,3 +1,5 @@
+require 'pry'
+
 class Move
   VALUES = ['r', 'p', 'sc']
 
@@ -82,6 +84,7 @@ class Computer < Player
 end
 
 class Game
+  WIN_SCORE = 2
   attr_accessor :human, :computer
   attr_reader :score
 
@@ -92,7 +95,10 @@ class Game
   end
 
   def display_welcome_message
-    puts "Welcome to Rock, Paper, Scissors!"
+    puts <<-INTRO
+    Welcome to Rock, Paper, Scissors!
+    You must win 3 matches to win the entire game.
+    INTRO
   end
 
   def display_goodbye_message
@@ -104,21 +110,45 @@ class Game
     puts "#{computer.name} chose move #{computer.move}."
   end
 
-  def display_winner
+  def display_score
+    puts "
+    ~~~~~Scoreboard~~~~~
+    #{human.name} has won #{score.human} matches.
+    #{computer.name} has won #{score.computer} matches.
+    There were #{score.tie} ties.
+    "
+  end
+
+  def match_winner
     if human.move > computer.move
-      puts "#{human.name} won!"
-      score.add_point('human')
+      human
     elsif human.move < computer.move
-      puts "#{computer.name} won!"
-      score.add_point('computer')
-    else
-      puts "It's a tie!"
-      score.add_point('tie')
+      computer
     end
   end
 
-  def display_score
-    puts score.display(human.name, computer.name)
+  def grand_winner
+    return human if score.human == WIN_SCORE
+    return computer if score.computer == WIN_SCORE
+  end
+
+  def display_match_winner
+    if match_winner
+      puts "#{match_winner.name} won!"
+      score.add_point(match_winner)
+    else
+      puts "It's a tie!"
+    end
+  end
+
+  def display_grand_winner
+    puts "
+    #{grand_winner.name} is the grand winner,
+    winning #{WIN_SCORE} matches!"
+  end
+
+  def match_ended?
+    score.human == WIN_SCORE || score.computer == WIN_SCORE
   end
 
   def play_again?
@@ -134,23 +164,33 @@ class Game
     return false if answer.downcase == 'n'
   end
 
+  def start_match
+    loop do
+      display_score
+      human.choose
+      computer.choose
+      display_moves
+      display_match_winner
+      sleep(1)
+      system 'clear'
+
+      if match_ended?
+        display_score
+        display_grand_winner
+        break
+      end
+    end
+  end
+
   def play
     display_welcome_message
-    loop do
-      score.clear_points
-      loop do
-        display_score
-        human.choose
-        computer.choose
-        display_moves
-        display_winner
-        sleep(2)
-        system 'clear'
-        break if score.human == 10 || score.computer == 10
-      end
 
+    loop do
+      score.clear
+      start_match
       break unless play_again?
     end
+
     display_goodbye_message
   end
 end
@@ -164,26 +204,20 @@ class Score
     @tie = 0
   end
 
-  def clear_points
+  def clear
     self.human = 0
     self.computer = 0
     self.tie = 0
   end
 
   def add_point(player)
-    case player
-    when 'human' then self.human = human + 1
-    when 'computer' then self.computer = computer + 1
-    when 'tie' then self.tie = tie + 1
+    if player.is_a?(Human)
+      self.human = human + 1
+    elsif player.is_a?(Computer)
+      self.computer = computer + 1
+    else
+      self.tie = tie + 1
     end
-  end
-
-  def display(player_name, computer_name)
-    "
-    ~~~~~Scoreboard~~~~~
-    #{player_name} has won #{human} rounds.
-    #{computer_name} has won #{computer} rounds.
-    There were #{tie} ties."
   end
 
   private
