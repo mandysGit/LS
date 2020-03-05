@@ -83,6 +83,7 @@ class Computer < Player
 end
 
 class Game
+  WIN_SCORE = 2
   attr_accessor :human, :computer
 
   def initialize
@@ -91,7 +92,10 @@ class Game
   end
 
   def display_welcome_message
-    puts "Welcome to Rock, Paper, Scissors!"
+    puts <<-INTRO
+    Welcome to Rock, Paper, Scissors!
+    You must win 3 matches to win the entire game.
+    INTRO
   end
 
   def display_goodbye_message
@@ -103,24 +107,53 @@ class Game
     puts "#{computer.name} chose move #{computer.move}."
   end
 
-  def display_winner
+  def display_score
+    puts "
+    ~~~~~Scoreboard~~~~~
+    #{human.name} has won #{human.score} matches.
+    #{computer.name} has won #{computer.score} matches.
+    "
+  end
+
+  def add_point(player)
+    player.score = player.score + 1
+  end
+
+  def clear_score
+    human.score = 0
+    computer.score = 0
+  end
+
+  def match_winner
     if human.move > computer.move
-      puts "#{human.name} won!"
-      human.score = human.score + 1
+      human
     elsif human.move < computer.move
-      puts "#{computer.name} won!"
-      computer.score = computer.score + 1
+      computer
+    end
+  end
+
+  def grand_winner
+    return human if human.score == WIN_SCORE
+    return computer if computer.score == WIN_SCORE
+  end
+
+  def display_match_winner
+    if match_winner
+      puts "#{match_winner.name} won!"
+      add_point(match_winner)
     else
       puts "It's a tie!"
     end
   end
 
-  def display_score
-    puts("
-    ~~~~~Scoreboard~~~~~
-    #{human.name} has won #{human.score} rounds.
-    #{computer.name} has won #{computer.score} rounds.
-    ")
+  def display_grand_winner
+    puts "
+    #{grand_winner.name} is the grand winner,
+    winning #{WIN_SCORE} matches!"
+  end
+
+  def match_ended?
+    human.score == WIN_SCORE || computer.score == WIN_SCORE
   end
 
   def play_again?
@@ -136,24 +169,33 @@ class Game
     return false if answer.downcase == 'n'
   end
 
+  def start_match
+    loop do
+      display_score
+      human.choose
+      computer.choose
+      display_moves
+      display_match_winner
+      sleep(1)
+      system 'clear'
+
+      if match_ended?
+        display_score
+        display_grand_winner
+        break
+      end
+    end
+  end
+
   def play
     display_welcome_message
-    loop do
-      human.score = 0
-      computer.score = 0
-      loop do
-        display_score
-        human.choose
-        computer.choose
-        display_moves
-        display_winner
-        sleep(1)
-        system 'clear'
-        break if human.score == 10 || computer.score == 10
-      end
 
+    loop do
+      clear_score
+      start_match
       break unless play_again?
     end
+
     display_goodbye_message
   end
 end
