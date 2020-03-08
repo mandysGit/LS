@@ -1,4 +1,4 @@
-##1) Keeping track of the score
+## 1) Keeping track of the score
 
 **Implementing Score as a new class**
 
