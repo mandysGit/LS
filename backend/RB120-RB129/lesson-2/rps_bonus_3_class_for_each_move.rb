@@ -14,7 +14,7 @@ class Move
   end
 
   def to_s
-    @value
+    value
   end
 
   def >(other_move)
@@ -26,12 +26,37 @@ class Move
   attr_reader :value
 end
 
+class Rock < Move
+end
+
+class Paper < Move
+end
+
+class Scissors < Move
+end
+
+class Lizard < Move
+end
+
+class Spock < Move
+end
+
 class Player
   attr_accessor :move, :name, :score
 
   def initialize
     set_name
     @score = 0
+  end
+
+  def select_move(choice)
+    case choice
+    when 'r' then self.move = Rock.new(choice)
+    when 'p' then self.move = Paper.new(choice)
+    when 'sc' then self.move = Scissors.new(choice)
+    when 'l' then self.move = Lizard.new(choice)
+    when 'sp' then self.move = Spock.new(choice)
+    end
   end
 end
 
@@ -62,7 +87,8 @@ class Human < Player
       break if Move::VALUES.include? choice
       puts "Sorry, invalid choice."
     end
-    self.move = Move.new(choice)
+
+    select_move(choice)
   end
 end
 
@@ -72,7 +98,7 @@ class Computer < Player
   end
 
   def choose
-    self.move = Move.new(Move::VALUES.sample)
+    select_move(Move::VALUES.sample)
   end
 end
 
