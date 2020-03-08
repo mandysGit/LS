@@ -2,7 +2,7 @@
 
 **Implementing Score as a new class**
 
-The attributes and behaviours of the `score` are now encapsulated in its own class. The `Score` instance is responsible for clearing points before the start of a match and keeping a tally of each player's wins and ties. `Score` is now used as a collaborator object for the `Game` class, as shown below:
+The states and behaviours of the `score` are now encapsulated in its own class. The `Score` instance is responsible for clearing points before the start of a match and keeping a tally of each player's wins and ties. `Score` is now used as a collaborator object for the `Game` class, as shown below:
 
 ```ruby
 class Game
@@ -24,7 +24,7 @@ The rps game is still quite simple, and I think it is easier to reason about the
 
 **Implementing Score as a state of an existing class**
 
-I can keep track of the human's score and computer's score by implementing score as an attribute of Player class.
+I can keep track of the human's score and computer's score by implementing score as an state of Player class.
 
 ```ruby
 class Player
@@ -37,7 +37,7 @@ class Player
 end
 ```
 
-In this implementation, I am not counting the score of ties since the score is an attribute of a player. Ties are not associated to any players. This approach is readable and simple, given the simple nature of the game at the moment. If the game shifts to a more complex scoring system, then extracting score into it's own class would be better.
+In this implementation, I am not counting the score of ties since the score is an state of a player. Ties are not associated to any players. This approach is readable and simple, given the simple nature of the game at the moment. If the game shifts to a more complex scoring system, then extracting score into it's own class would be better.
 
 
 
