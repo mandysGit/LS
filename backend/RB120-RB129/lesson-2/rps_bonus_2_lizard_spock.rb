@@ -14,7 +14,7 @@ class Move
   end
 
   def to_s
-    @value
+    value
   end
 
   def >(other_move)
