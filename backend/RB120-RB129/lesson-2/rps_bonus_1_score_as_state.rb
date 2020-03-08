@@ -94,7 +94,7 @@ class Game
   def display_welcome_message
     puts <<-INTRO
     Welcome to Rock, Paper, Scissors!
-    You must win 3 matches to win the entire game.
+    You must win #{WIN_SCORE} matches to win the entire game.
     INTRO
   end
 
@@ -104,7 +104,7 @@ class Game
 
   def display_moves
     puts "#{human.name} chose #{human.move}."
-    puts "#{computer.name} chose move #{computer.move}."
+    puts "#{computer.name} chose #{computer.move}."
   end
 
   def display_score
@@ -149,7 +149,7 @@ class Game
   def display_grand_winner
     puts "
     #{grand_winner.name} is the grand winner,
-    winning #{WIN_SCORE} matches!"
+    winning a total of #{WIN_SCORE} matches!"
   end
 
   def match_ended?
