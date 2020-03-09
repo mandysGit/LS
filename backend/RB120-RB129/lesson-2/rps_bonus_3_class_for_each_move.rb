@@ -49,6 +49,8 @@ class Player
     @score = 0
   end
 
+  private
+
   def select_move(choice)
     case choice
     when 'r' then self.move = Rock.new(choice)
