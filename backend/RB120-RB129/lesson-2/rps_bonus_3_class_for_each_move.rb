@@ -26,20 +26,11 @@ class Move
   attr_reader :value
 end
 
-class Rock < Move
-end
-
-class Paper < Move
-end
-
-class Scissors < Move
-end
-
-class Lizard < Move
-end
-
-class Spock < Move
-end
+class Rock < Move; end
+class Paper < Move; end
+class Scissors < Move; end
+class Lizard < Move; end
+class Spock < Move; end
 
 class Player
   attr_accessor :move, :name, :score
