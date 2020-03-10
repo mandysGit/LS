@@ -1,3 +1,14 @@
+module Promptable
+  def prompt(msg)
+    puts "=> #{msg}"
+  end
+
+  def display(msg)
+    puts "
+    #{msg}"
+  end
+end
+
 class Move
   VALUES = ['r', 'p', 'sc', 'sp', 'l']
 
@@ -37,13 +48,15 @@ class Player
 end
 
 class Human < Player
+  include Promptable
+
   def choose
     choice = nil
     loop do
       prompt_user_for_choices
       choice = gets.chomp
       break if Move::VALUES.include? choice
-      puts "Sorry, invalid choice."
+      prompt("Sorry, invalid choice.")
     end
 
     self.move = Move.new(choice)
@@ -55,23 +68,21 @@ class Human < Player
   def set_name
     n = ''
     loop do
-      puts "What's your name?"
+      prompt("What's your name?")
       n = gets.chomp
       break unless n.empty?
-      puts "Sorry, must enter a value."
+      prompt("Sorry, must enter a value.")
     end
     self.name = n
   end
 
   def prompt_user_for_choices
-    puts(
-      "Choose one:
+    prompt("Choose one:
     'r'  for rock,
     'p'  for paper,
     'sc' for scissors,
     'l'  for lizard,
-    'sp' for spock"
-    )
+    'sp' for spock")
   end
 end
 
@@ -89,6 +100,8 @@ class Computer < Player
 end
 
 class Game
+  include Promptable
+
   def initialize
     @human = Human.new
     @computer = Computer.new
@@ -113,39 +126,33 @@ class Game
   attr_accessor :human, :computer
 
   def display_welcome_message
-    puts "
-    Welcome #{human.name}!
+    display("Welcome #{human.name}!
     Let's play Rock, Paper, Scissors!
-    You must win #{WIN_SCORE} matches to win the entire game.
-    "
+    You must win #{WIN_SCORE} matches to win the entire game.")
   end
 
   def display_goodbye_message
-    puts "Thanks for playing Rock, Paper, Scissors. Good bye!"
+    prompt("\u{1F600} Thank You for playing Rock, Paper, Scissors! Good bye!")
   end
 
   def display_moves
-    puts "#{human.name} chose #{human.move}."
-    puts "#{computer.name} chose #{computer.move}."
+    display("#{human.name} chose #{human.move}.")
+    display("#{computer.name} chose #{computer.move}.")
   end
 
   def display_score
-    puts "
-    ~~~~~Scoreboard~~~~~
+    display("~~~~~Scoreboard~~~~~
     #{human.name} has won #{human.score} matches.
-    #{computer.name} has won #{computer.score} matches.
-    "
+    #{computer.name} has won #{computer.score} matches.")
   end
 
   def display_move_history
-    puts "
-      ~~~~~Game Recap~~~~~"
+    display("~~~~~Game Recap~~~~~")
 
     human.move_history.size.times do |index|
-      puts "
-      On match #{index + 1}:
-      #{human.name} chose: #{human.move_history[index]}
-      #{computer.name} chose: #{computer.move_history[index]}"
+      display("Match #{index + 1}:
+      #{human.name} chose #{human.move_history[index]}
+      #{computer.name} chose #{computer.move_history[index]}")
     end
   end
 
@@ -175,17 +182,16 @@ class Game
 
   def display_match_winner
     if match_winner
-      puts "#{match_winner.name} won!"
+      display("#{match_winner.name} won!")
       add_point(match_winner)
     else
-      puts "It's a tie!"
+      display("It's a tie!")
     end
   end
 
   def display_grand_winner
-    puts "
-    #{grand_winner.name} is the grand winner,
-    winning a total of #{WIN_SCORE} matches!"
+    display("#{grand_winner.name} is the grand winner,
+    winning a total of #{WIN_SCORE} matches!")
   end
 
   def match_ended?
@@ -195,10 +201,10 @@ class Game
   def play_again?
     answer = nil
     loop do
-      puts "Would you like to play again? (y/n)"
+      prompt("Would you like to play again? (y/n)")
       answer = gets.chomp
       break if ['y', 'n'].include? answer.downcase
-      puts "Sorry, must be y or n"
+      prompt("Sorry, must be y or n")
     end
 
     return true if answer.downcase == 'y'
