@@ -114,3 +114,57 @@ class Move
 end
 ```
 
+
+
+## 4) Keep track of a history of moves
+
+**What data structure will you reach for?**
+
+I used an Array to keep track of Player's move history. The Array is an order list, so it keeps all the Player's moves in order, from the first move until the last move. 
+
+move_history is a instance variable in Player class:
+
+```ruby
+class Player
+  attr_accessor :move, :name, :score, :move_history
+
+  def initialize
+    set_name
+    @score = 0
+    @move_history = []
+  end
+end
+```
+
+
+
+**Will you use a new class, or an existing class?**
+
+I choose to use the existing `Player` class to keep track of the move history. It makes sense to keep track of the move history as a state of a `Player` because each `Player` ***has a*** move history. Player and move history forms a ***has-a*** relationship. 
+
+
+
+ **What will the display output look like?**
+
+Display looks like: 
+
+```ruby
+~~~~~Game Recap~~~~~
+
+Match 1:
+Mandy chose r
+Hal chose r 
+
+Match 2:
+Mandy chose r
+Hal chose sc
+
+Match 3:
+Mandy chose r
+Hal chose sc
+
+Match 4:
+Mandy chose r
+Hal chose sc
+```
+
