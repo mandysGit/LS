@@ -37,6 +37,21 @@ class Player
 end
 
 class Human < Player
+  def choose
+    choice = nil
+    loop do
+      prompt_user_for_choices
+      choice = gets.chomp
+      break if Move::VALUES.include? choice
+      puts "Sorry, invalid choice."
+    end
+
+    self.move = Move.new(choice)
+    move_history << choice
+  end
+
+  private
+
   def set_name
     n = ''
     loop do
@@ -47,20 +62,6 @@ class Human < Player
     end
     self.name = n
   end
-
-  def choose
-    choice = nil
-    loop do
-      prompt_user_for_choices
-      choice = gets.chomp
-      break if Move::VALUES.include? choice
-      puts "Sorry, invalid choice."
-    end
-    self.move = Move.new(choice)
-    move_history << choice
-  end
-
-  private
 
   def prompt_user_for_choices
     puts(
@@ -75,24 +76,41 @@ class Human < Player
 end
 
 class Computer < Player
-  def set_name
-    self.name = ['R2D2', 'Hal', 'Chappie', 'Sonny', 'Number 5'].sample
-  end
-
   def choose
     self.move = Move.new(Move::VALUES.sample)
     move_history << move.to_s
   end
+
+  private
+
+  def set_name
+    self.name = ['R2D2', 'Hal', 'Chappie', 'Sonny', 'Number 5'].sample
+  end
 end
 
 class Game
-  WIN_SCORE = 3
-  attr_accessor :human, :computer
-
   def initialize
     @human = Human.new
     @computer = Computer.new
   end
+
+  def play
+    display_welcome_message
+
+    loop do
+      clear_score
+      clear_move_history
+      start_match
+      break unless play_again?
+    end
+
+    display_goodbye_message
+  end
+
+  private
+
+  WIN_SCORE = 3
+  attr_accessor :human, :computer
 
   def display_welcome_message
     puts "
@@ -204,19 +222,6 @@ class Game
         break
       end
     end
-  end
-
-  def play
-    display_welcome_message
-
-    loop do
-      clear_score
-      clear_move_history
-      start_match
-      break unless play_again?
-    end
-
-    display_goodbye_message
   end
 end
 
