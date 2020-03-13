@@ -140,7 +140,7 @@ end
 
 **Will you use a new class, or an existing class?**
 
-I choose to use the existing `Player` class to keep track of the move history. It makes sense to keep track of the move history as a state of a `Player` because each `Player` ***has a*** move history. Player and move history forms a ***has-a*** relationship. 
+I choose to use the existing `Player` class to keep track of the move history. It makes sense to keep track of the move history as a state of a `Player` because each `Player` has a move history.
 
 
 
