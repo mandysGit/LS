@@ -10,7 +10,7 @@ module Promptable
 end
 
 class Move
-  VALUES = ['r', 'p', 'sc', 'sp', 'l']
+  VALUES = %w(r p sc sp l)
 
   WIN_COMBINATIONS = {
     'r' => %w(l sc),
@@ -87,21 +87,82 @@ class Human < Player
 end
 
 class Computer < Player
+  def initialize
+    @personality = [R2D2, Hal, Chappie, Sonny, Number5].sample.new
+    super
+  end
+
   def choose
-    case name
-    when 'R2D2' then self.move = Move.new('r')
-    when 'Hal' then self.move = Move.new(['sc', 'sc','sc','r'].sample)
-    when 'Chappie' then self.move = Move.new(['p', 'p','p','r'].sample)
-    when 'Sonny' then self.move = Move.new(['sp', 'sp','sp','r','l'].sample)
-    when 'Number 5' then self.move = Move.new(Move::VALUES.sample)
-    end
+    self.move = personality.choose
     move_history << move.to_s
   end
 
   private
 
+  attr_reader :personality
+
   def set_name
-    self.name = ['R2D2', 'Hal', 'Chappie', 'Sonny', 'Number 5'].sample
+    self.name = personality.name
+  end
+end
+
+class R2D2 < Computer
+  def initialize; end
+
+  def choose
+    Move.new('r')
+  end
+
+  def name
+    self.class.to_s
+  end
+end
+
+class Hal < Computer
+  def initialize; end
+
+  def choose
+    Move.new(%w(sc sc sc sc sp sp l l r).sample)
+  end
+
+  def name
+    self.class.to_s
+  end
+end
+
+class Chappie < Computer
+  def initialize; end
+
+  def choose
+    Move.new(%w(l l l l l sp p sc r).sample)
+  end
+
+  def name
+    self.class.to_s
+  end
+end
+
+class Sonny < Computer
+  def initialize; end
+
+  def choose
+    Move.new('p')
+  end
+
+  def name
+    self.class.to_s
+  end
+end
+
+class Number5 < Computer
+  def initialize; end
+
+  def choose
+    Move.new(Move::VALUES.sample)
+  end
+
+  def name
+    self.class.to_s
   end
 end
 
