@@ -168,3 +168,9 @@ Mandy chose r
 Hal chose sc
 ```
 
+
+
+## 5) Computer Personalities
+
+I implemented each computer personality as a subclass of Computer, by following the ruby clean code guidelines: https://github.com/uohzxela/clean-code-ruby#avoid-conditionals
+
