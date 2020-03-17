@@ -2,7 +2,7 @@
 
 <u>**Implementing Score as a new class**</u>
 
-The states and behaviours of the `score` are now encapsulated in its own class. The `Score` instance is responsible for clearing points before the start of a match and keeping a tally of each player's wins and ties. `Score` is now used as a collaborator object for the `Game` class, as shown below:
+The `Score` instance is responsible for clearing points before the start of a match and keeping a tally of each player's wins and ties. `Score` is  a collaborator object for the `Game` class, as shown below:
 
 ```ruby
 class Game
@@ -18,11 +18,9 @@ class Game
   #....
 ```
 
-Although it may seem like a good idea to separate `Score` into it's own class, I believe it is too early to do that right now. As the scoring system becomes more complicated, for example, with more than 2 players  or if there's bonus points rewarded for certain situations, then it would make more sense to implement `Score` as it's own class. 
+I believe it is too early to separate `Score` into a separte class. As the scoring system becomes more complicated, for example, with more than 2 players  or if there are bonus points rewarded for certain situations, then it would make more sense to implement `Score` as it's own class. 
 
 The rps game is still quite simple, and I think it is easier to reason about the score by implementing it as a state of an existing class. 
-
-
 
 <u>**Implementing Score as a state of an existing class**</u>
 
@@ -78,11 +76,11 @@ end
 
 **<u>Discussion Pros & Cons</u>**
 
-It is not necessary to break up the moves into separate subclass for now because my rpsls game is still quite simple. Breaking up the moves into subclasses makes selecting a move and the code more complicated. 
+It is not necessary to break up the moves into separate subclass for now because my rpsls game is still simple. Breaking up the moves into subclasses makes selecting a move and the code more complicated. 
 
 If the game has more rules, and each move had unique features that could not be clearly represented in the behaviour or state of the `Move` class, then I would consider refactoring each move into separate classes. For instance, if Rock has specific rules that only applies to the Rock move, then creating subclasses for each move would make those rules more clear in the code. 
 
-Otherwise, the refactor I did by creating `WIN_COMBINATIONS` constant within the `Move` class is a clear reprersentation of the winning states for each move. It is unecessary at this point to refactor each move into it's own individual subclass. 
+The refactor I did by creating `WIN_COMBINATIONS` constant within the `Move` class is a clear representation of the winning states for each move.
 
 ```ruby 
 class Move
@@ -122,7 +120,7 @@ end
 
 I used an Array to keep track of Player's move history. The Array is an order list, so it keeps all the Player's moves in order, from the first move until the last move. 
 
-move_history is a instance variable in Player class:
+move_history is a state of the Player class:
 
 ```ruby
 class Player
@@ -136,17 +134,11 @@ class Player
 end
 ```
 
-
-
 **Will you use a new class, or an existing class?**
 
-I choose to use the existing `Player` class to keep track of the move history. It makes sense to keep track of the move history as a state of a `Player` because each `Player` has a move history.
-
-
+I use the existing `Player` class to keep track of the move history. It makes sense to keep track of the move history as a state of a `Player` because each `Player` has a move history.
 
  **What will the display output look like?**
-
-Display looks like: 
 
 ```ruby
 ~~~~~Game Recap~~~~~
@@ -173,4 +165,87 @@ Hal chose sc
 ## 5) Computer Personalities
 
 I implemented each computer personality as a subclass of Computer, by following the ruby clean code guidelines: https://github.com/uohzxela/clean-code-ruby#avoid-conditionals
+
+```ruby
+
+class Computer < Player
+  def initialize
+    @personality = [R2D2, Hal, Chappie, Sonny, Number5].sample.new
+    super
+  end
+
+  def choose
+    self.move = personality.choose
+    move_history << move.to_s
+  end
+
+  private
+
+  attr_reader :personality
+
+  def set_name
+    self.name = personality.name
+  end
+end
+
+class R2D2 < Computer
+  def initialize; end
+
+  def choose
+    Move.new('r')
+  end
+
+  def name
+    self.class.to_s
+  end
+end
+
+class Hal < Computer
+  def initialize; end
+
+  def choose
+    Move.new(%w(sc sc sc sc sp sp l l r).sample)
+  end
+
+  def name
+    self.class.to_s
+  end
+end
+
+class Chappie < Computer
+  def initialize; end
+
+  def choose
+    Move.new(%w(l l l l l sp p sc r).sample)
+  end
+
+  def name
+    self.class.to_s
+  end
+end
+
+class Sonny < Computer
+  def initialize; end
+
+  def choose
+    Move.new('p')
+  end
+
+  def name
+    self.class.to_s
+  end
+end
+
+class Number5 < Computer
+  def initialize; end
+
+  def choose
+    Move.new(Move::VALUES.sample)
+  end
+
+  def name
+    self.class.to_s
+  end
+end
+```
 
