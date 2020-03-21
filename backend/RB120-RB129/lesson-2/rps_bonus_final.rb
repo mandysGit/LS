@@ -10,7 +10,13 @@ module Promptable
 end
 
 class Move
-  VALUES = %w(r p sc sp l)
+  VALUES = {
+    'r' => 'rock',
+    'l' => 'lizard',
+    'sp' => 'spock',
+    'sc' => 'scissors',
+    'p' => 'paper'
+  }
 
   WIN_COMBINATIONS = {
     'r' => %w(l sc),
@@ -25,14 +31,14 @@ class Move
   end
 
   def to_s
-    value
+    VALUES[value]
   end
 
   def >(other_move)
-    WIN_COMBINATIONS[value].include?(other_move.to_s)
+    WIN_COMBINATIONS[value].include?(other_move.value)
   end
 
-  private
+  protected
 
   attr_reader :value
 end
@@ -55,12 +61,12 @@ class Human < Player
     loop do
       prompt_user_for_choices
       choice = gets.chomp
-      break if Move::VALUES.include? choice
+      break if Move::VALUES.keys.include? choice
       prompt("Sorry, invalid choice.")
     end
 
     self.move = Move.new(choice)
-    move_history << choice
+    move_history << move.to_s
   end
 
   private
@@ -158,7 +164,7 @@ class Number5 < Computer
   def initialize; end
 
   def choose
-    Move.new(Move::VALUES.sample)
+    Move.new(Move::VALUES.keys.sample)
   end
 
   def name
