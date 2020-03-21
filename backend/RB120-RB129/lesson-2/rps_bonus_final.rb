@@ -182,6 +182,7 @@ class Game
       clear_move_history
       start_match
       break unless play_again?
+      clear_screen
     end
 
     display_goodbye_message
