@@ -249,3 +249,28 @@ class Number5 < Computer
 end
 ```
 
+
+
+Prior to dividing up each personality into subclass, I had a case statement within `choose` instance method:
+
+```ruby
+class Computer < Player
+  def choose
+    case name
+    when 'R2D2' then self.move = Move.new('r')
+    when 'Hal' then self.move = Move.new(['sc', 'sc','sc','r'].sample)
+    when 'Chappie' then self.move = Move.new(['p', 'p','p','r'].sample)
+    when 'Sonny' then self.move = Move.new(['sp', 'sp','sp','r','l'].sample)
+    when 'Number 5' then self.move = Move.new(Move::VALUES.sample)
+    end
+    move_history << move.to_s
+  end
+
+  private
+
+  def set_name
+    self.name = ['R2D2', 'Hal', 'Chappie', 'Sonny', 'Number 5'].sample
+  end
+end
+```
+
