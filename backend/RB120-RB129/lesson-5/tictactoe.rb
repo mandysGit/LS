@@ -10,12 +10,25 @@ module Promptable
 end
 
 class Board
+  INITIAL_MARKER = " "
+
   def initialize
+    @squares = {}
+    (1..9).each {|key| @squares[key] = Square.new(INITIAL_MARKER)}
+  end
+
+  def get_square_at(key)
+    @squares[key]
   end
 end
 
 class Square
-  def initialize
+  def initialize(marker)
+    @marker = marker
+  end
+
+  def to_s
+    @marker
   end
 end
 
@@ -29,6 +42,11 @@ end
 
 class TTTGame
   include Promptable
+  attr_reader :board
+
+  def initialize
+    @board = Board.new
+  end
 
   def play
     display_welcome_message
@@ -49,7 +67,6 @@ class TTTGame
 
   private
 
-
   def display_welcome_message
     display("Welcome to Tic Tac Toe.
     The rules to win a round is to mark 3 squares
@@ -63,15 +80,15 @@ class TTTGame
   def display_board
     puts ""
     puts "     |     |"
-    puts "     |     |   "
+    puts "  #{board.get_square_at(1)}  |  #{board.get_square_at(1)}  |  #{board.get_square_at(1)} "
     puts "     |     |"
     puts "-----+-----+-----"
     puts "     |     |"
-    puts "     |     |   "
+    puts "  #{board.get_square_at(1)}  |  #{board.get_square_at(1)}  |  #{board.get_square_at(1)} "
     puts "     |     |"
     puts "-----+-----+-----"
     puts "     |     |"
-    puts "     |     |   "
+    puts "   #{board.get_square_at(1)} |  #{board.get_square_at(1)}  |  #{board.get_square_at(1)} "
     puts "     |     |"
     puts ""
   end
