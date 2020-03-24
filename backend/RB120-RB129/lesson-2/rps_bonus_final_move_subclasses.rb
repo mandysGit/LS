@@ -11,11 +11,11 @@ end
 
 class Move
   CHOICES = {
-    'p' => Paper,
-    'r' => Rock,
-    'sc' => Scissors,
-    'sp' => Spock,
-    'l' => Lizard
+    'p' => 'Paper',
+    'r' => 'Rock',
+    'sc' => 'Scissors',
+    'sp' => 'Spock',
+    'l' => 'Lizard'
   }
 
   def initialize(value)
@@ -23,16 +23,20 @@ class Move
   end
 
   def to_s
-    value
+    name
   end
 
   def >(other_move)
-    self.beats.include?(other_move.name)
+    beats.include?(other_move.name)
   end
+
+  protected
+
+  attr_reader :name
 
   private
 
-  attr_reader :value
+  attr_reader :beats
 end
 
 class Rock < Move
@@ -40,10 +44,6 @@ class Rock < Move
     @name = 'rock'
     @beats = ['lizard', 'scissors']
   end
-
-  protected
-
-  attr_reader :name, :beats
 end
 
 class Lizard < Move
@@ -51,10 +51,6 @@ class Lizard < Move
     @name = 'lizard'
     @beats = ['paper', 'spock']
   end
-
-  protected
-
-  attr_reader :name, :beats
 end
 
 class Spock < Move
@@ -62,10 +58,6 @@ class Spock < Move
     @name = 'spock'
     @beats = ['rock', 'scissors']
   end
-
-  protected
-
-  attr_reader :name, :beats
 end
 
 class Scissors < Move
@@ -73,21 +65,13 @@ class Scissors < Move
     @name = 'scissors'
     @beats = ['lizard', 'paper']
   end
-
-  protected
-
-  attr_reader :name, :beats
 end
 
 class Paper < Move
   def initialize
-    @name = 'rock'
+    @name = 'paper'
     @beats = ['rock', 'spock']
   end
-
-  protected
-
-  attr_reader :name, :beats
 end
 
 
@@ -113,8 +97,9 @@ class Human < Player
       prompt("Sorry, invalid choice.")
     end
 
-    self.move = Move::CHOICES[choice].new
-    move_history << move.name
+    move_string = Move::CHOICES[choice]
+    self.move = Object.const_get(move_string).new
+    move_history << move_string
   end
 
   private
@@ -164,7 +149,7 @@ class R2D2 < Computer
   def initialize; end
 
   def choose
-    Move::CHOICES['r'].new
+    Object.const_get('Rock').new
   end
 
   def name
@@ -176,7 +161,8 @@ class Hal < Computer
   def initialize; end
 
   def choose
-    Move::CHOICES[%w(sc sc sc sc sp sp l l r).sample].new
+    move_string = Move::CHOICES[%w(sc sc sc sc sp sp l l r).sample]
+    Object.const_get(move_string).new
   end
 
   def name
@@ -188,7 +174,8 @@ class Chappie < Computer
   def initialize; end
 
   def choose
-    Move::CHOICES[%w(l l l l l sp p sc r).sample].new
+    move_string = Move::CHOICES[%w(l l l l l sp p sc r).sample]
+    Object.const_get(move_string).new
   end
 
   def name
@@ -200,7 +187,7 @@ class Sonny < Computer
   def initialize; end
 
   def choose
-    Move::CHOICES['r'].new
+    Object.const_get('Paper').new
   end
 
   def name
@@ -212,7 +199,8 @@ class Number5 < Computer
   def initialize; end
 
   def choose
-    Move::CHOICES.keys.sample.new
+    move_string = Move::CHOICES[Move::CHOICES.keys.sample]
+    Object.const_get(move_string).new
   end
 
   def name
