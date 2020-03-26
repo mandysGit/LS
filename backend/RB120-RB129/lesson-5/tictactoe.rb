@@ -162,7 +162,7 @@ class TTTGame
       display_result
       break unless play_again?
       board.reset
-      system 'clear'
+      clear
       display("Let's play again!")
     end
 
@@ -170,6 +170,10 @@ class TTTGame
   end
 
   private
+
+  def clear
+    system 'clear'
+  end
 
   def display_welcome_message
     display("Welcome to Tic Tac Toe.
@@ -181,8 +185,8 @@ class TTTGame
     display("\u{1F600} Thank You for playing Rock, Paper, Scissors! Good bye!")
   end
 
-  def display_board(clear = true)
-    system 'clear' if clear
+  def display_board(clear_screen = true)
+    clear if clear_screen
     puts "You're a #{human.marker}. Computer is a #{computer.marker}"
     puts ""
     puts "     |     |"
