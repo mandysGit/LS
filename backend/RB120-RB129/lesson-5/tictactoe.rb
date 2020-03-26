@@ -100,13 +100,8 @@ class Player
   end
 end
 
-class TTTGame
-  HUMAN_MARKER = "X"
-  COMPUTER_MARKER = "O"
-  FIRST_TO_MOVE = COMPUTER_MARKER
-
+class Game
   include Promptable
-  attr_reader :board, :human, :computer
 
   def initialize
     @board = Board.new
@@ -114,6 +109,35 @@ class TTTGame
     @computer = Player.new(COMPUTER_MARKER)
     @current_marker = FIRST_TO_MOVE
   end
+
+  def play
+    display_welcome_message
+
+    loop do
+      display_board
+
+      loop do
+        current_player_moves
+        break if board.someone_won? || board.full?
+        clear_screen_and_display_board
+      end
+
+      display_result
+      break unless play_again?
+      reset
+      display_play_again_message
+    end
+
+    display_goodbye_message
+  end
+
+  private
+
+  HUMAN_MARKER = "X"
+  COMPUTER_MARKER = "O"
+  FIRST_TO_MOVE = COMPUTER_MARKER
+
+  attr_reader :board, :human, :computer
 
   def current_player_moves
     if human_turn?
@@ -181,29 +205,6 @@ class TTTGame
     display("Let's play again!")
   end
 
-  def play
-    display_welcome_message
-
-    loop do
-      display_board
-
-      loop do
-        current_player_moves
-        break if board.someone_won? || board.full?
-        clear_screen_and_display_board
-      end
-
-      display_result
-      break unless play_again?
-      reset
-      display_play_again_message
-    end
-
-    display_goodbye_message
-  end
-
-  private
-
   def clear
     system 'clear'
   end
@@ -231,5 +232,5 @@ class TTTGame
   end
 end
 
-game = TTTGame.new
+game = Game.new
 game.play
