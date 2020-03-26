@@ -35,14 +35,6 @@ class Board
     !!winning_marker
   end
 
-  def count_human_marker(squares)
-    squares.collect(&:marker).count(TTTGame::HUMAN_MARKER)
-  end
-
-  def count_computer_marker(squares)
-    squares.collect(&:marker).count(TTTGame::COMPUTER_MARKER)
-  end
-
   def reset
     (1..9).each {|key| @squares[key] = Square.new}
   end
@@ -50,11 +42,8 @@ class Board
   # returns winning marker or nil
   def winning_marker
     WINNING_LINES.each do |line|
-      if count_human_marker(@squares.values_at(*line)) == 3
-        return TTTGame::HUMAN_MARKER
-      elsif count_computer_marker(@squares.values_at(*line)) == 3
-        return TTTGame::COMPUTER_MARKER
-      end
+      squares = @squares.values_at(*line)
+      return squares.first.marker if three_identical_markers?(squares)
     end
     nil
   end
@@ -69,9 +58,16 @@ class Board
     puts "     |     |"
     puts "-----+-----+-----"
     puts "     |     |"
-    puts "   #{@squares[7]} |  #{@squares[8]}  |  #{@squares[9]} "
+    puts "  #{@squares[7]}  |  #{@squares[8]}  |  #{@squares[9]} "
     puts "     |     |"
     puts ""
+  end
+
+  private
+
+  def three_identical_markers?(squares)
+    markers = squares.select(&:marked?).collect(&:marker)
+    markers.size == 3 && markers.all?(markers.first)
   end
 end
 
@@ -89,6 +85,10 @@ class Square
 
   def unmarked?
     marker == INITIAL_MARKER
+  end
+
+  def marked?
+    marker != INITIAL_MARKER
   end
 end
 
