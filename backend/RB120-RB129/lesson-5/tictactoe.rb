@@ -148,7 +148,7 @@ class TTTGame
     display_welcome_message
 
     loop do
-      display_board(false)
+      display_board(clear_screen: false)
 
       loop do
         human_moves
@@ -185,7 +185,7 @@ class TTTGame
     display("\u{1F600} Thank You for playing Rock, Paper, Scissors! Good bye!")
   end
 
-  def display_board(clear_screen = true)
+  def display_board(clear_screen: true)
     clear if clear_screen
     puts "You're a #{human.marker}. Computer is a #{computer.marker}"
     puts ""
