@@ -144,6 +144,15 @@ class TTTGame
     answer == 'y'
   end
 
+  def reset
+    board.reset
+    clear
+  end
+
+  def display_play_again_message
+    display("Let's play again!")
+  end
+
   def play
     display_welcome_message
 
@@ -161,9 +170,8 @@ class TTTGame
 
       display_result
       break unless play_again?
-      board.reset
-      clear
-      display("Let's play again!")
+      reset
+      display_play_again_message
     end
 
     display_goodbye_message
