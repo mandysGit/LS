@@ -16,7 +16,7 @@ class Board
 
   def initialize
     @squares = {}
-    (1..9).each {|key| @squares[key] = Square.new}
+    reset
   end
 
   def get_square_at(key)
@@ -45,6 +45,10 @@ class Board
 
   def count_computer_marker(squares)
     squares.collect(&:marker).count(TTTGame::COMPUTER_MARKER)
+  end
+
+  def reset
+    (1..9).each {|key| @squares[key] = Square.new}
   end
 
   # returns winning marker or nil
@@ -128,20 +132,40 @@ class TTTGame
     end
   end
 
-  def play
-    display_welcome_message
-    display_board
-
+  def play_again?
+    answer = nil
     loop do
-      human_moves
-      break if board.someone_won? || board.full?
-
-      computer_moves
-      break if board.someone_won? || board.full?
-      display_board
+      prompt("Would you like to play again? (y/n)")
+      answer = gets.chomp.downcase
+      break if %w(y n).include? answer
+      display("Sorry, must be y or n")
     end
 
-    display_result
+    answer == 'y'
+  end
+
+  def play
+    display_welcome_message
+
+    loop do
+      display_board(false)
+
+      loop do
+        human_moves
+        break if board.someone_won? || board.full?
+
+        computer_moves
+        break if board.someone_won? || board.full?
+        display_board
+      end
+
+      display_result
+      break unless play_again?
+      board.reset
+      system 'clear'
+      display("Let's play again!")
+    end
+
     display_goodbye_message
   end
 
@@ -157,8 +181,8 @@ class TTTGame
     display("\u{1F600} Thank You for playing Rock, Paper, Scissors! Good bye!")
   end
 
-  def display_board
-    system 'clear'
+  def display_board(clear = true)
+    system 'clear' if clear
     puts "You're a #{human.marker}. Computer is a #{computer.marker}"
     puts ""
     puts "     |     |"
