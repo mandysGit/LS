@@ -1,6 +1,7 @@
 module Formatable
   def prompt(msg)
-    puts "=> #{msg}"
+    puts "
+    => #{msg}"
   end
 
   def paded_display(msg)
@@ -10,12 +11,16 @@ module Formatable
   end
 
   def display(msg)
-    puts "#{msg}"
+    puts msg.to_s
   end
 end
 
 class Board
   include Formatable
+
+  WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
+                  [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +
+                  [[1, 5, 9], [3, 5, 7]]
 
   def initialize
     @squares = {}
@@ -27,7 +32,7 @@ class Board
   end
 
   def unmarked_keys
-    @squares.keys.select {|key| @squares[key].unmarked?}
+    @squares.keys.select { |key| @squares[key].unmarked? }
   end
 
   def full?
@@ -69,10 +74,6 @@ class Board
 
   private
 
-  WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
-  [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +
-  [[1, 5, 9], [3, 5, 7]]
-
   def three_identical_markers?(squares)
     markers = squares.select(&:marked?).collect(&:marker)
     markers.size == 3 && markers.all?(markers.first)
@@ -80,9 +81,10 @@ class Board
 end
 
 class Square
+  INITIAL_MARKER = " "
   attr_accessor :marker
 
-  def initialize(marker=INITIAL_MARKER)
+  def initialize
     @marker = INITIAL_MARKER
   end
 
@@ -97,10 +99,6 @@ class Square
   def marked?
     marker != INITIAL_MARKER
   end
-
-  private
-
-  INITIAL_MARKER = " "
 end
 
 class Player
@@ -113,6 +111,10 @@ end
 
 class Game
   include Formatable
+
+  HUMAN_MARKER = "X"
+  COMPUTER_MARKER = "O"
+  FIRST_TO_MOVE = HUMAN_MARKER
 
   def initialize
     @board = Board.new
@@ -143,10 +145,6 @@ class Game
   end
 
   private
-
-  HUMAN_MARKER = "X"
-  COMPUTER_MARKER = "O"
-  FIRST_TO_MOVE = HUMAN_MARKER
 
   attr_reader :board, :human, :computer
 
@@ -218,7 +216,8 @@ class Game
   end
 
   def display_goodbye_message
-    paded_display("\u{1F600} Thank You for playing Rock, Paper, Scissors! Good bye!")
+    paded_display("\u{1F600} Thank You for playing Rock, Paper, Scissors!
+    Good bye!")
   end
 
   def display_result
