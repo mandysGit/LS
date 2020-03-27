@@ -139,13 +139,6 @@ class Game
 
     loop do
       display_board
-
-      loop do
-        current_player_moves
-        break if board.someone_won? || board.full?
-        clear_screen_and_display_board
-      end
-
       display_result
       break unless play_again?
       reset
@@ -158,6 +151,14 @@ class Game
   private
 
   attr_reader :board, :human, :computer
+
+  def start_match
+    loop do
+      current_player_moves
+      break if board.someone_won? || board.full?
+      clear_screen_and_display_board
+    end
+  end
 
   def current_player_moves
     if human_turn?
