@@ -13,6 +13,17 @@ module Formatable
   def display(msg)
     puts msg.to_s
   end
+
+  def joinor(arr, delimiter=', ', conjunction='or')
+    case arr.size
+    when 0 then ''
+    when 1 then arr.first
+    when 2 then "#{arr[0]} #{conjunction} #{arr[1]}"
+    else
+      arr[-1] = "#{conjunction} #{arr[-1]}"
+      arr.join(delimiter)
+    end
+  end
 end
 
 class Board
@@ -163,7 +174,7 @@ class Game
   end
 
   def human_moves
-    prompt("Chose a square (#{board.unmarked_keys.join(', ')}) ")
+    prompt("Chose a square (#{joinor(board.unmarked_keys)}) ")
 
     square = ''
     loop do
