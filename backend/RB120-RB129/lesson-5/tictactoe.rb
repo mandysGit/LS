@@ -3,13 +3,20 @@ module Formatable
     puts "=> #{msg}"
   end
 
-  def display(msg)
+  def paded_display(msg)
     puts "
-    #{msg}"
+    #{msg}
+    "
+  end
+
+  def display(msg)
+    puts "#{msg}"
   end
 end
 
 class Board
+  include Formatable
+
   def initialize
     @squares = {}
     reset
@@ -43,20 +50,22 @@ class Board
     nil
   end
 
+  # rubocop:disable Metrics/AbcSize
   def draw
-    puts "     |     |"
-    puts "  #{@squares[1]}  |  #{@squares[2]}  |  #{@squares[3]} "
-    puts "     |     |"
-    puts "-----+-----+-----"
-    puts "     |     |"
-    puts "  #{@squares[4]}  |  #{@squares[5]}  |  #{@squares[6]} "
-    puts "     |     |"
-    puts "-----+-----+-----"
-    puts "     |     |"
-    puts "  #{@squares[7]}  |  #{@squares[8]}  |  #{@squares[9]} "
-    puts "     |     |"
-    puts ""
+    display "     |     |"
+    display "  #{@squares[1]}  |  #{@squares[2]}  |  #{@squares[3]} "
+    display "     |     |"
+    display "-----+-----+-----"
+    display "     |     |"
+    display "  #{@squares[4]}  |  #{@squares[5]}  |  #{@squares[6]} "
+    display "     |     |"
+    display "-----+-----+-----"
+    display "     |     |"
+    display "  #{@squares[7]}  |  #{@squares[8]}  |  #{@squares[9]} "
+    display "     |     |"
+    display ""
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 
@@ -137,7 +146,7 @@ class Game
 
   HUMAN_MARKER = "X"
   COMPUTER_MARKER = "O"
-  FIRST_TO_MOVE = COMPUTER_MARKER
+  FIRST_TO_MOVE = HUMAN_MARKER
 
   attr_reader :board, :human, :computer
 
@@ -156,13 +165,13 @@ class Game
   end
 
   def human_moves
-    puts "Chose a square (#{board.unmarked_keys.join(', ')}) "
+    prompt("Chose a square (#{board.unmarked_keys.join(', ')}) ")
 
     square = ''
     loop do
       square = gets.chomp.to_i
       break if board.unmarked_keys.include?(square)
-      puts "Sorry, that's not a valid choice."
+      paded_display("Sorry, that's not a valid choice.")
     end
 
     board[square] = human.marker
@@ -178,7 +187,7 @@ class Game
       prompt("Would you like to play again? (y/n)")
       answer = gets.chomp.downcase
       break if %w(y n).include? answer
-      display("Sorry, must be y or n")
+      paded_display("Sorry, must be y or n")
     end
 
     answer == 'y'
@@ -200,17 +209,16 @@ class Game
   end
 
   def display_play_again_message
-    display("Let's play again!")
+    paded_display("Let's play again!")
   end
 
   def display_welcome_message
-    display("Welcome to Tic Tac Toe.
-    The rules to win a round is to mark 3 squares
-    in a row with the same marker.")
+    paded_display("Welcome to Tic Tac Toe! The rules to win a round is to mark
+    3 squares in a row with the same marker.")
   end
 
   def display_goodbye_message
-    display("\u{1F600} Thank You for playing Rock, Paper, Scissors! Good bye!")
+    paded_display("\u{1F600} Thank You for playing Rock, Paper, Scissors! Good bye!")
   end
 
   def display_result
@@ -218,19 +226,17 @@ class Game
 
     case board.winning_marker
     when human.marker
-      puts "You won!"
+      paded_display("You won!")
     when computer.marker
-      puts "Computer won!"
+      paded_display("Computer won!")
     else
-      puts "It's a tie!"
+      paded_display("It's a tie!")
     end
   end
 
   def display_board
-    puts "You're a #{human.marker}. Computer is a #{computer.marker}"
-    puts ""
+    paded_display("You're a #{human.marker}. Computer is a #{computer.marker}.")
     board.draw
-    puts ""
   end
 end
 
