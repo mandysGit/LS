@@ -1,4 +1,4 @@
-module Promptable
+module Formatable
   def prompt(msg)
     puts "=> #{msg}"
   end
@@ -10,10 +10,6 @@ module Promptable
 end
 
 class Board
-  WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
-  [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +
-  [[1, 5, 9], [3, 5, 7]]
-
   def initialize
     @squares = {}
     reset
@@ -36,10 +32,9 @@ class Board
   end
 
   def reset
-    (1..9).each {|key| @squares[key] = Square.new}
+    (1..9).each { |key| @squares[key] = Square.new }
   end
 
-  # returns winning marker or nil
   def winning_marker
     WINNING_LINES.each do |line|
       squares = @squares.values_at(*line)
@@ -65,6 +60,10 @@ class Board
 
   private
 
+  WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
+  [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +
+  [[1, 5, 9], [3, 5, 7]]
+
   def three_identical_markers?(squares)
     markers = squares.select(&:marked?).collect(&:marker)
     markers.size == 3 && markers.all?(markers.first)
@@ -72,7 +71,6 @@ class Board
 end
 
 class Square
-  INITIAL_MARKER = " "
   attr_accessor :marker
 
   def initialize(marker=INITIAL_MARKER)
@@ -80,7 +78,7 @@ class Square
   end
 
   def to_s
-    @marker
+    marker
   end
 
   def unmarked?
@@ -90,6 +88,10 @@ class Square
   def marked?
     marker != INITIAL_MARKER
   end
+
+  private
+
+  INITIAL_MARKER = " "
 end
 
 class Player
@@ -101,7 +103,7 @@ class Player
 end
 
 class Game
-  include Promptable
+  include Formatable
 
   def initialize
     @board = Board.new
@@ -170,19 +172,6 @@ class Game
     board[board.unmarked_keys.sample] = computer.marker
   end
 
-  def display_result
-    clear_screen_and_display_board
-
-    case board.winning_marker
-    when human.marker
-      puts "You won!"
-    when computer.marker
-      puts "Computer won!"
-    else
-      puts "It's a tie!"
-    end
-  end
-
   def play_again?
     answer = nil
     loop do
@@ -201,12 +190,17 @@ class Game
     clear
   end
 
-  def display_play_again_message
-    display("Let's play again!")
-  end
-
   def clear
     system 'clear'
+  end
+
+  def clear_screen_and_display_board
+    clear
+    display_board
+  end
+
+  def display_play_again_message
+    display("Let's play again!")
   end
 
   def display_welcome_message
@@ -219,9 +213,17 @@ class Game
     display("\u{1F600} Thank You for playing Rock, Paper, Scissors! Good bye!")
   end
 
-  def clear_screen_and_display_board
-    clear
-    display_board
+  def display_result
+    clear_screen_and_display_board
+
+    case board.winning_marker
+    when human.marker
+      puts "You won!"
+    when computer.marker
+      puts "Computer won!"
+    else
+      puts "It's a tie!"
+    end
   end
 
   def display_board
