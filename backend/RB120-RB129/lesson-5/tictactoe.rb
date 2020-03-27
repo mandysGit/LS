@@ -114,9 +114,11 @@ end
 
 class Player
   attr_reader :marker
+  attr_accessor :score
 
   def initialize(marker)
     @marker = marker
+    @score = 0
   end
 end
 
@@ -126,6 +128,7 @@ class Game
   HUMAN_MARKER = "X"
   COMPUTER_MARKER = "O"
   FIRST_TO_MOVE = HUMAN_MARKER
+  WIN_SCORE = 2
 
   def initialize
     @board = Board.new
@@ -138,11 +141,13 @@ class Game
     display_welcome_message
 
     loop do
+      clear_score
       display_board
-      display_result
+      start_game
       break unless play_again?
       reset
       display_play_again_message
+      clear
     end
 
     display_goodbye_message
@@ -152,12 +157,63 @@ class Game
 
   attr_reader :board, :human, :computer
 
+  def start_game
+    loop do
+      start_match
+      sleep(2)
+      if game_ended?
+        break
+      else
+        clear_screen_and_display_board
+      end
+    end
+
+    display_grand_winner
+  end
+
   def start_match
     loop do
+      display_rules
+      display_score
       current_player_moves
-      break if board.someone_won? || board.full?
+
+      if board.someone_won? || board.full?
+        clear_screen_and_display_board
+        display_match_winner
+        display_score
+        reset
+        break
+      end
       clear_screen_and_display_board
     end
+  end
+
+  def game_ended?
+    human.score == WIN_SCORE || computer.score == WIN_SCORE
+  end
+
+  def display_grand_winner
+    paded_display("human is the grand winner of #{WIN_SCORE} matches!") if human.score == WIN_SCORE
+    paded_display("computer is the grand winner of #{WIN_SCORE} matches!") if computer.score == WIN_SCORE
+  end
+
+  def clear_score
+    human.score = 0
+    computer.score = 0
+  end
+
+  def match_winner
+    return human if board.winning_marker == human.marker
+    return computer if board.winning_marker == computer.marker
+  end
+
+  def grand_winner
+    return human if human.score == WIN_SCORE
+    return computer if computer.score == WIN_SCORE
+  end
+
+  def add_point(player)
+    player.score = player.score + 1
   end
 
   def current_player_moves
@@ -206,7 +262,6 @@ class Game
   def reset
     board.reset
     @current_marker = FIRST_TO_MOVE
-    clear
   end
 
   def clear
@@ -218,31 +273,41 @@ class Game
     display_board
   end
 
+  def display_match_winner
+    if match_winner.equal?(human)
+      add_point(match_winner)
+      paded_display("human won!")
+    elsif match_winner.equal?(computer)
+      add_point(match_winner)
+      paded_display("computer won!")
+    else
+      display("It's a tie!")
+    end
+  end
+
+  def display_rules
+    paded_display("The rules to win a round is to mark
+    3 squares in a row with the same marker.
+    You must win #{WIN_SCORE} rounds to win the entire game.")
+  end
+
+  def display_score
+    paded_display("~~~~~Scoreboard~~~~~
+    Player has won #{human.score} rounds.
+    Computer has won #{computer.score} rounds.")
+  end
+
   def display_play_again_message
     paded_display("Let's play again!")
   end
 
   def display_welcome_message
-    paded_display("Welcome to Tic Tac Toe! The rules to win a round is to mark
-    3 squares in a row with the same marker.")
+    paded_display("Welcome to Tic Tac Toe!")
   end
 
   def display_goodbye_message
     paded_display("\u{1F600} Thank You for playing Rock, Paper, Scissors!
     Good bye!")
-  end
-
-  def display_result
-    clear_screen_and_display_board
-
-    case board.winning_marker
-    when human.marker
-      paded_display("You won!")
-    when computer.marker
-      paded_display("Computer won!")
-    else
-      paded_display("It's a tie!")
-    end
   end
 
   def display_board
