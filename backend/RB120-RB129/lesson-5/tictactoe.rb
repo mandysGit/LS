@@ -142,12 +142,9 @@ class Game
 
     loop do
       clear_score
-      display_board
       start_game
       break unless play_again?
-      reset
-      display_play_again_message
-      clear
+      clear_screen
     end
 
     display_goodbye_message
@@ -160,12 +157,8 @@ class Game
   def start_game
     loop do
       start_match
-      sleep(2)
-      if game_ended?
-        break
-      else
-        clear_screen_and_display_board
-      end
+      break if game_ended?
+      clear_screen
     end
 
     display_grand_winner
@@ -173,18 +166,21 @@ class Game
 
   def start_match
     loop do
+      display_board
       display_rules
       display_score
       current_player_moves
 
-      if board.someone_won? || board.full?
+      if match_ended?
         clear_screen_and_display_board
         display_match_winner
         display_score
+        sleep(2)
         reset
         break
       end
-      clear_screen_and_display_board
+
+      clear_screen
     end
   end
 
@@ -192,9 +188,16 @@ class Game
     human.score == WIN_SCORE || computer.score == WIN_SCORE
   end
 
+  def match_ended?
+    board.someone_won? || board.full?
+  end
+
   def display_grand_winner
-    paded_display("human is the grand winner of #{WIN_SCORE} matches!") if human.score == WIN_SCORE
-    paded_display("computer is the grand winner of #{WIN_SCORE} matches!") if computer.score == WIN_SCORE
+    if human.score == WIN_SCORE
+      paded_display("human is the grand winner of #{WIN_SCORE} matches!")
+    elsif computer.score == WIN_SCORE
+      paded_display("computer is the grand winner of #{WIN_SCORE} matches!")
+    end
   end
 
   def clear_score
@@ -264,41 +267,36 @@ class Game
     @current_marker = FIRST_TO_MOVE
   end
 
-  def clear
+  def clear_screen
     system 'clear'
   end
 
   def clear_screen_and_display_board
-    clear
+    clear_screen
     display_board
   end
 
   def display_match_winner
     if match_winner.equal?(human)
       add_point(match_winner)
-      paded_display("human won!")
+      paded_display("human won! \u{1F389}")
     elsif match_winner.equal?(computer)
       add_point(match_winner)
-      paded_display("computer won!")
+      paded_display("computer won! \u{1F389}")
     else
       display("It's a tie!")
     end
   end
 
   def display_rules
-    paded_display("The rules to win a round is to mark
-    3 squares in a row with the same marker.
-    You must win #{WIN_SCORE} rounds to win the entire game.")
+    paded_display("RULES: Win a match by marking 3 squares in a row with the
+    same marker. You must win #{WIN_SCORE} matches to win the entire game.")
   end
 
   def display_score
     paded_display("~~~~~Scoreboard~~~~~
-    Player has won #{human.score} rounds.
-    Computer has won #{computer.score} rounds.")
-  end
-
-  def display_play_again_message
-    paded_display("Let's play again!")
+    Player has won #{human.score} matches.
+    Computer has won #{computer.score} matches.")
   end
 
   def display_welcome_message
@@ -306,7 +304,7 @@ class Game
   end
 
   def display_goodbye_message
-    paded_display("\u{1F600} Thank You for playing Rock, Paper, Scissors!
+    paded_display("\u{1F600} Thank You for playing Tic Tac Toe!
     Good bye!")
   end
 
