@@ -83,10 +83,10 @@ class Board
   end
   # rubocop:enable Metrics/AbcSize
 
-  def find_at_risk_square(line)
+  def find_at_risk_square(line, marker)
     squares = @squares.values_at(*line)
 
-    return nil unless squares.collect(&:marker).count(Game::HUMAN_MARKER) == 2
+    return nil unless squares.collect(&:marker).count(marker) == 2
 
     @squares.select do |key, square|
       line.include?(key) && square.marker == Square::INITIAL_MARKER
@@ -137,7 +137,7 @@ class Game
 
   HUMAN_MARKER = "X"
   COMPUTER_MARKER = "O"
-  FIRST_TO_MOVE = COMPUTER_MARKER
+  FIRST_TO_MOVE = HUMAN_MARKER
   WIN_SCORE = 2
 
   def initialize
@@ -260,8 +260,15 @@ class Game
     square = nil
 
     Board::WINNING_LINES.each do |line|
-      square = board.find_at_risk_square(line)
+      square = board.find_at_risk_square(line, HUMAN_MARKER)
       break if square
+    end
+
+    if !square
+      Board::WINNING_LINES.each do |line|
+        square = board.find_at_risk_square(line, COMPUTER_MARKER)
+        break if square
+      end
     end
 
     if !square
