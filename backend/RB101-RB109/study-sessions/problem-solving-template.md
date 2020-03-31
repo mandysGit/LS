@@ -65,7 +65,7 @@
 
 #### Algorithm
 
-5. In plain english, write out the instructions of what you need do.
+5. In plain english, write out the instructions of what you need to do.
 
    - **What** are you going to do with the input? These are the steps of converting input to output. 
 
