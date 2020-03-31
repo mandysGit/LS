@@ -25,7 +25,7 @@
 -  an intuition for abstract problem solving
 - an algorithm that is language agnostic
 - the importance of problem solving skills
-- finding the correct syntax to code the algorithm is easy part, but coming up with the algorithm is the creative and hard part. With practice, students will develop an intuition for writng out alogrithms. 
+- finding the correct syntax to code the algorithm is easy part, but coming up with the algorithm is the creative and hard part. With practice, students will develop an intuition for writing out alogrithms. 
 
 
 
@@ -65,7 +65,7 @@
 
 #### Algorithm
 
-5. In plain english, write out the instructions of what you need do.
+5. In plain english, write out the instructions of what you need to do.
 
    - **What** are you going to do with the input? These are the steps of converting input to output. 
 
@@ -73,7 +73,7 @@
 
    - Don't name what library methods/functions you want to use
 
-   - Don't list out anything that syntax specific 
+   - Don't list out anything that's syntax specific 
 
      
 
