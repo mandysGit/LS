@@ -257,25 +257,25 @@ class Game
   end
 
   def computer_moves
-    square = nil
+    square = computer_strategy(move: 'offense') ||
+             computer_strategy(move: 'defense') ||
+             board.unmarked_keys.find { |key| key == 5 } ||
+             board.unmarked_keys.sample
 
+    board[square] = computer.marker
+  end
+
+  def computer_strategy(move: 'offense')
+    marker = COMPUTER_MARKER if move == 'offense'
+    marker = HUMAN_MARKER if move == 'defense'
+
+    square = nil
     Board::WINNING_LINES.each do |line|
-      square = board.find_at_risk_square(line, HUMAN_MARKER)
+      square = board.find_at_risk_square(line, marker)
       break if square
     end
 
-    if !square
-      Board::WINNING_LINES.each do |line|
-        square = board.find_at_risk_square(line, COMPUTER_MARKER)
-        break if square
-      end
-    end
-
-    if !square
-      square = board.unmarked_keys.sample
-    end
-
-    board[square] = computer.marker
+    square
   end
 
   def play_again?
