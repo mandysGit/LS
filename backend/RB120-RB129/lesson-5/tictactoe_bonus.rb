@@ -137,14 +137,14 @@ class Game
 
   HUMAN_MARKER = "X"
   COMPUTER_MARKER = "O"
-  FIRST_TO_MOVE = HUMAN_MARKER
   WIN_SCORE = 2
 
   def initialize
     @board = Board.new
     @human = Player.new(HUMAN_MARKER)
     @computer = Player.new(COMPUTER_MARKER)
-    @current_marker = FIRST_TO_MOVE
+    @first_to_move = 'choose'
+    @current_marker = @first_to_move
   end
 
   def play
@@ -163,6 +163,7 @@ class Game
   private
 
   attr_reader :board, :human, :computer
+  attr_accessor :first_to_move, :current_marker
 
   def start_game
     loop do
@@ -179,12 +180,11 @@ class Game
       display_board
       display_rules
       display_score
+      choose_first_to_move! if first_to_move == 'choose'
       current_player_moves
 
       if match_ended?
-        clear_screen_and_display_board
-        display_match_winner
-        display_score
+        display_match_result
         sleep(2)
         reset
         break
@@ -194,12 +194,33 @@ class Game
     end
   end
 
+  def choose_first_to_move!
+    choice = ''
+    loop do
+      prompt("Choose the first player, enter 'c' for computer or
+      'h' for human:")
+      choice = gets.chomp
+      break if choice == 'h' || choice == 'c'
+      paded_display("#{choice} is an invalid choice.")
+    end
+
+    self.first_to_move = HUMAN_MARKER if choice == 'h'
+    self.first_to_move = COMPUTER_MARKER if choice == 'c'
+    self.current_marker = first_to_move
+  end
+
   def game_ended?
     human.score == WIN_SCORE || computer.score == WIN_SCORE
   end
 
   def match_ended?
     board.someone_won? || board.full?
+  end
+
+  def display_match_result
+    clear_screen_and_display_board
+    display_match_winner
+    display_score
   end
 
   def display_grand_winner
@@ -292,7 +313,7 @@ class Game
 
   def reset
     board.reset
-    @current_marker = FIRST_TO_MOVE
+    self.current_marker = first_to_move
   end
 
   def clear_screen
