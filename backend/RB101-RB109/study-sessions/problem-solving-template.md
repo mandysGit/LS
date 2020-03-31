@@ -67,7 +67,7 @@
 
 5. In plain english, write out the instructions of what you need do.
 
-   - What are you going to do with the input?
+   - **What** are you going to do with the input?
 
    - Don't skip steps, list one instruction at a time, you may include the data structure(s) included in the problem and any additional data structure(s) you're planning to use
 
@@ -79,7 +79,10 @@
 
 #### Algorithm - Pseudocode     
 
-6. Rewrite your instructions into pseudocode, you can name library methods/functions and syntax specific stuff here
+6. Rewrite your instructions into pseudocode
+   - Explain **how** you are going to implement your algorithm.
+   - Example, "Use String#chars to return an array of characters in the String. Then use Array#each to iterate over each string character of the Array..."
+   - you can name library methods/functions and syntax specific stuff
 
 
 
