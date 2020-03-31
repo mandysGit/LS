@@ -56,9 +56,9 @@
 
 4. Understand the data that's given and returned in the problem
 
-   - What's the input from the problem (if any)? 
+   - What's the **input** from the problem (if any)? 
 
-   - What are you going to return?
+   - What's the **output** you're going to return?
 
      
 
@@ -67,7 +67,7 @@
 
 5. In plain english, write out the instructions of what you need do.
 
-   - **What** are you going to do with the input?
+   - **What** are you going to do with the input? These are the steps of converting input to output. 
 
    - Don't skip steps, list one instruction at a time, you may include the data structure(s) included in the problem and any additional data structure(s) you're planning to use
 
