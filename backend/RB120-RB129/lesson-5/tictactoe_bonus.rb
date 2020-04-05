@@ -182,7 +182,7 @@ class Game
       display_score
       choose_first_to_move! if first_to_move == 'choose'
       current_player_moves
-      self.current_marker = alternate(current_marker)
+      alternate!(current_marker)
 
       if match_ended?
         display_match_result
@@ -251,8 +251,12 @@ class Game
     player.score = player.score + 1
   end
 
-  def alternate(marker)
-    marker == COMPUTER_MARKER ? HUMAN_MARKER : COMPUTER_MARKER
+  def alternate!(marker)
+    if marker == COMPUTER_MARKER
+      self.current_marker = HUMAN_MARKER
+    else
+      self.current_marker = COMPUTER_MARKER
+    end
   end
 
   def current_player_moves
