@@ -123,26 +123,45 @@ class Square
 end
 
 class Player
-  attr_reader :marker
-  attr_accessor :score
+  attr_accessor :score, :marker
 
-  def initialize(marker)
-    @marker = marker
+  def initialize
     @score = 0
+  end
+end
+
+class Human < Player
+  include Formatable
+
+  def set_marker
+    marker = ''
+    loop do
+      prompt("Choose a marker: '#{Game::X_MARKER}' or '#{Game::O_MARKER}'")
+      marker = gets.chomp
+      break if [Game::X_MARKER, Game::O_MARKER].include? marker
+      paded_display("Sorry, invalid choice.")
+    end
+    self.marker = marker
+  end
+end
+
+class Computer < Player
+  def set_marker(marker)
+    self.marker = marker
   end
 end
 
 class Game
   include Formatable
 
-  HUMAN_MARKER = "X"
-  COMPUTER_MARKER = "O"
+  X_MARKER = "X"
+  O_MARKER = "O"
   WIN_SCORE = 2
 
   def initialize
     @board = Board.new
-    @human = Player.new(HUMAN_MARKER)
-    @computer = Player.new(COMPUTER_MARKER)
+    @human = Human.new
+    @computer = Computer.new
     @first_to_move = 'choose'
     @current_marker = @first_to_move
   end
@@ -165,8 +184,19 @@ class Game
   attr_reader :board, :human, :computer
   attr_accessor :first_to_move, :current_marker
 
+  def players_choose_marker
+    human.set_marker
+
+    if human.marker == X_MARKER
+      computer.set_marker(O_MARKER)
+    else
+      computer.set_marker(X_MARKER)
+    end
+  end
+
   def start_game
     loop do
+      players_choose_marker
       start_match
       break if game_ended?
       clear_screen
@@ -205,8 +235,8 @@ class Game
       paded_display("#{choice} is an invalid choice.")
     end
 
-    self.first_to_move = HUMAN_MARKER if choice == 'h'
-    self.first_to_move = COMPUTER_MARKER if choice == 'c'
+    self.first_to_move = X_MARKER if choice == 'h'
+    self.first_to_move = O_MARKER if choice == 'c'
     self.current_marker = first_to_move
   end
 
@@ -252,10 +282,10 @@ class Game
   end
 
   def alternate!(marker)
-    if marker == COMPUTER_MARKER
-      self.current_marker = HUMAN_MARKER
+    if marker == O_MARKER
+      self.current_marker = X_MARKER
     else
-      self.current_marker = COMPUTER_MARKER
+      self.current_marker = O_MARKER
     end
   end
 
@@ -268,7 +298,7 @@ class Game
   end
 
   def human_turn?
-    @current_marker == HUMAN_MARKER
+    @current_marker == X_MARKER
   end
 
   def human_moves
@@ -294,8 +324,8 @@ class Game
   end
 
   def computer_strategy(move: 'offense')
-    marker = COMPUTER_MARKER if move == 'offense'
-    marker = HUMAN_MARKER if move == 'defense'
+    marker = O_MARKER if move == 'offense'
+    marker = X_MARKER if move == 'defense'
 
     square = nil
     Board::WINNING_LINES.each do |line|
