@@ -1,7 +1,6 @@
 module Formatable
   def prompt(msg)
-    puts "
-    => #{msg}"
+    puts "=>  #{msg}"
   end
 
   def paded_display(msg)
@@ -123,9 +122,10 @@ class Square
 end
 
 class Player
-  attr_accessor :score, :marker
+  attr_accessor :score, :marker, :name
 
   def initialize
+    set_name
     @score = 0
   end
 end
@@ -143,11 +143,26 @@ class Human < Player
     end
     self.marker = marker
   end
+
+  def set_name
+    n = ''
+    loop do
+      prompt("What's your name?")
+      n = gets.chomp
+      break unless n.empty?
+      prompt("Sorry, must enter a value.")
+    end
+    self.name = n
+  end
 end
 
 class Computer < Player
   def set_marker(marker)
     self.marker = marker
+  end
+
+  def set_name
+    self.name = ['Catalina', 'Synapse'].sample
   end
 end
 
@@ -168,6 +183,7 @@ class Game
 
   def play
     display_welcome_message
+    players_choose_marker
 
     loop do
       clear_score
@@ -196,7 +212,6 @@ class Game
 
   def start_game
     loop do
-      players_choose_marker
       start_match
       break if game_ended?
       clear_screen
@@ -256,9 +271,9 @@ class Game
 
   def display_grand_winner
     if human.score == WIN_SCORE
-      paded_display("human is the grand winner of #{WIN_SCORE} matches!")
+      paded_display("#{human.name} is the grand winner of #{WIN_SCORE} matches!")
     elsif computer.score == WIN_SCORE
-      paded_display("computer is the grand winner of #{WIN_SCORE} matches!")
+      paded_display("#{computer.name} is the grand winner of #{WIN_SCORE} matches!")
     end
   end
 
@@ -365,10 +380,10 @@ class Game
   def display_match_winner
     if match_winner.equal?(human)
       add_point(match_winner)
-      paded_display("human won! \u{1F389}")
+      paded_display("#{human.name} won! \u{1F389}")
     elsif match_winner.equal?(computer)
       add_point(match_winner)
-      paded_display("computer won! \u{1F389}")
+      paded_display("#{computer.name} won! \u{1F389}")
     else
       display("It's a tie!")
     end
@@ -381,12 +396,12 @@ class Game
 
   def display_score
     paded_display("~~~~~Scoreboard~~~~~
-    Player has won #{human.score} matches.
-    Computer has won #{computer.score} matches.")
+    #{human.name} has won #{human.score} matches.
+    #{computer.name} has won #{computer.score} matches.")
   end
 
   def display_welcome_message
-    paded_display("Welcome to Tic Tac Toe!")
+    paded_display("Hi #{human.name}! Welcome to Tic Tac Toe!")
   end
 
   def display_goodbye_message
@@ -395,7 +410,7 @@ class Game
   end
 
   def display_board
-    paded_display("You're a #{human.marker}. Computer is a #{computer.marker}.")
+    paded_display("You're a #{human.marker}. #{computer.name} is a #{computer.marker}.")
     board.draw
   end
 end
