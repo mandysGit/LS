@@ -200,12 +200,6 @@ class Game
   attr_reader :board, :human, :computer
   attr_accessor :first_to_move, :current_marker
 
-  def players_choose_marker
-    human.set_marker
-    computer.marker = O_MARKER if human.marker == X_MARKER
-    computer.marker = X_MARKER if human.marker == O_MARKER
-  end
-
   def start_game
     loop do
       start_match
@@ -236,6 +230,20 @@ class Game
     end
   end
 
+  def game_ended?
+    human.score == WIN_SCORE || computer.score == WIN_SCORE
+  end
+
+  def match_ended?
+    board.someone_won? || board.full?
+  end
+
+  def players_choose_marker
+    human.set_marker
+    computer.marker = O_MARKER if human.marker == X_MARKER
+    computer.marker = X_MARKER if human.marker == O_MARKER
+  end
+
   def choose_first_to_move!
     choice = ''
     loop do
@@ -249,14 +257,6 @@ class Game
     self.first_to_move = X_MARKER if choice == 'h'
     self.first_to_move = O_MARKER if choice == 'c'
     self.current_marker = first_to_move
-  end
-
-  def game_ended?
-    human.score == WIN_SCORE || computer.score == WIN_SCORE
-  end
-
-  def match_ended?
-    board.someone_won? || board.full?
   end
 
   def display_match_result
