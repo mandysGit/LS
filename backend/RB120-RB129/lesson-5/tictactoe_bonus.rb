@@ -144,6 +144,8 @@ class Human < Player
     self.marker = marker
   end
 
+  private
+
   def set_name
     n = ''
     loop do
@@ -157,9 +159,7 @@ class Human < Player
 end
 
 class Computer < Player
-  def set_marker(marker)
-    self.marker = marker
-  end
+  private
 
   def set_name
     self.name = ['Catalina', 'Synapse'].sample
@@ -202,12 +202,8 @@ class Game
 
   def players_choose_marker
     human.set_marker
-
-    if human.marker == X_MARKER
-      computer.set_marker(O_MARKER)
-    else
-      computer.set_marker(X_MARKER)
-    end
+    computer.marker = O_MARKER if human.marker == X_MARKER
+    computer.marker = X_MARKER if human.marker == O_MARKER
   end
 
   def start_game
@@ -271,9 +267,11 @@ class Game
 
   def display_grand_winner
     if human.score == WIN_SCORE
-      paded_display("#{human.name} is the grand winner of #{WIN_SCORE} matches!")
+      paded_display("#{human.name} is the grand winner
+      of #{WIN_SCORE} matches!")
     elsif computer.score == WIN_SCORE
-      paded_display("#{computer.name} is the grand winner of #{WIN_SCORE} matches!")
+      paded_display("#{computer.name} is the grand winner
+      of #{WIN_SCORE} matches!")
     end
   end
 
@@ -297,11 +295,8 @@ class Game
   end
 
   def alternate!(marker)
-    if marker == O_MARKER
-      self.current_marker = X_MARKER
-    else
-      self.current_marker = O_MARKER
-    end
+    self.current_marker = X_MARKER if marker == O_MARKER
+    self.current_marker = O_MARKER if marker == X_MARKER
   end
 
   def current_player_moves
@@ -410,7 +405,8 @@ class Game
   end
 
   def display_board
-    paded_display("You're a #{human.marker}. #{computer.name} is a #{computer.marker}.")
+    paded_display("You're a #{human.marker}.
+    #{computer.name} is a #{computer.marker}.")
     board.draw
   end
 end
