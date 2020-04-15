@@ -187,9 +187,11 @@ class Computer < Player
   end
 
   def computer_strategy(move: 'offense')
-    # fix this logic since now we can choose markers
-    marker = Game::O_MARKER if move == 'offense'
-    marker = Game::X_MARKER if move == 'defense'
+    other_marker = Game::X_MARKER if marker == Game::O_MARKER
+    other_marker = Game::O_MARKER if marker == Game::X_MARKER
+
+    marker = self.marker if move == 'offense'
+    marker = other_marker if move == 'defense'
 
     square = nil
     Board::WINNING_LINES.each do |line|
