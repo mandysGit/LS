@@ -257,22 +257,6 @@ class Game
     self.current_marker = first_to_move
   end
 
-  def display_match_result
-    clear_screen_and_display_board
-    display_match_winner
-    display_score
-  end
-
-  def display_grand_winner
-    if human.score == WIN_SCORE
-      paded_display("#{human.name} is the grand winner
-      of #{WIN_SCORE} matches!")
-    elsif computer.score == WIN_SCORE
-      paded_display("#{computer.name} is the grand winner
-      of #{WIN_SCORE} matches!")
-    end
-  end
-
   def clear_score
     human.score = 0
     computer.score = 0
@@ -378,7 +362,7 @@ class Game
       add_point(match_winner)
       paded_display("#{computer.name} won! \u{1F389}")
     else
-      display("It's a tie!")
+      paded_display("It's a tie!")
     end
   end
 
@@ -408,8 +392,20 @@ class Game
     board.draw
   end
 
-  def display_first_to_move
-    paded_display("Player with marker #{first_to_move} goes first.")
+  def display_match_result
+    clear_screen_and_display_board
+    display_match_winner
+    display_score
+  end
+
+  def display_grand_winner
+    if human.score == WIN_SCORE
+      paded_display("#{human.name} is the grand winner
+      of #{WIN_SCORE} matches!")
+    elsif computer.score == WIN_SCORE
+      paded_display("#{computer.name} is the grand winner
+      of #{WIN_SCORE} matches!")
+    end
   end
 end
 
