@@ -7,10 +7,6 @@ module Formatable
     puts "\n    #{msg}\n\n"
   end
 
-  def display(msg)
-    puts msg.to_s
-  end
-
   def joinor(arr, delimiter=', ', conjunction='or')
     case arr.size
     when 0 then ''
@@ -65,18 +61,18 @@ class Board
 
   # rubocop:disable Metrics/AbcSize
   def draw
-    display "     |     |"
-    display "  #{@squares[1]}  |  #{@squares[2]}  |  #{@squares[3]} "
-    display "     |     |"
-    display "-----+-----+-----"
-    display "     |     |"
-    display "  #{@squares[4]}  |  #{@squares[5]}  |  #{@squares[6]} "
-    display "     |     |"
-    display "-----+-----+-----"
-    display "     |     |"
-    display "  #{@squares[7]}  |  #{@squares[8]}  |  #{@squares[9]} "
-    display "     |     |"
-    display ""
+    puts "     |     |"
+    puts "  #{@squares[1]}  |  #{@squares[2]}  |  #{@squares[3]} "
+    puts "     |     |"
+    puts "-----+-----+-----"
+    puts "     |     |"
+    puts "  #{@squares[4]}  |  #{@squares[5]}  |  #{@squares[6]} "
+    puts "     |     |"
+    puts "-----+-----+-----"
+    puts "     |     |"
+    puts "  #{@squares[7]}  |  #{@squares[8]}  |  #{@squares[9]} "
+    puts "     |     |"
+    puts ""
   end
   # rubocop:enable Metrics/AbcSize
 
