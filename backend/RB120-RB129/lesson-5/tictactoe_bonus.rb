@@ -4,9 +4,7 @@ module Formatable
   end
 
   def paded_display(msg)
-    puts "
-    #{msg}
-    "
+    puts "\n    #{msg}\n\n"
   end
 
   def display(msg)
