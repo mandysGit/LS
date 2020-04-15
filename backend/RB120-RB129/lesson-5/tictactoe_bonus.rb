@@ -182,8 +182,13 @@ class Game
   end
 
   def play
+    clear_screen
     display_welcome_message
     players_choose_marker
+    clear_screen
+
+    choose_first_to_move! if first_to_move == 'choose'
+    clear_screen
 
     loop do
       clear_score
@@ -215,7 +220,6 @@ class Game
       display_board
       display_rules
       display_score
-      choose_first_to_move! if first_to_move == 'choose'
       current_player_moves
       alternate!(current_marker)
 
@@ -408,6 +412,10 @@ class Game
     paded_display("You're a #{human.marker}.
     #{computer.name} is a #{computer.marker}.")
     board.draw
+  end
+
+  def display_first_to_move
+    paded_display("Player with marker #{first_to_move} goes first.")
   end
 end
 
