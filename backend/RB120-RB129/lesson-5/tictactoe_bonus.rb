@@ -136,12 +136,12 @@ class Human < Player
   def set_marker
     marker = ''
     loop do
-      prompt("Choose a marker: '#{Game::X_MARKER}' or '#{Game::O_MARKER}'")
+      prompt("Choose a marker, enter 'x' or 'o': ")
       marker = gets.chomp
-      break if [Game::X_MARKER, Game::O_MARKER].include? marker
+      break if [Game::X_MARKER, Game::O_MARKER].include? marker.upcase
       paded_display("Sorry, invalid choice.")
     end
-    self.marker = marker
+    self.marker = marker.upcase
   end
 
   private
