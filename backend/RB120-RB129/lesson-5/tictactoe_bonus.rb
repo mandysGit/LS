@@ -118,10 +118,15 @@ end
 class Player
   attr_accessor :score, :marker, :name
 
-  def initialize
+  def initialize(board)
     set_name
     @score = 0
+    @board = board
   end
+
+  private
+
+  attr_reader :board
 end
 
 class Human < Player
@@ -136,6 +141,19 @@ class Human < Player
       paded_display("Sorry, invalid choice.")
     end
     self.marker = marker.upcase
+  end
+
+  def moves
+    prompt("Chose a square (#{joinor(board.unmarked_keys)}) ")
+
+    square = ''
+    loop do
+      square = gets.chomp.to_i
+      break if board.unmarked_keys.include?(square)
+      paded_display("Sorry, that's not a valid choice.")
+    end
+
+    board[square] = marker
   end
 
   private
@@ -153,10 +171,33 @@ class Human < Player
 end
 
 class Computer < Player
+  def moves
+    square = computer_strategy(move: 'offense') ||
+             computer_strategy(move: 'defense') ||
+             board.unmarked_keys.find { |key| key == 5 } ||
+             board.unmarked_keys.sample
+
+    board[square] = marker
+  end
+
   private
 
   def set_name
     self.name = ['Catalina', 'Synapse'].sample
+  end
+
+  def computer_strategy(move: 'offense')
+    # fix this logic since now we can choose markers
+    marker = Game::O_MARKER if move == 'offense'
+    marker = Game::X_MARKER if move == 'defense'
+
+    square = nil
+    Board::WINNING_LINES.each do |line|
+      square = board.find_at_risk_square(line, marker)
+      break if square
+    end
+
+    square
   end
 end
 
@@ -169,8 +210,8 @@ class Game
 
   def initialize
     @board = Board.new
-    @human = Human.new
-    @computer = Computer.new
+    @human = Human.new(@board)
+    @computer = Computer.new(@board)
     @first_to_move = 'choose'
     @current_marker = @first_to_move
   end
@@ -283,49 +324,14 @@ class Game
 
   def current_player_moves
     if human_turn?
-      human_moves
+      human.moves
     else
-      computer_moves
+      computer.moves
     end
   end
 
   def human_turn?
     @current_marker == X_MARKER
-  end
-
-  def human_moves
-    prompt("Chose a square (#{joinor(board.unmarked_keys)}) ")
-
-    square = ''
-    loop do
-      square = gets.chomp.to_i
-      break if board.unmarked_keys.include?(square)
-      paded_display("Sorry, that's not a valid choice.")
-    end
-
-    board[square] = human.marker
-  end
-
-  def computer_moves
-    square = computer_strategy(move: 'offense') ||
-             computer_strategy(move: 'defense') ||
-             board.unmarked_keys.find { |key| key == 5 } ||
-             board.unmarked_keys.sample
-
-    board[square] = computer.marker
-  end
-
-  def computer_strategy(move: 'offense')
-    marker = O_MARKER if move == 'offense'
-    marker = X_MARKER if move == 'defense'
-
-    square = nil
-    Board::WINNING_LINES.each do |line|
-      square = board.find_at_risk_square(line, marker)
-      break if square
-    end
-
-    square
   end
 
   def play_again?
