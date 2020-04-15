@@ -3,7 +3,7 @@ module Formatable
     puts "=>  #{msg}"
   end
 
-  def paded_display(msg)
+  def padded_display(msg)
     puts "\n    #{msg}\n\n"
   end
 
@@ -138,7 +138,7 @@ class Human < Player
       prompt("Choose a marker, enter 'x' or 'o': ")
       marker = gets.chomp
       break if [Game::X_MARKER, Game::O_MARKER].include? marker.upcase
-      paded_display("Sorry, invalid choice.")
+      padded_display("Sorry, invalid choice.")
     end
     self.marker = marker.upcase
   end
@@ -150,7 +150,7 @@ class Human < Player
     loop do
       square = gets.chomp.to_i
       break if board.unmarked_keys.include?(square)
-      paded_display("Sorry, that's not a valid choice.")
+      padded_display("Sorry, that's not a valid choice.")
     end
 
     board[square] = marker
@@ -292,7 +292,7 @@ class Game
       'h' for human:")
       choice = gets.chomp
       break if choice == 'h' || choice == 'c'
-      paded_display("#{choice} is an invalid choice.")
+      padded_display("#{choice} is an invalid choice.")
     end
 
     self.first_to_move = X_MARKER if choice == 'h'
@@ -342,7 +342,7 @@ class Game
       prompt("Would you like to play again? (y/n)")
       answer = gets.chomp.downcase
       break if %w(y n).include? answer
-      paded_display("Sorry, must be y or n")
+      padded_display("Sorry, must be y or n")
     end
 
     answer == 'y'
@@ -365,37 +365,37 @@ class Game
   def display_match_winner
     if match_winner.equal?(human)
       add_point(match_winner)
-      paded_display("#{human.name} won! \u{1F389}")
+      padded_display("#{human.name} won! \u{1F389}")
     elsif match_winner.equal?(computer)
       add_point(match_winner)
-      paded_display("#{computer.name} won! \u{1F389}")
+      padded_display("#{computer.name} won! \u{1F389}")
     else
-      paded_display("It's a tie!")
+      padded_display("It's a tie!")
     end
   end
 
   def display_rules
-    paded_display("RULES: Win a match by marking 3 squares in a row with the
+    padded_display("RULES: Win a match by marking 3 squares in a row with the
     same marker. You must win #{WIN_SCORE} matches to win the entire game.")
   end
 
   def display_score
-    paded_display("~~~~~Scoreboard~~~~~
+    padded_display("~~~~~Scoreboard~~~~~
     #{human.name} has won #{human.score} matches.
     #{computer.name} has won #{computer.score} matches.")
   end
 
   def display_welcome_message
-    paded_display("Hi #{human.name}! Welcome to Tic Tac Toe!")
+    padded_display("Hi #{human.name}! Welcome to Tic Tac Toe!")
   end
 
   def display_goodbye_message
-    paded_display("\u{1F600} Thank You for playing Tic Tac Toe!
+    padded_display("\u{1F600} Thank You for playing Tic Tac Toe!
     Good bye!")
   end
 
   def display_board
-    paded_display("You're a #{human.marker}.
+    padded_display("You're a #{human.marker}.
     #{computer.name} is a #{computer.marker}.")
     board.draw
   end
@@ -408,10 +408,10 @@ class Game
 
   def display_grand_winner
     if human.score == WIN_SCORE
-      paded_display("#{human.name} is the grand winner
+      padded_display("#{human.name} is the grand winner
       of #{WIN_SCORE} matches!")
     elsif computer.score == WIN_SCORE
-      paded_display("#{computer.name} is the grand winner
+      padded_display("#{computer.name} is the grand winner
       of #{WIN_SCORE} matches!")
     end
   end
