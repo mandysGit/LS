@@ -83,9 +83,3 @@
    - Explain **how** you are going to implement your algorithm.
    - Example, "Use String#chars to return an array of characters in the String. Then use Array#each to iterate over each string character of the Array..."
    - you can name library methods/functions and syntax specific stuff
-
-
-
-https://www.codewars.com/kata/5594c4599934000e1e00002e
-
-TODO: write an example in Ruby and JS
