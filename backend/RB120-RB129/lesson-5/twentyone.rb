@@ -56,32 +56,65 @@ end
 
 class Deck
   def initialize
-    # obviously, we need some data structure to keep track of cards
-    # array, hash, something else?
+    @deck = []
+    refill_deck!
   end
 
   def deal
-    # does the dealer or the deck deal?
+    refill_deck! if deck.empty?
+    deck.shuffle!
+    deck.pop
   end
+
+  private
+
+  def refill_deck!
+    suits_and_ranks = Card::SUITS.product(Card::RANKS)
+
+    suits_and_ranks.each do |suit, rank|
+      deck << Card.new(suit, rank)
+    end
+  end
+
+  private
+
+  attr_reader :deck
 end
 
 class Card
-  def initialize
-    # what are the "states" of a card?
+  RANKS = %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
+  SUITS = %w(♥️ ♦️ ♣️ ♠️)
+
+  def initialize(suit, rank)
+   @suit = suit
+   @rank = rank
+  end
+
+  def to_s
+    "#{@rank} of #{@suit}"
   end
 end
 
 class Game
   include Formatable
-  WIN_SCORE = 2
+
+  def initialize
+    @deck = Deck.new
+  end
 
   def start
     display_welcome
+    # 52.times { @deck.deal }
+    # p @deck
+    # 52.times { @deck.deal }
     # deal_cards
     # show_initial_cards
     # player_turn
     # dealer_turn
     # show_result
+  end
+
+  def deal_cards
   end
 
   def display_welcome
@@ -91,8 +124,7 @@ class Game
     Ace is 1 or 11.
 
     The objective of the game is to get as close to 21 as possible.
-    If you go over 21, it's a bust and you lose that round.
-    You must win #{WIN_SCORE} rounds to win the entire game.")
+    If you go over 21, it's a bust and you lose that round.")
   end
 end
 
