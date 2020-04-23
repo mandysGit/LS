@@ -6,7 +6,16 @@ module Formatable
   def padded_display(msg)
     puts "\n    #{msg}\n\n"
   end
+
+  def joinand(arr, delimiter=', ', word='and')
+    if arr.size == 2
+      arr.join(" #{word} ")
+    elsif arr.size > 2
+      arr[0...arr.size - 1].join(delimiter) + " #{word} #{arr.last}"
+    end
+  end
 end
+
 class Participant
   attr_reader :cards
 
@@ -79,7 +88,7 @@ class Card
   SUITS = %w(♥️ ♦️ ♣️ ♠️)
   WHATEVER_ONE = 21
 
-  attr_reader :rank
+  attr_reader :suit, :rank
 
   def initialize(suit, rank)
    @suit = suit
@@ -87,7 +96,7 @@ class Card
   end
 
   def to_s
-    "#{@rank} of #{@suit}"
+    "#{rank} of #{suit}"
   end
 end
 
@@ -103,7 +112,7 @@ class Game
   def start
     display_welcome
     deal_initial_cards!
-    # show_initial_cards
+    show_initial_cards
     # player_turn
     # dealer_turn
     # show_result
@@ -118,6 +127,16 @@ class Game
       player.cards << deck.deal
       dealer.cards << deck.deal
     end
+  end
+
+  def show_initial_cards
+    dealer_card = dealer.cards.first.to_s
+    player_cards = player.cards.map(&:to_s)
+
+    padded_display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Dealer has: #{dealer_card} and unknown card.
+    You have: #{joinand(player_cards)}.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
   end
 
   def display_welcome
