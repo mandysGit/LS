@@ -4,10 +4,12 @@ module Formatable
   end
 
   def padded_display(msg)
-    puts "\n    #{msg}\n\n"
+    puts "\n    #{msg}\n"
   end
 
-  def joinand(arr, delimiter=', ', word='and')
+  def joinand(cards, delimiter=', ', word='and')
+    arr = cards.map(&:to_s)
+
     if arr.size == 2
       arr.join(" #{word} ")
     elsif arr.size > 2
@@ -17,19 +19,14 @@ module Formatable
 end
 
 class Participant
-  attr_reader :cards
+  attr_reader :cards, :name
 
   def initialize
     @cards = []
   end
 
-  def hit
-  end
-
-  def stay
-  end
-
   def busted?
+    total > Card::TWENTY_ONE
   end
 
   def total
@@ -43,7 +40,7 @@ class Participant
     end
 
     cards.map(&:rank).count('ace').times do
-      sum -= 10 if sum > Card::WHATEVER_ONE
+      sum -= 10 if sum > Card::TWENTY_ONE
     end
 
     sum
@@ -51,9 +48,18 @@ class Participant
 end
 
 class Player < Participant
+  def initialize
+    super
+    @name = 'Mandy'
+  end
 end
 
 class Dealer < Participant
+  DEALER_LIMIT = 17
+  def initialize
+    super
+    @name = 'Dealer'
+  end
 end
 
 class Deck
@@ -62,7 +68,7 @@ class Deck
     refill_deck!
   end
 
-  def deal
+  def deal_one
     refill_deck! if deck.empty?
     deck.shuffle!
     deck.pop
@@ -86,7 +92,7 @@ end
 class Card
   RANKS = %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
   SUITS = %w(♥️ ♦️ ♣️ ♠️)
-  WHATEVER_ONE = 21
+  TWENTY_ONE = 21
 
   attr_reader :suit, :rank
 
@@ -112,30 +118,94 @@ class Game
   def start
     display_welcome
     deal_initial_cards!
-    show_initial_cards
-    # player_turn
-    # dealer_turn
-    # show_result
+
+    display_initial_cards
+    player_turn
+    display_turn_result(player)
+    dealer_turn if !player.busted?
+
+    display_game_result
   end
 
   private
 
   attr_reader :deck, :player, :dealer
 
-  def deal_initial_cards!
-    2.times do
-      player.cards << deck.deal
-      dealer.cards << deck.deal
+  def winner
+    "Player" if player.total > dealer.total
+    "Dealer" if dealer.total > player.total
+  end
+
+  def display_winner
+    padded_display "The winner is #{winner}!" if winner
+    padded_display "It's a tie!" if !winner
+  end
+
+  def display_score
+    padded_display "Player has a total of: #{player.total}"
+    padded_display "Dealer has a total of: #{dealer.total}"
+  end
+
+  def display_cards
+    padded_display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Dealer has: #{joinand(dealer.cards)}.
+    You have: #{joinand(player.cards)}.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+  end
+
+  def display_game_result
+    display_turn_result(dealer)
+
+    display_cards
+    display_score
+    display_winner
+  end
+
+  def dealer_turn
+    loop do
+      break if dealer.total >= Dealer::DEALER_LIMIT || dealer.busted?
+      dealer.cards << deck.deal_one
     end
   end
 
-  def show_initial_cards
-    dealer_card = dealer.cards.first.to_s
-    player_cards = player.cards.map(&:to_s)
+  def display_turn_result(participant)
+    padded_display "#{participant.name} busted!" if participant.busted?
+    padded_display "#{participant.name} chose to stay!" if !participant.busted?
+  end
 
+  def player_turn
+    loop do
+      prompt "You have a total of #{player.total}"
+      prompt "hit or stay? Enter 'h' or 's'"
+
+      answer = validate(answer)
+      player.cards << deck.deal_one if answer == 'h'
+      break if answer == 's' || player.busted?
+    end
+  end
+
+  def validate(answer)
+    loop do
+      answer = gets.chomp.downcase
+      break if answer == 'h' || answer == 's'
+      prompt "#{answer} is an invalid choice.
+      Please choose hit or stay. Enter 'h' or 's'"
+    end
+
+    answer
+  end
+
+  def deal_initial_cards!
+    2.times do
+      player.cards << deck.deal_one
+      dealer.cards << deck.deal_one
+    end
+  end
+
+  def display_initial_cards
     padded_display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Dealer has: #{dealer_card} and unknown card.
-    You have: #{joinand(player_cards)}.
+    Dealer has: #{dealer.cards.first} and unknown card.
+    You have: #{joinand(player.cards)}.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
   end
 
