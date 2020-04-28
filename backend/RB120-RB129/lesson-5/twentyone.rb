@@ -122,15 +122,21 @@ class Game
 
     display_initial_cards
     player_turn
-    display_turn_result(player)
     dealer_turn if !player.busted?
 
+    clear
+    display_turn_result(player)
+    display_turn_result(dealer)
     display_game_result
   end
 
   private
 
   attr_reader :deck, :player, :dealer
+
+  def clear
+    system 'clear'
+  end
 
   def winner
     if player.busted?
@@ -162,8 +168,6 @@ class Game
   end
 
   def display_game_result
-    display_turn_result(dealer)
-
     display_cards
     display_score
     display_winner
