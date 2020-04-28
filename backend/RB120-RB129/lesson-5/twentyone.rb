@@ -56,6 +56,7 @@ end
 
 class Dealer < Participant
   DEALER_LIMIT = 17
+
   def initialize
     super
     @name = 'Dealer'
@@ -132,8 +133,15 @@ class Game
   attr_reader :deck, :player, :dealer
 
   def winner
-    "Player" if player.total > dealer.total
-    "Dealer" if dealer.total > player.total
+    if player.busted?
+      'dealer'
+    elsif dealer.busted?
+      'player'
+    elsif player.total == dealer.total
+      'tie'
+    else
+      player.total > dealer.total ? 'player' : 'dealer'
+    end
   end
 
   def display_winner
