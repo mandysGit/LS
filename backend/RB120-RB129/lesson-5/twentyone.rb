@@ -92,7 +92,7 @@ end
 
 class Card
   RANKS = %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
-  SUITS = %w(♥️ ♦️ ♣️ ♠️)
+  SUITS = %w(❤ ♦️ ♣️ ♠️)
   TWENTY_ONE = 21
 
   attr_reader :suit, :rank
@@ -134,39 +134,6 @@ class Game
 
   attr_reader :deck, :player, :dealer
 
-  def clear
-    system 'clear'
-  end
-
-  def winner
-    if player.busted?
-      'dealer'
-    elsif dealer.busted?
-      'player'
-    elsif player.total == dealer.total
-      'tie'
-    else
-      player.total > dealer.total ? 'player' : 'dealer'
-    end
-  end
-
-  def display_winner
-    padded_display "The winner is #{winner}!" if winner
-    padded_display "It's a tie!" if !winner
-  end
-
-  def display_score
-    padded_display "Player has a total of: #{player.total}"
-    padded_display "Dealer has a total of: #{dealer.total}"
-  end
-
-  def display_cards
-    padded_display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Dealer has: #{joinand(dealer.cards)}.
-    You have: #{joinand(player.cards)}.
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-  end
-
   def display_game_result
     display_cards
     display_score
@@ -178,11 +145,6 @@ class Game
       break if dealer.total >= Dealer::DEALER_LIMIT || dealer.busted?
       dealer.cards << deck.deal_one
     end
-  end
-
-  def display_turn_result(participant)
-    padded_display "#{participant.name} busted!" if participant.busted?
-    padded_display "#{participant.name} chose to stay!" if !participant.busted?
   end
 
   def player_turn
@@ -214,6 +176,40 @@ class Game
     end
   end
 
+  def winner
+    if player.busted?
+      'dealer'
+    elsif dealer.busted?
+      'player'
+    elsif player.total == dealer.total
+      'tie'
+    else
+      player.total > dealer.total ? 'player' : 'dealer'
+    end
+  end
+
+  def display_winner
+    padded_display "🎊🥇The winner is #{winner}!🥇🎉" if winner
+    padded_display "It's a tie!" if !winner
+  end
+
+  def display_turn_result(participant)
+    padded_display "#{participant.name} busted! 💥😟" if participant.busted?
+    padded_display "#{participant.name} chose to stay! 👍" if !participant.busted?
+  end
+
+  def display_score
+    padded_display "Player has a total of: #{player.total}"
+    padded_display "Dealer has a total of: #{dealer.total}"
+  end
+
+  def display_cards
+    padded_display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Dealer has: #{joinand(dealer.cards)}.
+    You have: #{joinand(player.cards)}.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+  end
+
   def display_initial_cards
     padded_display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Dealer has: #{dealer.cards.first} and unknown card.
@@ -231,6 +227,10 @@ class Game
 
     The objective of the game is to get as close to 21 as possible.
     If you go over 21, it's a bust and you lose that round.")
+  end
+
+  def clear
+    system 'clear'
   end
 end
 
