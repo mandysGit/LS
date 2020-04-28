@@ -19,7 +19,8 @@ module Formatable
 end
 
 class Participant
-  attr_reader :cards, :name
+  attr_accessor :cards
+  attr_reader :name
 
   def initialize
     @cards = []
@@ -107,7 +108,7 @@ class Card
   end
 end
 
-class Game
+class TwentyOne
   include Formatable
 
   def initialize
@@ -117,22 +118,47 @@ class Game
   end
 
   def start
-    display_welcome
-    deal_initial_cards!
+    loop do
+      clear
+      clear_hands
+      display_welcome
+      deal_initial_cards!
 
-    display_initial_cards
-    player_turn
-    dealer_turn if !player.busted?
+      display_initial_cards
+      player_turn
+      dealer_turn if !player.busted?
 
-    clear
-    display_turn_result(player)
-    display_turn_result(dealer)
-    display_game_result
+      clear
+      display_turn_result(player)
+      display_turn_result(dealer)
+      display_game_result
+
+      break unless play_again?
+    end
+
+    display_goodbye
   end
 
   private
 
   attr_reader :deck, :player, :dealer
+
+  def clear_hands
+    player.cards = []
+    dealer.cards = []
+  end
+
+  def play_again?
+    answer = nil
+    loop do
+      prompt "Would you like to play again? (y/n)"
+      answer = gets.chomp.downcase
+      break if ['y', 'n'].include? answer
+      prompt "Sorry, must be 'y' or 'n'."
+    end
+
+    answer == 'y'
+  end
 
   def display_game_result
     display_cards
@@ -195,7 +221,7 @@ class Game
 
   def display_turn_result(participant)
     padded_display "#{participant.name} busted! 💥😟" if participant.busted?
-    padded_display "#{participant.name} chose to stay! 👍" if !participant.busted?
+    padded_display "#{participant.name} chose to stay!" if !participant.busted?
   end
 
   def display_score
@@ -218,7 +244,7 @@ class Game
   end
 
   def display_welcome
-    padded_display("Welcome to Twenty-one!
+    padded_display("✨Welcome to Twenty-one! ✨
 
     You and the dealer will be dealt two cards initially.
     You can hit to get another card or stay with the cards you currently have.
@@ -229,9 +255,13 @@ class Game
     If you go over 21, it's a bust and you lose that round.")
   end
 
+  def display_goodbye
+    padded_display("Thank you for playing Twenty One! Goodbye!")
+  end
+
   def clear
     system 'clear'
   end
 end
 
-Game.new.start
+TwentyOne.new.start
