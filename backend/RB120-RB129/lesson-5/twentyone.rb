@@ -24,6 +24,7 @@ class Participant
 
   def initialize
     @cards = []
+    set_name
   end
 
   def busted?
@@ -46,21 +47,35 @@ class Participant
 
     sum
   end
+
+  private
+
+  attr_writer :name
 end
 
 class Player < Participant
-  def initialize
-    super
-    @name = 'Mandy'
+  include Formatable
+  private
+
+  def set_name
+    n = ''
+    loop do
+      prompt "Hi there! What's your name?"
+      n = gets.chomp
+      break unless n.empty?
+      prompt "Sorry, must enter a value."
+    end
+    self.name = n
   end
 end
 
 class Dealer < Participant
   DEALER_LIMIT = 17
 
-  def initialize
-    super
-    @name = 'Dealer'
+  private
+
+  def set_name
+    self.name = ['Catalina', 'Synapse'].sample
   end
 end
 
@@ -204,13 +219,13 @@ class TwentyOne
 
   def winner
     if player.busted?
-      'dealer'
+      dealer.name
     elsif dealer.busted?
-      'player'
+      player.name
     elsif player.total == dealer.total
       'tie'
     else
-      player.total > dealer.total ? 'player' : 'dealer'
+      player.total > dealer.total ? player.name : dealer.name
     end
   end
 
@@ -225,31 +240,31 @@ class TwentyOne
   end
 
   def display_score
-    padded_display "Player has a total of: #{player.total}"
-    padded_display "Dealer has a total of: #{dealer.total}"
+    padded_display "#{dealer.name} has a total of: #{dealer.total}"
+    padded_display "#{player.name} has a total of: #{player.total}"
   end
 
   def display_cards
     padded_display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Dealer has: #{joinand(dealer.cards)}.
-    You have: #{joinand(player.cards)}.
+    #{dealer.name} has: #{joinand(dealer.cards)}.
+    #{player.name} has: #{joinand(player.cards)}.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
   end
 
   def display_initial_cards
     padded_display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Dealer has: #{dealer.cards.first} and unknown card.
-    You have: #{joinand(player.cards)}.
+    #{dealer.name} has: #{dealer.cards.first} and unknown card.
+    #{player.name} has: #{joinand(player.cards)}.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
   end
 
   def display_welcome
-    padded_display("✨Welcome to Twenty-one! ✨
+    padded_display("Hi #{player.name}! ✨Welcome to Twenty-one! ✨
 
-    You and the dealer will be dealt two cards initially.
-    You can hit to get another card or stay with the cards you currently have.
-    Cards 1-10 are worth face value. Jack, Queen, King are worth 10, and
-    Ace is 1 or 11.
+    You and the #{dealer.name} will be dealt two cards initially.
+    You can hit to get another card or stay with the cards you have.
+    Cards 1-10 are worth face value.
+    Jack, Queen, King are worth 10, and Ace is 1 or 11.
 
     The objective of the game is to get as close to 21 as possible.
     If you go over 21, it's a bust and you lose that round.")
