@@ -138,7 +138,7 @@ class TwentyOne
   def start
     loop do
       clear
-      clear_hands
+      reset
       display_welcome
       deal_initial_cards!
 
@@ -157,9 +157,10 @@ class TwentyOne
 
   private
 
-  attr_reader :deck, :player, :dealer
+  attr_accessor :deck, :player, :dealer
 
-  def clear_hands
+  def reset
+    self.deck = Deck.new
     player.cards = []
     dealer.cards = []
   end
