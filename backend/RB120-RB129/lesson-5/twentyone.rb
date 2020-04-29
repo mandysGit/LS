@@ -144,7 +144,7 @@ class TwentyOne
 
       display_initial_cards
       player_turn
-      dealer_turn if !player.busted?
+      dealer_turn unless player.busted?
 
       clear
       display_game_result
@@ -222,12 +222,19 @@ class TwentyOne
   end
 
   def winner
-    return dealer.name if player.busted? || dealer > player
-    return player.name if dealer.busted? || player > dealer
+    if player.busted?
+      dealer
+    elsif dealer.busted?
+      player
+    elsif dealer > player
+      dealer
+    elsif player > dealer
+      player
+    end
   end
 
   def display_winner
-    padded_display "🎊🥇The winner is #{winner}!🥇🎉" if winner
+    padded_display "🎊🥇The winner is #{winner.name}!🥇🎉" if winner
     padded_display "It's a tie!" if !winner
   end
 
