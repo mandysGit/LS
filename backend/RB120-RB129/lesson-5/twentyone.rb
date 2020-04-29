@@ -194,7 +194,8 @@ class TwentyOne
 
   def player_turn
     loop do
-      prompt "You have a total of #{player.total}"
+      display_player_cards
+      prompt "A total of #{player.total}."
       prompt "hit or stay? Enter 'h' or 's'"
 
       answer = validate(answer)
@@ -260,6 +261,10 @@ class TwentyOne
     #{dealer.name} has: #{dealer.cards.first} and unknown card.
     #{player.name} has: #{joinand(player.cards)}.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+  end
+
+  def display_player_cards
+    padded_display "#{player.name} has: #{joinand(player.cards)}."
   end
 
   def display_welcome
