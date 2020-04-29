@@ -55,6 +55,7 @@ end
 
 class Player < Participant
   include Formatable
+
   private
 
   def set_name
@@ -100,8 +101,6 @@ class Deck
       deck << Card.new(suit, rank)
     end
   end
-
-  private
 
   attr_reader :deck
 end
