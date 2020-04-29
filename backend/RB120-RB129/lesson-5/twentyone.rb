@@ -48,6 +48,10 @@ class Participant
     sum
   end
 
+  def >(other)
+    total > other.total
+  end
+
   private
 
   attr_writer :name
@@ -113,8 +117,8 @@ class Card
   attr_reader :suit, :rank
 
   def initialize(suit, rank)
-   @suit = suit
-   @rank = rank
+    @suit = suit
+    @rank = rank
   end
 
   def to_s
@@ -143,8 +147,6 @@ class TwentyOne
       dealer_turn if !player.busted?
 
       clear
-      display_turn_result(player)
-      display_turn_result(dealer)
       display_game_result
 
       break unless play_again?
@@ -175,6 +177,8 @@ class TwentyOne
   end
 
   def display_game_result
+    display_turn_result(player)
+    display_turn_result(dealer)
     display_cards
     display_score
     display_winner
@@ -217,15 +221,8 @@ class TwentyOne
   end
 
   def winner
-    if player.busted?
-      dealer.name
-    elsif dealer.busted?
-      player.name
-    elsif player.total == dealer.total
-      'tie'
-    else
-      player.total > dealer.total ? player.name : dealer.name
-    end
+    return dealer.name if player.busted? || dealer > player
+    return player.name if dealer.busted? || player > dealer
   end
 
   def display_winner
@@ -258,9 +255,9 @@ class TwentyOne
   end
 
   def display_welcome
-    padded_display("Hi #{player.name}! ✨Welcome to Twenty-one! ✨
+    padded_display("Hi #{player.name}! ✨Welcome to Twenty-one!✨
 
-    You and the #{dealer.name} will be dealt two cards initially.
+    You and #{dealer.name} will be dealt two cards initially.
     You can hit to get another card or stay with the cards you have.
     Cards 1-10 are worth face value.
     Jack, Queen, King are worth 10, and Ace is 1 or 11.
