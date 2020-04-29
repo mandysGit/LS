@@ -139,9 +139,9 @@ class TwentyOne
     loop do
       clear
       reset
+
       display_welcome
       deal_initial_cards!
-
       display_initial_cards
       player_turn
       dealer_turn unless player.busted?
