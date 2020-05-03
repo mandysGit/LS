@@ -118,6 +118,34 @@ class TodoList
     list
   end
 
+  def find_by_title(title)
+    each do |todo|
+      return todo if todo.title == title
+    end
+
+    nil
+  end
+
+  def all_done
+    select { |todo| todo.done? }
+  end
+
+  def all_not_done
+    select { |todo| !todo.done? }
+  end
+
+  def mark_done(title)
+    find_by_title(title) && find_by_title(title).done!
+  end
+
+  def mark_all_done
+    each { |todo| todo.done! }
+  end
+
+  def mark_all_undone
+    each { |todo| todo.undone! }
+  end
+  
   private 
 
   attr_reader :todos
@@ -132,8 +160,9 @@ list.add(todo1)
 list.add(todo2)
 list.add(todo3)
 
-todo1.done!
+p list.all_done
+p list.all_not_done
 
-results = list.select { |todo| todo.done? }    # you need to implement this method
+list.mark_done("Buy milk")
 
-puts results.inspect
+p list.all_done
