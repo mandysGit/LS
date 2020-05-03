@@ -24,7 +24,6 @@ class Participant
 
   def initialize
     @cards = []
-    set_name
   end
 
   def busted?
@@ -60,13 +59,11 @@ end
 class Player < Participant
   include Formatable
 
-  private
-
   def set_name
     n = ''
     loop do
       prompt "Hi there! What's your name?"
-      n = gets.chomp
+      n = gets.chomp.strip
       break unless n.empty?
       prompt "Sorry, must enter a value."
     end
@@ -76,8 +73,6 @@ end
 
 class Dealer < Participant
   DEALER_LIMIT = 17
-
-  private
 
   def set_name
     self.name = ['Catalina', 'Synapse'].sample
@@ -122,7 +117,7 @@ class Card
   end
 
   def to_s
-    "#{rank} of #{suit}"
+    "#{rank} of #{suit} "
   end
 end
 
@@ -139,6 +134,7 @@ class TwentyOne
     loop do
       clear
       reset
+      set_names
 
       display_welcome
       deal_initial_cards!
@@ -158,6 +154,11 @@ class TwentyOne
   private
 
   attr_accessor :deck, :player, :dealer
+
+  def set_names
+    player.set_name
+    dealer.set_name
+  end
 
   def reset
     self.deck = Deck.new
