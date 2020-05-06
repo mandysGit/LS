@@ -1,5 +1,5 @@
 def reduce(array, acc=array[0])
-  counter = 0
+  counter = acc == array[0] ? 1 : 0
 
   while counter < array.size
     current_element = array[counter]
