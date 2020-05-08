@@ -98,8 +98,8 @@ class TodoList
   end
 
   def to_s
-    result = "---- #{title} ----\n" 
-    todos.each { |todo| result << "#{todo}\n" }
+    result = "---- #{title} ----" 
+    todos.each { |todo| result << "\n#{todo}" }
     result
   end
 
