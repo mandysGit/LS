@@ -1,7 +1,5 @@
 class TextAnalyzer
   def process
-    text = ''
-
     File.open("random_text.txt", "r") do |f|
       yield(f.read)
       f.close
