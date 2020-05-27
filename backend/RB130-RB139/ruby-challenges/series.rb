@@ -35,6 +35,8 @@ class Series
   end
 
   def slices(n)
+    raise ArgumentError if n > @digits.size
+
     result = []
     integers = @digits.chars.map(&:to_i)
 
