@@ -20,21 +20,43 @@ Algo:
 - return result
 =end
 
+#class Octal
+#  def initialize(str)
+#    @str = str
+#  end
+#
+#  def to_decimal
+#    result = 0
+#    exp = @str.size - 1
+#    return result if @str.match(/[^0-7]/)
+#
+#    @str.each_char do |char|
+#      result += (char.to_i)*(8**exp)
+#      exp = exp - 1
+#    end
+#
+#    p result
+#  end
+#end
+
+=begin
+Algo: 
+- reverse the string
+- create an array of characters
+- convert each string char into an integer, and multiply by 8^(idx of the char)
+- sum the array
+=end
+
 class Octal
-  def initialize(str)
-    @str = str
+  def initialize(octal)
+    @octal = octal
   end
 
   def to_decimal
-    result = 0
-    exp = @str.size - 1
-    return result if @str.match(/[^0-7]/)
-
-    @str.each_char do |char|
-      result += (char.to_i)*(8**exp)
-      exp = exp - 1
-    end
-
-    p result
+    return 0 if @octal.match(/[^0-7]/)
+    @octal.reverse
+          .chars
+          .map.with_index { |n, idx| n.to_i * 8**idx }
+          .sum
   end
 end
