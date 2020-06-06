@@ -24,10 +24,27 @@ algo:
 - return the result of anagrams
 =end
 
+# class Anagram
+#   def initialize(match_word)
+#     @match_word = match_word.downcase
+#   end
+
+#   def match(list)
+#     list.select { |word| anagram?(word) }
+#   end
+
+#   def anagram?(word)
+#     return false if @match_word == word.downcase
+#     temp = word.downcase.clone
+#     @match_word.each_char { |char| temp.slice!(char) }
+
+#     temp.empty? && @match_word.size == word.size
+#   end
+# end
+   
 class Anagram
   def initialize(match_word)
-    @match_word = match_word.downcase
-    @anagrams = []
+    @match_word = match_word
   end
 
   def match(list)
@@ -35,11 +52,8 @@ class Anagram
   end
 
   def anagram?(word)
-    return false if @match_word == word.downcase
-    temp = word.downcase.clone
-    @match_word.each_char { |char| temp.slice!(char) }
-
-    temp.empty? && @match_word.size == word.size
+    @match_word.downcase != word.downcase &&
+    word.downcase.chars.sort == @match_word.downcase.chars.sort
   end
 end
-    
+
