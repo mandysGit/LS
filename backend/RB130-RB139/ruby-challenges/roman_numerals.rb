@@ -3,11 +3,11 @@ Algo:
 - Divide the integer up to its individual 1's 10's 100's
 - Store the divided integers into an array
 - reverse the array, 1000s should be first elements, lower elements should be last elements
-- Iterate overr the array, create the corresponding roman numeral for each element
+- Iterate over the array, create the corresponding roman numeral for each element
 - concentate all the roman numerals and return it as one string
 =end
 
-Integer.define_method(:to_roman) do 
+Fixnum.define_method(:to_roman) do 
   multiple = 1
   next_numeral, current_numeral = self.divmod(10)
   numerals = []
