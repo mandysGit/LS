@@ -19,17 +19,21 @@ Initialize
     - Convert Integer to String, #to_s
     - Reverse the string
     - Convert String to Array, chars
-    - Convert each element of the Array to Integer
-    - Array#reverse_each through Array with index
+    - Concert each string char to an Integer, #map(&:to_i)
 
 - addends -> returns an array of digits changed
-    - Map through numbers
+    - Map through numbers with index
+    - on every even index, return num
     - On every odd index, num*2
     - If num > 10 , num - 9
     - return the reverse the numbers array
 
 - checksum -> returns the checksum
+    - Array#sum
+
 - valid? -> returns true or false
+    - checksum % 10 == 0
+
 - self.create -> returns Integer, original number plus check digit
     - Iterate over 0..9
     - Append each number to numbers input
@@ -40,7 +44,7 @@ Initialize
 
 class Luhn
   def initialize(numbers)
-    @numbers = convert_to_array(numbers)
+    @numbers = numbers.to_s.reverse.chars.map(&:to_i)
   end
 
   def self.create(numbers)
@@ -48,10 +52,6 @@ class Luhn
       digits = numbers.to_s.+(check_digit).to_i
       return digits if self.new(digits).valid?
     end
-  end
-
-  def convert_to_array(integers)
-    integers.to_s.reverse.chars.map(&:to_i)
   end
 
   def addends
