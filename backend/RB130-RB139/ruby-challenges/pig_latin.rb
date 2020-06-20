@@ -97,7 +97,7 @@ class PigLatin
   end
 
   def self.consonants(word)
-    word.match(/\A([^aeiou]+(qu)|^(qu)|[^aeiou]+)/)
+    word.match(/\A([^aeiou]*(qu)|[^aeiou]+)/)
   end
 
   def self.shorten(word)
