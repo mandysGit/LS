@@ -43,33 +43,68 @@ Algo:
     - Return mutated_word + consonants + `ay`
 =end
 
+# class PigLatin
+#   def self.translate(words)
+#     words.split.map { |word| pig_latin(word) }.join(' ')
+#   end
+
+#   def self.pig_latin(word)
+#     first = word[0]
+#     second = word[1]
+    
+#     if first == 'y' || first == 'x'
+#       result = word[1...word.size] + first + 'ay' if vowel?(second)
+#       result = word + 'ay' if !vowel?(second)
+#       result
+#     elsif vowel?(first)
+#       word + 'ay'
+#     else
+#       consonants = ''
+#       vowel_idx = 0
+
+#       word.chars.each.with_index do |char, idx|
+#         vowel_idx = idx
+
+#         if char == 'u' && consonants[-1] == 'q'
+#           consonants << char
+#         elsif !vowel?(char)
+#           consonants << char
+#         else
+#           break
+#         end
+#       end
+
+#       word[vowel_idx...word.size] + consonants + 'ay' 
+#     end
+#   end
+
+#   def self.vowel?(letter)
+#     'aeiou'.include?(letter)
+#   end
+# end
+
+
+# REFACTOR WITH REGEX
+
 class PigLatin
   def self.translate(words)
-    words.split.map { |word| pig_latin(word) }.join(' ')
+    words.split.map { |word| translate_one(word) }.join(' ')
   end
 
-  def self.pig_latin(word)
-    first = word[0]
-    second = word[1]
-    
-    if first == 'y' || first == 'x'
-      word[1...word.size] + first + 'ay' if !vowel?(second)
-      word + 'ay' if vowel?(second)
-    elsif vowel?(first)
-      word + 'ay'
-    else
-      consonants = ''
-      vowel_idx = 0
-      word.chars.each.with_index do |char, idx|
-        consonants << char if !vowel?(char)
-        vowel_idx = idx
-        break if vowel?(char)
-      end
-      word[vowel_idx...word.size] + consonants + 'ay' 
-    end
+  def self.translate_one(word)
+    return "#{word}ay" if  vowel_sound?(word)
+    "#{shorten(word)}#{consonants(word)}ay"
   end
 
-  def self.vowel?(letter)
-    'aeiou'.include?(letter)
+  def self.consonants(word)
+    word.match(/\A([^aeiou]+(qu)|^(qu)|[^aeiou]+)/)
+  end
+
+  def self.shorten(word)
+    word.delete_prefix("#{consonants(word)}")
+  end
+
+  def self.vowel_sound?(word)
+    word.match(/\A[aeiou]|[xy][^aeiou]/)
   end
 end
