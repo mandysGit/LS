@@ -16,7 +16,7 @@ Output:
 rules:
 - Throw ArgumentError if n is greater than the length of the String of digits
 
-Algo: 
+Algo:
 - initialize result as empty array
 - Convert String of digits to Array of chars
 - Convert each char to integer
@@ -24,7 +24,7 @@ Algo:
 - Iterate over Array of Integers with index
   - Retrieve the element from current index, up until length n. Use Array#[start, stop]
   - Append to result IF the length of the retrieved elements are equal or n
-  - ELSE if less than n, break out of loop  
+  - ELSE if less than n, break out of loop
 
   - return result
 =end
