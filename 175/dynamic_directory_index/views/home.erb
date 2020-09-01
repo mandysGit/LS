@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <body>
+    <h3>Cat Breeds</h3>
+    <p>
+      <% if params[:sort] == "desc" %>
+        <a href="/">Sort Ascending</a>
+      <% else %>
+        <a href="/?sort=desc">Sort Descending</a>
+      <% end %>
+    </p>
+
+    <ul>
+      <% @file_names.each do |file_name| %>
+        <li>
+          <a href="/images/<%= file_name %>"><%= file_name %></a>
+        </li>
+      <% end %>
+    </ul>
+  </body>
+</html>
