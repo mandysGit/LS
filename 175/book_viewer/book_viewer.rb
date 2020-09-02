@@ -22,6 +22,25 @@ get "/chapters/:number" do
   erb :chapter
 end
 
+get "/search" do
+  @result = match_chapters(params[:query])
+
+  erb :search
+end
+
+def match_chapters(query)
+  results = [] 
+
+  return results if !query || query.empty?
+
+  @contents.each.with_index do |title, idx|
+    chapter = File.read("data/chp#{idx + 1}.txt")
+    results << [title, idx + 1] if chapter.match?(params[:query])
+  end
+
+  results
+end
+
 helpers do
   def in_paragraphs(text)
     text.split("\n\n")
