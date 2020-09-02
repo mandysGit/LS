@@ -35,17 +35,30 @@ def match_chapters(query)
 
   @contents.each.with_index do |title, idx|
     chapter = File.read("data/chp#{idx + 1}.txt")
-    results << [title, idx + 1] if chapter.match?(params[:query])
+    results << [title, idx + 1, match_paragraphs(chapter)] if chapter.match?(params[:query])
   end
 
   results
 end
 
+def match_paragraphs(chapter)
+  hsh = {}
+  chapter.split("\n\n").each_with_index do |paragraph, idx| 
+    hsh[idx] = paragraph
+  end
+
+  hsh.select { |_, paragraph| paragraph.match?(params[:query]) }
+end
+
 helpers do
   def in_paragraphs(text)
     text.split("\n\n")
-        .map { |paragraph| "<p>#{paragraph}</p>" }
+        .map.with_index { |paragraph, idx| "<p id=paragraph#{idx}>#{paragraph}</p>" }
         .join
+  end
+
+  def bold_match(paragraph, pattern)
+    paragraph.gsub(pattern, "<strong>#{pattern}</strong>")
   end
 end
 
