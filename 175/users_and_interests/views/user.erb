@@ -1,0 +1,15 @@
+<h2><%= @name %>'s Page</h2>
+<p>e-mail: <%= @email %> </p>
+<p>Interests: <%= @interests %> </p>
+
+<h4> Other Pages </h4>
+<ul>
+  <% @users.each_pair do |name, _| %>
+    <% if name != @name %>
+      <li>
+        <a href="/<%= name %>"><%= name %></a>
+      </li>
+    <%end%>
+  <%end%>
+</ul>
+
