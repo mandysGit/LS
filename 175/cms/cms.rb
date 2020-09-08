@@ -3,5 +3,7 @@ require 'sinatra/reloader'
 require 'tilt/erubis'
 
 get '/' do
-  erb :home
+  @files = Dir.new("data").children
+  erb :list
 end
+
