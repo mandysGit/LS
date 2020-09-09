@@ -19,42 +19,53 @@ helpers do
 
     case extension
     when ".md"
-      render_markdown(File.read("data/#{file}"))
+      render_markdown(File.read(file))
     when ".txt"
       headers["Content-Type"] = "text/plain"
-      File.read("data/#{file}")
+      File.read(file)
     end
   end
 end
 
+def data_path
+  if ENV["RACK_ENV"] == "test"
+    File.expand_path("../test/data", __FILE__)
+  else
+    File.expand_path("../data", __FILE__)
+  end
+end
+
 get "/" do
-  @files = Dir.new("data").children
+  pattern = File.join(data_path, "*")
+  @files = Dir.glob(pattern).map do |path|
+    File.basename(path)
+  end
   erb :index
 end
 
 get "/:file" do
-  file = params[:file]
-  @files = Dir.new("data").children
+  file_path = File.join(data_path, params[:file])
 
-  if @files.include?(file)
-    load_file_content(file)
+  if File.exist?(file_path)
+    load_file_content(file_path)
   else
-    session[:message] = "#{file} does not exist."
+    session[:message] = "#{params[:file]} does not exist."
     redirect "/"
   end
 end
 
 get "/:file/edit" do
-  @file = params[:file]
-  @content = File.read("data/#{@file}")
+  @file_name = params[:file]
+  file_path = File.join(data_path, @file_name)
+  @content = File.read(file_path)
 
   erb :edit
 end
 
 post "/:file/edit" do
-  @file = params[:file]
-  File.write("data/#{@file}", params[:content])
+  @file_path = File.join(data_path, params[:file])
+  File.write(@file_path, params[:content])
 
-  session[:message] = "#{@file} has been updated."
+  session[:message] = "#{params[:file]} has been updated."
   redirect "/"
 end
