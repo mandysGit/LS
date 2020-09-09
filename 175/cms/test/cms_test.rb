@@ -135,5 +135,46 @@ class AppTest < Minitest::Test
     get "/"
     refute_includes last_response.body, "delete_this.txt"
   end
+
+  def test_signin
+    get "/"
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, "Sign In"
+
+    get "users/signin"
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, "Username:"
+    assert_includes last_response.body, "Password:"
+    assert_includes last_response.body, %q(<button type="submit")
+  end
+
+  def test_signin_valid_credentials
+    post "/users/signin", username: "admin", password: "secret"
+    assert_equal 302, last_response.status
+
+    get last_response["Location"]
+    assert_includes last_response.body, "Welcome!"
+    assert_includes last_response.body, "Signed in as admin"
+  end
+
+  def test_signin_invalid_credentials
+    post "/users/signin", username: "guest", password: "random"
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, "Invalid Credentials"
+  end
+
+  def test_signout
+    post "/users/signin", username: "admin", password: "secret"
+    assert_equal 302, last_response.status
+    get last_response["Location"]
+    assert_includes last_response.body, "Welcome!"
+    assert_includes last_response.body, "Signed in as admin"
+
+    post "/users/signout"
+    assert_equal 302, last_response.status
+    get last_response["Location"]
+    assert_includes last_response.body, "You have been signed out."
+    assert_includes last_response.body, "Sign In"
+  end
 end
 

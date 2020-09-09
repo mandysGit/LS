@@ -47,6 +47,28 @@ get "/" do
   erb :index
 end
 
+get "/users/signin" do
+  erb :signin
+end
+
+post "/users/signin" do
+  if params[:username] == "admin" && params[:password] == "secret"
+    session[:username] = params[:username]
+    session[:message] = "Welcome!"
+    redirect "/"
+  else
+    session[:message] = "Invalid Credentials"
+    status 422
+    erb :signin
+  end
+end
+
+post "/users/signout" do
+  session.delete(:username)
+  session[:message] = "You have been signed out."
+  redirect "/"
+end
+
 get "/new" do
   erb :new
 end
@@ -105,3 +127,4 @@ post "/:file/delete" do
   session[:message] = "#{params[:file]} has been deleted."
   redirect "/"
 end
+
