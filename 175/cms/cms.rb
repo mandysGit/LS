@@ -25,6 +25,10 @@ helpers do
       File.read(file)
     end
   end
+
+  def valid_file_extension(file) 
+    file.include?(".md") || file.include?(".txt")
+  end
 end
 
 def data_path
@@ -41,6 +45,30 @@ get "/" do
     File.basename(path)
   end
   erb :index
+end
+
+get "/new" do
+  erb :new
+end
+
+post "/new/create" do
+  if params[:new_file].empty?
+    session[:message] = "A name is required."
+    status 422
+
+    erb :new
+  elsif !valid_file_extension(params[:new_file])
+    session[:message] = "A valid file extension is required."
+    status 422
+
+    erb :new
+  else
+    file_path = File.join(data_path, params[:new_file])
+    File.write(file_path, "")
+    session[:message] = "#{params[:new_file]} was created."
+
+    redirect "/"
+  end
 end
 
 get "/:file" do
@@ -69,3 +97,4 @@ post "/:file/edit" do
   session[:message] = "#{params[:file]} has been updated."
   redirect "/"
 end
+

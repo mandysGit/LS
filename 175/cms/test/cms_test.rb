@@ -89,5 +89,37 @@ class AppTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_includes last_response.body, "new content"
   end
+
+  def test_new
+    get "/new"
+
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Add a new Document:"
+    assert_includes last_response.body, %q(<button type="submit")
+  end
+
+  def test_create_new_document
+    post "/new/create", new_file: "test.txt"
+
+    assert_equal 302, last_response.status 
+    get last_response["Location"]
+    assert_includes last_response.body, "test.txt was created."
+
+    get "/"
+    assert_includes last_response.body, "test.txt"
+  end
+
+  def test_create_new_document_without_filename
+    post "/new/create", new_file: ""
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, "A name is required."
+  end
+
+  def test_create_new_document_without_extension
+    post "/new/create", new_file: "test"
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, "A valid file extension is required."
+  end
 end
 
