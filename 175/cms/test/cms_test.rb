@@ -18,6 +18,10 @@ class AppTest < Minitest::Test
     end
   end
 
+  def session
+    last_request.env["rack.session"]
+  end
+
   def setup
     FileUtils.mkdir_p(data_path)
   end
@@ -50,12 +54,7 @@ class AppTest < Minitest::Test
     get "/non_existent.txt"
     assert_equal 302, last_response.status # Assert user was redircted
 
-    get last_response["Location"] # Request page that user was redirected
-    assert_equal 200, last_response.status
-    assert_includes last_response.body, "non_existent.txt does not exist."
-
-    get "/" # Reload the page
-    refute_includes last_response.body, "non_existent.txt does not exist."
+    assert_equal "non_existent.txt does not exist.", session[:message]
   end
 
   def test_render_markdown
@@ -81,10 +80,8 @@ class AppTest < Minitest::Test
     post "/changes.txt/edit", content: "new content"
 
     assert_equal 302, last_response.status # Assert user was redircted
-    
-    get last_response["Location"]
+    assert_equal "changes.txt has been updated.", session[:message]
 
-    assert_includes last_response.body, "changes.txt has been updated"
     get "/changes.txt"
     assert_equal 200, last_response.status
     assert_includes last_response.body, "new content"
@@ -103,8 +100,7 @@ class AppTest < Minitest::Test
     post "/new/create", new_file: "test.txt"
 
     assert_equal 302, last_response.status 
-    get last_response["Location"]
-    assert_includes last_response.body, "test.txt was created."
+    assert_equal "test.txt was created.", session[:message]
 
     get "/"
     assert_includes last_response.body, "test.txt"
@@ -126,17 +122,14 @@ class AppTest < Minitest::Test
     create_document "delete_this.txt"
 
     post "/delete_this.txt/delete"
-
     assert_equal 302, last_response.status
-    
-    get last_response["Location"]
-    assert_includes last_response.body, "delete_this.txt has been deleted."
+    assert_equal "delete_this.txt has been deleted.", session[:message]
 
     get "/"
-    refute_includes last_response.body, "delete_this.txt"
+    refute_includes last_response.body, %q(href="delete_this.txt")
   end
 
-  def test_signin
+  def test_render_signin
     get "/"
     assert_equal 200, last_response.status
     assert_includes last_response.body, "Sign In"
@@ -151,29 +144,29 @@ class AppTest < Minitest::Test
   def test_signin_valid_credentials
     post "/users/signin", username: "admin", password: "secret"
     assert_equal 302, last_response.status
-
+    assert_equal "Welcome!", session[:message]
+    assert_equal "admin", session[:username]
+    
     get last_response["Location"]
-    assert_includes last_response.body, "Welcome!"
     assert_includes last_response.body, "Signed in as admin"
   end
 
   def test_signin_invalid_credentials
     post "/users/signin", username: "guest", password: "random"
     assert_equal 422, last_response.status
+    assert_nil session[:username]
     assert_includes last_response.body, "Invalid Credentials"
   end
 
   def test_signout
-    post "/users/signin", username: "admin", password: "secret"
-    assert_equal 302, last_response.status
-    get last_response["Location"]
-    assert_includes last_response.body, "Welcome!"
+    get "/", {}, { "rack.session" => { username: "admin" } }
     assert_includes last_response.body, "Signed in as admin"
 
     post "/users/signout"
-    assert_equal 302, last_response.status
+    assert_equal "You have been signed out.", session[:message]
+
     get last_response["Location"]
-    assert_includes last_response.body, "You have been signed out."
+    assert_nil session[:username]
     assert_includes last_response.body, "Sign In"
   end
 end
