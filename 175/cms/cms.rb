@@ -29,6 +29,17 @@ helpers do
   def valid_file_extension(file) 
     file.include?(".md") || file.include?(".txt")
   end
+
+  def signed_in?
+    session[:username] != nil
+  end
+
+  def require_signed_in_user
+    if !signed_in?
+      session[:message] = "You must be signed in to do that."
+      redirect "/"
+    end
+  end
 end
 
 def data_path
@@ -70,10 +81,13 @@ post "/users/signout" do
 end
 
 get "/new" do
+  require_signed_in_user
   erb :new
 end
 
 post "/new/create" do
+  require_signed_in_user
+
   if params[:new_file].empty?
     session[:message] = "A name is required."
     status 422
@@ -105,6 +119,8 @@ get "/:file" do
 end
 
 get "/:file/edit" do
+  require_signed_in_user
+
   @file_name = params[:file]
   file_path = File.join(data_path, @file_name)
   @content = File.read(file_path)
@@ -113,6 +129,8 @@ get "/:file/edit" do
 end
 
 post "/:file/edit" do
+  require_signed_in_user
+
   @file_path = File.join(data_path, params[:file])
   File.write(@file_path, params[:content])
 
@@ -121,6 +139,8 @@ post "/:file/edit" do
 end
 
 post "/:file/delete" do
+  require_signed_in_user
+
   file_path = File.join(data_path, params[:file])
   File.delete(file_path)
 

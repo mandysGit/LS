@@ -30,6 +30,10 @@ class AppTest < Minitest::Test
     FileUtils.rm_rf(data_path)
   end
 
+  def admin_session
+    { "rack.session" => { username: "admin" } }
+  end
+
   def test_index
     create_document "about.md"
     create_document "changes.txt"
@@ -68,7 +72,7 @@ class AppTest < Minitest::Test
 
   def test_render_edit
     create_document "changes.txt"
-    get "/changes.txt/edit"
+    get "/changes.txt/edit", {}, admin_session
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -76,8 +80,17 @@ class AppTest < Minitest::Test
     assert_includes last_response.body, %q(<button type="submit")
   end
 
+  def test_editing_document_signed_out
+    create_document "changes.txt"
+
+    get "/changes.txt/edit"
+
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+  end
+
   def test_edit_file
-    post "/changes.txt/edit", content: "new content"
+    post "/changes.txt/edit", {content: "new content"}, admin_session
 
     assert_equal 302, last_response.status # Assert user was redircted
     assert_equal "changes.txt has been updated.", session[:message]
@@ -87,8 +100,15 @@ class AppTest < Minitest::Test
     assert_includes last_response.body, "new content"
   end
 
+  def test_updating_document_signed_out
+    post "/changes.txt/edit", {content: "new content"}
+
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+  end
+
   def test_new
-    get "/new"
+    get "/new", {}, admin_session
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -96,8 +116,15 @@ class AppTest < Minitest::Test
     assert_includes last_response.body, %q(<button type="submit")
   end
 
+  def test_view_new_document_form_signed_out
+    get "/new"
+
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+  end
+
   def test_create_new_document
-    post "/new/create", new_file: "test.txt"
+    post "/new/create", {new_file: "test.txt"}, admin_session
 
     assert_equal 302, last_response.status 
     assert_equal "test.txt was created.", session[:message]
@@ -106,14 +133,21 @@ class AppTest < Minitest::Test
     assert_includes last_response.body, "test.txt"
   end
 
+  def test_create_new_document_signed_out
+    post "new/create", {filename: "test.txt"}
+
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+  end
+
   def test_create_new_document_without_filename
-    post "/new/create", new_file: ""
+    post "/new/create", {new_file: ""}, admin_session
     assert_equal 422, last_response.status
     assert_includes last_response.body, "A name is required."
   end
 
   def test_create_new_document_without_extension
-    post "/new/create", new_file: "test"
+    post "/new/create", {new_file: "test"}, admin_session
     assert_equal 422, last_response.status
     assert_includes last_response.body, "A valid file extension is required."
   end
@@ -121,12 +155,20 @@ class AppTest < Minitest::Test
   def test_delete_document
     create_document "delete_this.txt"
 
-    post "/delete_this.txt/delete"
+    post "/delete_this.txt/delete", {}, admin_session
     assert_equal 302, last_response.status
     assert_equal "delete_this.txt has been deleted.", session[:message]
 
     get "/"
     refute_includes last_response.body, %q(href="delete_this.txt")
+  end
+
+  def test_deleting_document_signed_out
+    create_document "test.txt"
+
+    post "/test.txt/delete"
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
   end
 
   def test_render_signin
