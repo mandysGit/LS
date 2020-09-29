@@ -68,3 +68,55 @@ SELECT s.description
  RIGHT OUTER JOIN services AS s
     ON s.id = cs.service_id
   WHERE cs.service_id IS NULL;
+
+SELECT c.name, string_agg(s.description, ', ') AS services
+  FROM customers AS c
+       LEFT OUTER JOIN customers_services AS CS
+       ON c.id = cs.customer_id
+       LEFT OUTER JOIN services AS s
+       ON s.id = cs.service_id
+ GROUP BY c.id;
+   
+SELECT s.description, count(cs.service_id)
+  FROM services AS s
+       LEFT OUTER JOIN customers_services AS cs
+       ON s.id = cs.service_id
+ GROUP BY s.description
+HAVING count(cs.service_id) >= 3;
+
+SELECT sum(s.price) AS gross
+  FROM services AS s
+ INNER JOIN customers_services AS cs
+       ON cs.service_id = s.id;
+
+INSERT INTO customers(name, payment_token)
+       VALUES ('John Doe', 'EYODHLCN');
+
+INSERT INTO customers_services(customer_id, service_id)
+       VALUES (7, 1), (7, 2), (7, 3);
+
+
+SELECT sum(s.price) AS "sum"
+  FROM services AS s
+ INNER JOIN customers_services AS cs
+       ON cs.service_id = s.id
+ WHERE s.price > 100;
+
+SELECT sum(price)
+  FROM services
+ WHERE price > 100;
+
+SELECT (SELECT sum(price)
+  FROM services
+ WHERE price > 100) * count(id) AS sum
+  FROM customers;
+
+DELETE FROM customers_services
+WHERE service_id = 7;
+
+DELETE FROM services
+WHERE description = 'Bulk Email';
+
+DELETE FROM customers
+WHERE name = 'Chen Ke-Hua';
+
