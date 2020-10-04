@@ -35,9 +35,11 @@ SELECT DISTINCT bidders.name
   FROM bidders
  INNER JOIN bids ON bidders.id = bids.bidder_id;
 
+-- Query from a Virtual Table
 SELECT MAX(bid_counts.count) FROM
    (SELECT count(bidder_id) FROM bids GROUP BY bidder_id) AS bid_counts;
 
+-- SCALAR SUBQUERY
 SELECT name, (SELECT count(item_id) FROM bids WHERE item_id = items.id)
   FROM items;
 
