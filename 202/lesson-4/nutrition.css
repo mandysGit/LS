@@ -1,0 +1,105 @@
+html, body {
+  font: 28px "Helvetica", "Arial", sans-serif;
+}
+
+article {
+  width: 680px;
+  padding: 10px 15px 15px 15px;
+  border: 2px solid;
+  box-sizing: border-box;
+}
+
+header { 
+  padding-bottom: 1.5px;
+  border-bottom: 15px solid;
+  margin-bottom: 10px;
+}
+
+header * {
+  margin: 0;
+} 
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1rem;
+  border-top: 1rem solid;
+  border-bottom: 0.01rem solid;
+  padding: 10px 0;
+  margin: 6px 0;
+}
+
+header dl, header dl * {
+  display: inline-block;
+}
+
+header dl:nth-child(5) dt {
+  font-weight: bold;
+}
+
+header dl:nth-child(6) {
+  float: right;
+}
+
+.indent {
+  width: 1rem;
+  border-top: none;
+}
+
+table {
+  width: 100%;
+  border-spacing: 0;
+}
+
+table dl, dt, dd  {
+  margin: 0;
+  display: inline-block;
+}
+
+table:nth-child(2) td {
+  border-top: 1px solid;
+  padding: 2px;
+}
+
+table:nth-child(2) tbody:nth-child(2) td:last-child,
+table:nth-child(2) td:first-child dt {
+  font-weight: bold;
+}
+
+table:nth-child(2) th,
+table:nth-child(2) tbody td:last-child {
+  text-align: right;
+}
+
+table:nth-child(2) tbody:nth-child(2) > tr:nth-child(9) td {
+  border-bottom: 20px solid;
+}
+
+table:nth-child(2) tfoot td {
+  font-size: 0.9rem;
+  padding-top: 10px;
+}
+
+table:nth-child(3) {
+  font-size: 0.8rem;
+}
+
+table:nth-child(3) th {
+  border-bottom: 1px solid;
+  font-weight: normal;
+}
+
+table:nth-child(3) tr th:first-child {
+  width: 30%;
+}
+table:nth-child(3) tr > th + th {
+  width: 20%;
+  text-align: left;
+}
+
+table:nth-child(3) .indent {
+  text-indent: 1.2rem;
+}
+
