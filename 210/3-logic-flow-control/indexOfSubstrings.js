@@ -29,8 +29,21 @@ function lastIndexOf(firstString, secondString) {
     }
   }
 
-  if (substringIndexes.length > 1) return substringIndexes[substringIndexes.length - 1];
+  if (substringIndexes.length >= 1) return substringIndexes[substringIndexes.length - 1];
   return -1;
+}
+
+// Further Exploration
+function lastIndexOf(firstString, secondString) {
+  let accumulator = 0;
+  let index;
+  while (index !== -1) {
+    let newStr = createSubStringToCompare(accumulator, firstString.length, firstString)
+    index = indexOf(newStr, secondString);
+    accumulator = accumulator + index + 1;
+  };
+
+  return accumulator - 1;
 }
 
 console.log(indexOf('Some strings', 's'));                      // 5
