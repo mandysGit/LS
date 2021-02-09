@@ -23,13 +23,12 @@ helper function rotate
 */
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
-const OFFSET = 26;
+const OFFSET = ALPHABET.length;
 const ROTATION = 13;
-const LAST_POSITION_OF_ALPHABET = 25;
+const LAST_POSITION_OF_ALPHABET = OFFSET - 1;
 
 function rot13(str) {
-  if (typeof str !== 'string') return '';
-  return str.replace(/[a-zA-Z]/g, rotate)
+  return str.replace(/[a-z]/gi, rotate)
 }
 
 function rotate(letter) {
@@ -42,7 +41,6 @@ function rotate(letter) {
 
 // Edge cases
 console.log(rot13('')); // ''
-console.log(rot13());  // ''
 
 // Symbols & Numbers
 console.log(rot13('^&*^*&')); // ^&*^*&
@@ -50,11 +48,16 @@ console.log(rot13('123'));    // 123
 console.log(rot13('1#1$'));   // 1#1$
 
 // Beginning and end letters
-console.log(rot13('A'));
-console.log(rot13('a'));
-console.log(rot13('z'));
-console.log(rot13('Z'));
+console.log(rot13('A')); // N
+console.log(rot13('a')); // n
+console.log(rot13('z')); // m
+console.log(rot13('Z')); // M
 
 // Sample tests
 console.log(rot13('Teachers open the door, but you must enter by yourself.'));
-console.log(rot13(rot13('Teachers open the door, but you must enter by yourself.')));
+// logs:
+// Grnpuref bcra gur qbbe, ohg lbh zhfg ragre ol lbhefrys.
+
+console.log(rot13(rot13('Teachers open the door, but you must enter by yourself.')))
+// logs:
+// Teachers open the door, but you must enter by yourself.;
