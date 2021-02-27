@@ -14,43 +14,22 @@ const arr1 = [1, 2, 3];
 console.log(slice(arr1, 1, 3));                     // [2, 3]
 console.log(arr1);                                  // [1, 2, 3]
 
-function splice(array, start, deleteCount, element1, elementN) {
+function splice(array, start, deleteCount, ...args) {
   if (start > array.length) start = array.length;
-  if (deleteCount > (array.length - start)) deleteCount = array.length - start;
-  let deletedElements = [];
-  let elementsToAdd = [element1, elementN];
-  let countDelete = deleteCount;
-  let countAdd = deleteCount;
- 
-  // Delete elements or replace elements
-  for (let i = start; countDelete > 0; i++) {
-    deletedElements.push(array[i]);
+  if (deleteCount > array.length - start) deleteCount = array.length - start;
 
-    if (typeof element1 !== 'undefined') {
-      array[i] = element1;
-      element1 = undefined;
-    } else if (typeof elementN !== 'undefined') {
-      array[i] = elementN;
-      elementN = undefined;
-    } else {
-      array[i] = null;
-    }
+  let head = array.slice(0, start);
+  let middle = [...args];
+  let tail = array.slice(start + deleteCount);
+  let deletedElements = array.slice(start, start + deleteCount);
 
-    countDelete--;
-  };
+  while (array.length > 0) array.pop();
+  array.push(...head, ...middle, ...tail);
 
-  let keepElements = array.filter(ele => ele !== null);
-  array.length = keepElements.length;
-
-  for (let i = 0; i < keepElements.length; i++) {
-    array[i] = keepElements[i];
-  };
-
-  //console.log('array: ', array);
   return deletedElements;
 }
 
-console.log('-----------');
+console.log('----SPLICE-------');
 console.log(splice([1, 2, 3], 1, 2));              // [2, 3]
 console.log(splice([1, 2, 3], 1, 3));              // [2, 3]
 console.log(splice([1, 2, 3], 1, 0));              // []
