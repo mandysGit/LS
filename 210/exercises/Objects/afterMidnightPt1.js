@@ -1,17 +1,13 @@
-const MINUTES_PER_HOUR = 60;
-const HOURS_PER_DAY = 24;
-const MINUTES_PER_DAY = HOURS_PER_DAY * MINUTES_PER_HOUR;
+const MILLISECONDS_PER_MINUTE = 60000;
 
 function timeOfDay(deltaMinutes) {
-  deltaMinutes = deltaMinutes % MINUTES_PER_DAY;
-  if (deltaMinutes < 0) {
-    deltaMinutes = MINUTES_PER_DAY + deltaMinutes;
-  }
+  const midnight = new Date('1/1/2000 00:00');
+  const afterMidnight = new Date(midnight.getTime() + deltaMinutes * MILLISECONDS_PER_MINUTE);
 
-  let hours = Math.floor(deltaMinutes / MINUTES_PER_HOUR);
-  let minutes = deltaMinutes % MINUTES_PER_HOUR;
+  const hours = padWithZeroes(afterMidnight.getHours(), 2);
+  const minutes = padWithZeroes(afterMidnight.getMinutes(), 2);
 
-  return `${padWithZeroes(hours, 2)}:${padWithZeroes(minutes, 2)}`;
+  return `${hours}:${minutes}`;
 }
 
 function padWithZeroes(number, length) {
