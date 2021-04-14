@@ -29,7 +29,7 @@ let longText = 'Four score and seven years ago our fathers brought forth' +
   ' earth.';
 
 function longestSentence(text) {
-  let sentences = text.match(/(\w[^.?!]+[.?!])/g);
+  let sentences = text.match(/(\w[^.?!]*[.?!])/g);
 
   let longestSentence = sentences.reduce((longestSentence, current) => {
     if (wordCount(current) > wordCount(longestSentence)) return current;
@@ -47,3 +47,4 @@ function wordCount(sentence) {
 }
 
 longestSentence(longText);
+longestSentence('I!');
