@@ -33,6 +33,7 @@ Another solution is to declare a variable `self` that points to `this` within th
 Then reference `self` within the anonymous callback function.
 */
 
+// binding a function expression to `this`
 const franchise = {
   name: 'How to Train Your Dragon',
   allMovies: function() {
@@ -46,6 +47,7 @@ const franchise = {
 a way to set the execution context of a callback. Passing the execution context 
 as a second argument to these methods, it will be treated as the context within the callback. .
 */
+// `this` as 2nd argument to map
 const franchise = {
   name: 'How to Train Your Dragon',
   allMovies: function() {
@@ -55,6 +57,7 @@ const franchise = {
   }
 }
 
+// arrow function
 const franchise = {
   name: 'How to Train Your Dragon',
   allMovies() {
@@ -64,6 +67,7 @@ const franchise = {
   },
 };
 
+// self variable
 const franchise = {
   name: 'How to Train Your Dragon',
   allMovies() {
