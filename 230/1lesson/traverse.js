@@ -125,3 +125,12 @@ walk(document, function(node) {
     node.style.color = 'red'
   }
 });
+
+
+// Using querySelector method
+let paragraphs = document.querySelectorAll(".intro p");
+
+for (let p of paragraphs) {
+  p.classList.add("article-text");
+}
+
