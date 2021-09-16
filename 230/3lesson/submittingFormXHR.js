@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   request.addEventListener('load', event => store.innerHTML = request.response);
   request.send();
   
-  // EVENT CLICK
+  // CLICK EVENT
   store.addEventListener('click', event =>  {
     let target = event.target;
     if (target.tagName !== 'A') {
@@ -25,8 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
  
-  
-  // EVENT SUBMIT
+  // SUBMIT EVENT 
   store.addEventListener('submit', event => {
     event.preventDefault();
     
@@ -38,7 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let request = new XMLHttpRequest();
     let data = new FormData(form);
    
-    request.open('POST', `https://ls-230-web-store-demo.herokuapp.com/products${form.getAttribute('action')}`);
+    request.open('POST', `https://ls-230-web-store-demo.herokuapp.com/${form.getAttribute('action')}`);
+    // Set auth to allow for submitting form
+    request.setRequestHeader('Authorization', 'token AUTH_TOKEN');
     
     request.addEventListener('load', (event) => {
       console.log(request.response);
