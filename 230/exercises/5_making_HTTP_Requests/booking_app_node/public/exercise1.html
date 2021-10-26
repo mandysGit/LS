@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>your page title goes here</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+  </body>
+  <script>
+    // FETCH
+    function getSchedules() {
+      fetch('http://localhost:3000/api/schedules', { method: 'GET' })
+      .then(response => response.json())
+      .then(data => {
+        if (data.length > 0) {
+          let result = {};
+
+          for (let schedule of data) {
+              let staffId = `staff ${schedule.staff_id}`;
+
+            if (result.hasOwnProperty(staffId)) result[staffId] += 1;
+            else result[staffId] = 1;
+          }
+
+          console.log(result)
+        } else {
+          console.log('There are currently no schedules available for booking')
+        }
+      })
+      .finally(() => console.log('Request completed'));
+    }
+    //getSchedules();
+
+      // XHR
+      function retrieveSchedules() {
+        const request = new XMLHttpRequest();
+
+        request.open('GET', 'http://localhost:3000/api/schedules');
+        request.timeout = 5000;
+        request.responseType = 'json';
+
+        request.addEventListener('load', event => {
+          const schedules = request.response;
+          const result = {};
+
+          if (schedules.length > 0) {
+            for (let schedule of schedules) {
+                let staffId = `staff ${schedule.staff_id}`;
+
+              if (result.hasOwnProperty(staffId)) {
+                result[staffId] += 1;
+              } else {
+                result[staffId] = 1;
+              }
+            }
+
+            console.log(result);
+          } else {
+            console.log('There are currently no schedules available for booking')
+          }
+        });
+
+        request.addEventListener('timeout', event => {
+          console.log('It is taking longer than usual, please try again later.');
+        });
+
+        request.addEventListener('loadend', event => {
+          console.log('The request has completed.');
+        })
+
+        request.send();
+      }
+
+  //    retrieveSchedules()
+    </script>
+  </html>
